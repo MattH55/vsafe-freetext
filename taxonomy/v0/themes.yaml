@@ -2,6 +2,7 @@
 # before any gold-set result is used to tune the classifier.
 # Backbone: MedDRA SOC -> HLGT (mapping table to be added: taxonomy/v0/meddra_map.csv).
 # The eight PACVS candidate domains are themes here, so the phenotype is a query over aggregates.
+# Terms are regexes matched case-insensitively; wrap a term in (?-i:...) to make it case-sensitive.
 version: v0-draft
 
 themes:
@@ -17,7 +18,7 @@ themes:
   dysautonomia:
     domain: pacvs
     terms: ["palpitations?", "racing heart", "heart racing", tachycardia, "fast heart ?rate",
-            POTS, "dizz(?:y|iness)", "lightheaded(?:ness)?", "heat intolerance", "pounding heart"]
+            "(?-i:POTS)", "dizz(?:y|iness)", "lightheaded(?:ness)?", "heat intolerance", "pounding heart"]
   sensory_neuropathic:
     domain: pacvs
     terms: [tingling, "pins and needles", "numb(?:ness)?", burning, "paresthesias?", "paraesthesias?",
@@ -36,7 +37,9 @@ themes:
             "abdominal pain", bloating, constipation]
   menstrual:
     domain: pacvs
-    terms: [period, periods, "menstrua\\w*", "heavy bleeding", spotting, "missed period",
+    # "period(s)" only when not "period(s) of ..." and not "short/long/... period" (time spans)
+    terms: ["(?<!short )(?<!long )(?<!brief )(?<!same )(?<!time )(?<!trial )(?<!grace )(?<!waiting )periods?(?!\\s+of\\b)",
+            "menstrua\\w*", "heavy bleeding", spotting, "missed period",
             "irregular (?:cycle|period)s?"]
 
   # --- lay-reporting layer (not in the MedDRA backbone) ---
@@ -56,3 +59,4 @@ themes:
   pre_existing_worsened:
     domain: lay
     terms: ["flare(?:d|-up)?", "worse(?:ned)? my", "made my .{1,30} worse"]
+

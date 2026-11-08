@@ -35,3 +35,20 @@ def test_attribution_flags():
 def test_negated_helper():
     s = "no tinnitus"
     assert negated(s, s.index("tinnitus"))
+
+
+def test_pots_is_case_sensitive():
+    assert "dysautonomia" in themes("diagnosed with POTS last month")
+    assert "dysautonomia" not in themes("I was washing pots and pans")
+
+
+@pytest.mark.parametrize("text", ["for a period of time I felt fine", "over a short period",
+                                  "periods of rest helped"])
+def test_period_as_time_span_is_not_menstrual(text):
+    assert "menstrual" not in themes(text)
+
+
+@pytest.mark.parametrize("text", ["my period came early", "heavier periods since the shot",
+                                  "period was 10 days late"])
+def test_period_menstrual(text):
+    assert "menstrual" in themes(text)
