@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from . import config
@@ -189,6 +190,8 @@ def main(argv=None):
     s.set_defaults(func=cmd_qa)
 
     a = p.parse_args(argv)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")   # polars tables on a cp1252 Windows console
     if a.func is not cmd_inspect:
         config.assert_local_data_dir()
     a.func(a)
