@@ -10,40 +10,84 @@ from . import config
 
 
 def cmd_inspect(a):
-    from .ingest import inspect_xlsx
+    """Header row only. Data rows are never printed (free text must not reach a terminal log)."""
+    from .ingest import extract_zip, header_row
 
-    header, rows = inspect_xlsx(Path(a.path), a.n)
-    print("columns:", header)
-    for r in rows:
-        print(r)
+    path = Path(a.path)
+    files = extract_zip(path) if path.suffix.lower() == ".zip" else [path]
+    for f in files:
+        print(f"{f.name}: {header_row(f)}")
+
+
+def _file_spec(part: str, name: str) -> dict:
+    for f in config.load("sources").get(part, {}).get("files") or []:
+        if f.get("name") == name:
+            return f
+    return {}
 
 
 def cmd_ingest(a):
-    from .ingest import xlsx_to_parquet
+    import time
 
-    src = Path(a.src)
-    out_dir = config.DATA_DIR / "interim" / a.part
-    files = sorted(src.glob("*.xlsx")) if src.is_dir() else [src]
+    from .ingest import ingest_file
+
+    part = a.part
+    spec = config.load("sources").get(part, {})
+    src = Path(a.src) if a.src else config.source_dir(spec)
+    out_dir = config.DATA_DIR / "interim" / part
+    kinds = ("*.xlsx", "*.zip", "*.csv", "*.txt", "*.tsv")
+    files = sorted(f for k in kinds for f in src.glob(k)) if src.is_dir() else [src]
+    if a.only:
+        files = [f for f in files if f.name in a.only]
     for f in files:
-        n = xlsx_to_parquet(f, out_dir / (f.stem + ".parquet"), release=f.stem)
-        print(f"{f.name}: {n:,} rows")
+        fs = _file_spec(part, f.name)
+        t0 = time.time()
+        for out, n in ingest_file(f, out_dir, release=f.stem, under3=bool(fs.get("under3"))):
+            print(f"{part}\t{f.name}\t{out.name}\t{n}\t{time.time() - t0:.0f}s")
 
 
 def cmd_download(a):
     from .download import download
 
-    download(a.only)
+    download(a.only, files=a.files)
+
+
+def _glob(part: str) -> str:
+    return str(config.DATA_DIR / "interim" / part / "*.parquet")
+
+
+def _have(part: str) -> bool:
+    return any((config.DATA_DIR / "interim" / part).glob("*.parquet"))
+
+
+def _labelled(part: str) -> list[tuple[str, str]]:
+    """One (parquet path, release label) per ingested file of a part."""
+    files = sorted((config.DATA_DIR / "interim" / part).glob("*.parquet"))
+    return [(str(f), f.stem) for f in files]
 
 
 def cmd_link(a):
+    import time
+
     from . import link
 
     con = link.connect()
-    interim = config.DATA_DIR / "interim"
-    link.build_entries(con, str(interim / "freetext_updated" / "*.parquet"))
-    link.link_dose(con, str(interim / "vaccinations" / "*.parquet"))
-    link.link_survey(con, str(interim / "health_checkins" / "*.parquet"))
-    print(json.dumps(link.join_rates(con), indent=2))
+    t0 = time.time()
+    ft = (str(config.DATA_DIR / "interim" / "freetext_updated" / f"{a.release}.parquet")
+          if a.release else _glob("freetext_updated"))
+    link.build_entries(con, ft)
+    if _have("registrants"):
+        link.link_registrants(con, _glob("registrants"))
+    link.link_dose(con, _glob("vaccinations"))
+    link.link_survey(con, _glob("health_checkins"))
+    if _have("meddra") and not a.skip_meddra:
+        link.link_meddra(con, _labelled("meddra"),
+                         field_values=config.load("columns").get("meddra_field_values"))
+    if _have("call_center") and not a.skip_outcomes:
+        link.link_outcomes(con, _labelled("call_center"))
+    rates = link.join_rates(con)
+    rates["seconds"] = round(time.time() - t0)
+    print(json.dumps(rates, indent=2))
 
 
 def cmd_gate(a):
@@ -56,29 +100,97 @@ def cmd_gate(a):
     print(f"gate 1 (join rates >= {need}): {'PASS' if ok else 'FAIL - document the reason'}")
 
 
+def _write(df, name: str) -> None:
+    """Write a suppressed table to data/aggregates and print it (aggregates only)."""
+    import polars as pl
+
+    from .suppress import assert_safe
+
+    assert_safe(df.filter(~pl.col("suppressed")) if "suppressed" in df.columns else df)
+    out = config.DATA_DIR / "aggregates" / f"{name}.csv"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    df.write_csv(out)
+    with pl.Config(tbl_rows=-1, tbl_cols=-1, fmt_str_lengths=60, tbl_width_chars=200):
+        print(f"## {name}  ({out})")
+        print(df)
+
+
+def cmd_classify(a):
+    from . import link, themes
+
+    con = link.connect()
+    n = themes.build_entry_themes(con)        # week-1 / six-week only until OSF registration
+    print(f"classified {n} entries (layer 1)")
+    _write(themes.lexicon_coverage(con), "phase1_lexicon_coverage")
+    _write(themes.theme_counts(con), "phase1_theme_counts")
+    _write(themes.flag_counts(con), "phase1_flag_counts")
+
+
+def cmd_explore(a):
+    from . import explore, link
+
+    con = link.connect()
+    _write(explore.text_length_profile(con), "phase1_length_profile")
+    _write(explore.candidate_ngrams(con, n_max=a.n, top=a.top), "phase1_candidate_ngrams")
+
+
+def cmd_qa(a):
+    from . import link
+
+    con = link.connect()
+    _write(link.duplicate_report(con), "phase1_duplicates")
+    if _have("meddra"):
+        _write(link.meddra_coverage(con), "phase1_meddra_coverage")
+    if _have("freetext_original"):
+        df, cols = link.crosscheck(con, config.DATA_DIR / "interim" / "freetext_original",
+                                   config.DATA_DIR / "interim" / "freetext_updated",
+                                   registrant_col=config.columns("freetext")["registrant"])
+        _write(df, "phase1_crosscheck")
+        print(json.dumps(cols, indent=2))
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
 
-    s = sub.add_parser("inspect", help="print header and first rows of an .xlsx")
-    s.add_argument("path"); s.add_argument("-n", type=int, default=5)
+    s = sub.add_parser("inspect", help="print the header row of an .xlsx, .csv or .zip")
+    s.add_argument("path")
     s.set_defaults(func=cmd_inspect)
 
     s = sub.add_parser("download", help="fetch files listed in config/sources.yaml")
-    s.add_argument("--only", nargs="*")
+    s.add_argument("--only", nargs="*", help="parts (keys of sources.yaml)")
+    s.add_argument("--files", nargs="*", help="file names within those parts")
     s.set_defaults(func=cmd_download)
 
-    s = sub.add_parser("ingest", help="convert .xlsx release(s) to Parquet")
-    s.add_argument("src"); s.add_argument("--part", default="freetext_updated")
+    s = sub.add_parser("ingest", help="convert source files (.xlsx, .csv, .zip) to Parquet")
+    s.add_argument("src", nargs="?", help="file or directory (default: the part's raw dir)")
+    s.add_argument("--part", default="freetext_updated")
+    s.add_argument("--only", nargs="*", help="file names to ingest from the directory")
     s.set_defaults(func=cmd_ingest)
 
-    s = sub.add_parser("link", help="dedupe and link entries to dose and survey")
+    s = sub.add_parser("link", help="dedupe and link entries to person, dose, survey, MedDRA, outcomes")
+    s.add_argument("--release", help="one updated release (file stem), e.g. r01")
+    s.add_argument("--skip-meddra", action="store_true")
+    s.add_argument("--skip-outcomes", action="store_true")
     s.set_defaults(func=cmd_link)
 
     s = sub.add_parser("gate", help="report gate-1 join rates")
     s.set_defaults(func=cmd_gate)
 
+    s = sub.add_parser("classify", help="layer-1 entry_themes (week-1/six-week only pre-registration)")
+    s.set_defaults(func=cmd_classify)
+
+    s = sub.add_parser("explore", help="aggregate-only n-grams of unlabelled entries")
+    s.add_argument("-n", type=int, default=3)
+    s.add_argument("--top", type=int, default=300)
+    s.set_defaults(func=cmd_explore)
+
+    s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")
+    s.set_defaults(func=cmd_qa)
+
     a = p.parse_args(argv)
+    if a.func is not cmd_inspect:
+        config.assert_local_data_dir()
     a.func(a)
 
 
