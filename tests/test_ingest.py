@@ -23,3 +23,33 @@ def test_roundtrip(tmp_path):
     assert t["TEXT"] == ["tired", "dizzy"]
     assert t["_row"] == [1, 3]
     assert len(set(t["_content_hash"])) == 2
+
+
+def test_under3_flag_is_explicit(tmp_path):
+    wb = Workbook()
+    wb.active.append(["A"])
+    wb.active.append(["x"])
+    src = tmp_path / "anything.xlsx"   # name says nothing about age
+    wb.save(src)
+    out = tmp_path / "o.parquet"
+    xlsx_to_parquet(src, out, "anything", under3=True)
+    assert pq.read_table(out).to_pydict()["_under3"] == [True]
+
+
+def test_csv_and_zip_ingest(tmp_path):
+    import zipfile
+
+    from vsafe_ft.ingest import header_row, ingest_file
+
+    csv = tmp_path / "chk.csv"
+    csv.write_text("REG,SID,DAY\nr1,s1,0007\nr2,s2,42\n")
+    assert header_row(csv) == ["REG", "SID", "DAY"]
+    zp = tmp_path / "chk.zip"
+    with zipfile.ZipFile(zp, "w") as z:
+        z.write(csv, "inner/chk.csv")
+    outs = list(ingest_file(zp, tmp_path / "out"))
+    assert len(outs) == 1 and outs[0][1] == 2
+    t = pq.read_table(outs[0][0]).to_pydict()
+    assert t["DAY"] == ["0007", "42"]           # all_varchar: leading zeros kept
+    assert t["_release"] == ["chk", "chk"]
+    assert (tmp_path / "extracted" / "chk" / "inner" / "chk.csv").exists()
