@@ -62,7 +62,7 @@ def con(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "columns", fake_columns)
     _ft(FT).write_parquet(tmp_path / "ft.parquet")
     pl.DataFrame({"REG": ["a", "b", "b"], "SEX": ["F", "M", "M"], "ZIP3": ["123", "456", "456"],
-                  "RD": ["2021-02-01"] * 3, "REL": ["self"] * 3, "GUARD": [None] * 3}
+                  "RD": ["2021-02-01"] * 3, "REL": ["self"] * 3, "GUARD": ["g9", None, None]}
                  ).write_parquet(tmp_path / "reg.parquet")
     pl.DataFrame({"REG": ["a", "a"], "VDATE": ["2021-03-01", "2021-03-29"], "DOSE": ["1", "2"],
                   "MFR": ["X", "X"], "AGE": ["30-39"] * 2}).write_parquet(tmp_path / "vax.parquet")
@@ -101,6 +101,8 @@ def test_registrants_joined_without_zip3(con):
     assert not any("zip" in c.lower() for c in cols)
     got = dict(con.execute("SELECT registrant, sex FROM entries").fetchall())
     assert got == {"a": "F", "b": "M", "c": None}   # registrant b deduplicated, c unmatched
+    g = dict(con.execute("SELECT registrant, guardian FROM entries").fetchall())
+    assert g == {"a": True, "b": False, "c": None}  # a boolean, never the guardian's code
 
 
 def test_days_since_most_recent_dose(con):

@@ -23,6 +23,15 @@
 - The vaccinations file has no age column (`REGISTRANT_CODE, MANUFACTURER, DOSE_NUMBER,
   VACCINATION_DATE, COADMINISTERED, COADMINISTERED_VAX`); age band must come from registrants.
 
+- Registrants (`REGISTRANT_CODE, ZIP_CODE, SEX, REGISTERED_DATE, TIME_ZONE, RELATIONSHIP,
+  GUARDIAN_REGISTRANT_CODE`) has no age column either. Check the check-in file for age; if none,
+  `age_band` cannot be a reporting dimension.
+- `GUARDIAN_REGISTRANT_CODE` is another person's code: only a boolean `guardian` is carried.
+- VAERS: the full bundle `AllVAERSDataCSVS.zip` (data dated 2026-06-03, 1990-2026 +
+  NonDomestic, 585,977,435 bytes, sha256 f8900934e55cc06ee7b41ed0938c876e625a48bf5726e9e7baadd1d417ed1280)
+  was already on this machine (downloaded by hand for ParentsVaccineGUide); copied to
+  `<data dir>/raw/vaers/`. Add to MANIFEST.tsv when the scripted downloads finish.
+
 ## Immediate next steps
 - [ ] Download the 13 updated free-text files, Nov 2024 MedDRA, registrants, vaccinations, check-ins (~7 GB); add URLs to `config/sources.yaml`.
 - [ ] `vsafe-ft inspect` the first release; fill `config/columns.yaml`.

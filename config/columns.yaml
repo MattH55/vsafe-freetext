@@ -13,13 +13,15 @@ freetext:
   text_sro: SYSTEMIC_REACTION_OTHER    # systemic-reaction-other field (SRO)
   text_hcvo: HEALTHCARE_VISITS_OTHER   # health-care-visit-other field (HCVO)
 
+# Confirmed 2026-11-08 (consolidated_registrants[1].csv header): REGISTRANT_CODE, ZIP_CODE, SEX,
+# REGISTERED_DATE, TIME_ZONE, RELATIONSHIP, GUARDIAN_REGISTRANT_CODE. No age column here either.
 registrants:
-  registrant: TODO
-  sex: TODO
-  zip3: TODO                 # never reported (CDC user agreement bars sub-national analysis)
-  registration_date: TODO
-  relationship: TODO
-  guardian: TODO
+  registrant: REGISTRANT_CODE
+  sex: SEX
+  zip3: ZIP_CODE             # never read or reported (CDC user agreement bars sub-national analysis)
+  registration_date: REGISTERED_DATE
+  relationship: RELATIONSHIP
+  guardian: GUARDIAN_REGISTRANT_CODE   # another person's code: only has_guardian (bool) is kept
 
 # Confirmed 2026-11-08 (consolidated_vaccinations[1].csv header): REGISTRANT_CODE, MANUFACTURER,
 # DOSE_NUMBER, VACCINATION_DATE, COADMINISTERED, COADMINISTERED_VAX. No age column here.

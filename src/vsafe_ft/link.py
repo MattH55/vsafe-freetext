@@ -103,10 +103,16 @@ def build_entries(con, parquet_glob: str) -> None:
 
 
 def link_registrants(con, registrants_parquet: str) -> None:
-    """Add sex, relationship, guardian and registration_date to `entries` (zip3 never read)."""
+    """Add sex, relationship, guardian and registration_date to `entries` (zip3 never read).
+
+    The guardian column holds another registrant's code, so only a boolean is kept.
+    """
     keep = ["sex", "relationship", "guardian", "registration_date"]
     r = config.columns("registrants", keys=["registrant", *keep])
-    sel = ", ".join(f"{_q(r[k])} AS {k}" for k in keep)
+    g = _q(r["guardian"])
+    sel = ", ".join(
+        f"({g} IS NOT NULL AND trim({g}) <> '') AS guardian" if k == "guardian"
+        else f"{_q(r[k])} AS {k}" for k in keep)
     con.execute(
         f"""
         CREATE OR REPLACE TABLE registrants AS
