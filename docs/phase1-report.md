@@ -20,6 +20,7 @@ Aggregates only. Every table below passed `suppress.suppress` + `suppress.assert
 | ingest | updated r12_under3.xlsx | 16,418 | 3 s |
 | ingest | original r01.xlsx | 390,000 | 27 s |
 | ingest | original r12_under3.xlsx | 16,418 | 2 s |
+| ingest | vaccinations CSV (909 MB unzipped) | 20,140,862 | 49 s |
 
 ## Gate 1: join rates
 

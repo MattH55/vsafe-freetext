@@ -133,15 +133,18 @@ def _has(con, table: str, col: str) -> bool:
 
 def link_dose(con, vaccinations_parquet: str) -> None:
     """days_since_dose = STARTED_ON - most recent vaccination at or before STARTED_ON (ASOF join)."""
-    v = config.columns("vaccinations")
+    v = config.columns("vaccinations", keys=["registrant", "vaccination_date", "dose_number",
+                                             "manufacturer"])
     max_days = config.analysis()["max_days_since_dose"]
+    age = (_q(v["age_band"]) if v.get("age_band") not in (None, "TODO")
+           else "NULL::VARCHAR")           # the v-safe vaccinations file has no age column
     con.execute(
         f"""
         CREATE OR REPLACE TABLE vax AS
         SELECT {_q(v['registrant'])} AS registrant,
                TRY_CAST({_q(v['vaccination_date'])} AS DATE) AS vax_date,
                {_q(v['dose_number'])} AS dose_number, {_q(v['manufacturer'])} AS manufacturer,
-               {_q(v['age_band'])} AS age_band
+               {age} AS age_band
         FROM read_parquet({_s(vaccinations_parquet)}, union_by_name = true)
         """
     )

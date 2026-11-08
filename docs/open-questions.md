@@ -20,6 +20,9 @@
 - The updated release 3 is a revised file (`3rd Interim Release 24-01322-FOIA (Revised).xlsx`).
 - The GitHub owner `mhalma` does not exist; the repository is `MattH55/vsafe-freetext` (private).
 
+- The vaccinations file has no age column (`REGISTRANT_CODE, MANUFACTURER, DOSE_NUMBER,
+  VACCINATION_DATE, COADMINISTERED, COADMINISTERED_VAX`); age band must come from registrants.
+
 ## Immediate next steps
 - [ ] Download the 13 updated free-text files, Nov 2024 MedDRA, registrants, vaccinations, check-ins (~7 GB); add URLs to `config/sources.yaml`.
 - [ ] `vsafe-ft inspect` the first release; fill `config/columns.yaml`.

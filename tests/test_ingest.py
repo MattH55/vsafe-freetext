@@ -53,3 +53,12 @@ def test_csv_and_zip_ingest(tmp_path):
     assert t["DAY"] == ["0007", "42"]           # all_varchar: leading zeros kept
     assert t["_release"] == ["chk", "chk"]
     assert (tmp_path / "extracted" / "chk" / "inner" / "chk.csv").exists()
+
+
+def test_output_names_have_no_glob_characters(tmp_path):
+    from vsafe_ft.ingest import ingest_file
+
+    csv = tmp_path / "consolidated_x[1].csv"
+    csv.write_bytes(b"A\n1\n")
+    (out, n), = ingest_file(csv, tmp_path / "out")
+    assert out.name == "consolidated_x_1.parquet" and n == 1

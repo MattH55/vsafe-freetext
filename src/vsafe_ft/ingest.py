@@ -10,6 +10,7 @@ check-in file is never held in memory. Zips are unpacked under `<dir>/extracted/
 from __future__ import annotations
 
 import hashlib
+import re
 import zipfile
 from pathlib import Path
 
@@ -143,21 +144,26 @@ def header_row(path: Path) -> list[str]:
     return [c[0] for c in cols]
 
 
+def _safe_name(stem: str) -> str:
+    """File-name stem without glob characters ('[1]' would be a character class in DuckDB)."""
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", stem).strip("_")
+
+
 def ingest_file(path: Path, out_dir: Path, release: str | None = None, under3: bool = False):
     """Choose the converter by file type. Yields (output parquet, rows) per table written."""
     suffix = path.suffix.lower()
     release = release or path.stem
     if suffix == ".xlsx":
-        out = out_dir / f"{path.stem}.parquet"
+        out = out_dir / f"{_safe_name(path.stem)}.parquet"
         yield out, xlsx_to_parquet(path, out, release, under3)
     elif suffix in TEXT_SUFFIXES:
-        out = out_dir / f"{path.stem}.parquet"
+        out = out_dir / f"{_safe_name(path.stem)}.parquet"
         yield out, csv_to_parquet(path, out, release, under3)
     elif suffix == ".zip":
         inner = extract_zip(path)
         for f in inner:
             label = release if len(inner) == 1 else f"{release}/{f.stem}"
-            out = out_dir / f"{path.stem}__{f.stem}.parquet"
+            out = out_dir / f"{_safe_name(path.stem)}__{_safe_name(f.stem)}.parquet"
             yield out, csv_to_parquet(f, out, label, under3)
     else:
         raise ValueError(f"Unsupported file type: {path}")

@@ -21,12 +21,14 @@ registrants:
   relationship: TODO
   guardian: TODO
 
+# Confirmed 2026-11-08 (consolidated_vaccinations[1].csv header): REGISTRANT_CODE, MANUFACTURER,
+# DOSE_NUMBER, VACCINATION_DATE, COADMINISTERED, COADMINISTERED_VAX. No age column here.
 vaccinations:
-  registrant: TODO
-  manufacturer: TODO
-  dose_number: TODO
-  vaccination_date: TODO
-  age_band: TODO
+  registrant: REGISTRANT_CODE
+  manufacturer: MANUFACTURER
+  dose_number: DOSE_NUMBER
+  vaccination_date: VACCINATION_DATE
+  age_band: null             # not in this file; taken from registrants if present
 
 health_checkins:
   registrant: TODO
