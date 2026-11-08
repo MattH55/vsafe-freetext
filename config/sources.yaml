@@ -1,59 +1,135 @@
-# Data sources. URLs are left blank until copied from the ICAN v-safe data page;
+# Data sources. `dir` is relative to the data directory ($VSAFE_DATA_DIR, default ./data).
+# URLs copied from https://icandecide.org/v-safe-data/ on 2026-11-08 (all returned HTTP 200).
+# Local names are short (r01.xlsx ...); the url keeps the original file name.
 # record the sha256 of every file on download (vsafe-ft download writes it to data/raw/MANIFEST.tsv).
 # Hosts that must be allowed in a cloud session's network settings:
 #   filedev0128.s3.us-east-1.amazonaws.com  (free text, Nov 2024 MedDRA)
 #   filedev0128.s3.amazonaws.com            (registrants, vaccinations, check-ins)
 #   ican-public.s3.amazonaws.com            (older MedDRA, call center)
-# VAERS yearly zips sit behind a CAPTCHA: download by hand into data/raw/vaers/.
+# VAERS yearly zips sit behind a CAPTCHA: download by hand into <data dir>/raw/vaers/.
 
 freetext_updated:          # 24-01322-FOIA; primary corpus, 7,554,929 entries
-  dir: data/raw/freetext_updated
+  dir: raw/freetext_updated
   format: xlsx
   expected_files: 13       # 12 releases + under-3 file
-  files: []                # - {name: ..., url: ..., release: 1}
+  files:
+    - {name: r01.xlsx, release: 1,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/1st+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r02.xlsx, release: 2,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/2nd+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r03.xlsx, release: 3,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/3rd+Interim+Release+24-01322-FOIA+%28Revised%29.xlsx"}
+    - {name: r04.xlsx, release: 4,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/4th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r05.xlsx, release: 5,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/5th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r06.xlsx, release: 6,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/6th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r07.xlsx, release: 7,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/7th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r08.xlsx, release: 8,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/8th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r09.xlsx, release: 9,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/9th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r10.xlsx, release: 10,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/10th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r11.xlsx, release: 11,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/11th+Interim+Release+24-01322-FOIA.xlsx"}
+    - {name: r12.xlsx, release: 12,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/12th+Final+Release+24-01322-FOIA.xlsx"}
+    - {name: r12_under3.xlsx, release: 12, under3: true,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/Updated/12th+Under-3+Final+Release+24-01322-FOIA.xlsx"}
 
 freetext_original:         # as received from CDC; cross-check only
-  dir: data/raw/freetext_original
+  dir: raw/freetext_original
   format: xlsx
-  expected_files: 12
-  files: []
+  expected_files: 13       # 12 releases + under-3 file (the ICAN page lists 13)
+  files:
+    - {name: r01.xlsx, release: 1,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/1st-Interim-Release-o-Feb-15-2024.xlsx"}
+    - {name: r02.xlsx, release: 2,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/2nd-Interim-Release-o-Mar-15-2024.xlsx"}
+    - {name: r03.xlsx, release: 3,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/3rd-Interim-Release-o-April-15-2024.xlsx"}
+    - {name: r04.xlsx, release: 4,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/4th-Interim-Release-o-May-15-2024.xlsx"}
+    - {name: r05.xlsx, release: 5,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/5th-Interim-Release-o-June-14-2024.xlsx"}
+    - {name: r06.xlsx, release: 6,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/6th-Interim-Release-o-July-15-2024.xlsx"}
+    - {name: r07.xlsx, release: 7,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/7th-Interim-Release-o-August-15-2024.xlsx"}
+    - {name: r08.xlsx, release: 8,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/8th-Interim-Release-o-September-15-2024.xlsx"}
+    - {name: r09.xlsx, release: 9,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/9th-Interim-Release-o-October-15-2024.xlsx"}
+    - {name: r10.xlsx, release: 10,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/10th-Interim-Release-o-November-15-2024.xlsx"}
+    - {name: r11.xlsx, release: 11,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/11th-Interim-Release-o-December-15-2024.xlsx"}
+    - {name: r12.xlsx, release: 12,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/12th+Interim+%26+Final+Release+January+15%2C+2025.xlsx"}
+    - {name: r12_under3.xlsx, release: 12, under3: true,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/12th+Under-3+Interim+%26+Final+Release+January+15%2C+2025.xlsx"}
 
 meddra:                    # 30,987,860 codes, 10,737 terms
-  dir: data/raw/meddra
+  dir: raw/meddra
   format: zip
-  files: []                # Jun 2023, Oct 2023, Nov 2024
+  files:                  # Jun 2023, Oct 2023, Nov 2024
+    - {name: vsafe_MedDRA_SRO_prelim_data_04102023.zip, release: '2023-06',
+       url: "https://ican-public.s3.amazonaws.com/productions/vsafe/meddra/vsafe_MedDRA_SRO_prelim_data_04102023.zip"}
+    - {name: vsafe_covid19_meddra_20210906.zip, release: '2023-10',
+       url: "https://ican-public.s3.amazonaws.com/productions/vsafe/meddra/vsafe_covid19_meddra_20210906.zip"}
+    - {name: vsafe-MedDRA-110124.zip, release: '2024-11',
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/vsafe-MedDRA-110124.zip"}
 
 registrants:               # 10,147,001 people
-  dir: data/raw/registrants
+  dir: raw/registrants
   format: zip
-  files: []                # consolidated_registrants, race_ethnicity
+  files:                  # consolidated_registrants, race_ethnicity
+    - {name: consolidated_registrants.zip,
+       url: "https://filedev0128.s3.amazonaws.com/22-0128-foia/consolidated_registrants%5B1%5D.zip"}
+    - {name: consolidated_race_ethnicity.zip,
+       url: "https://filedev0128.s3.amazonaws.com/22-0128-foia/consolidated_race_ethnicity%5B1%5D.zip"}
 
 vaccinations:
-  dir: data/raw/vaccinations
+  dir: raw/vaccinations
   format: zip
-  files: []
+  files:
+    - {name: consolidated_vaccinations.zip,
+       url: "https://filedev0128.s3.amazonaws.com/22-0128-foia/consolidated_vaccinations%5B1%5D.zip"}
 
 health_checkins:           # 151,847,152 check-ins, ~5 GB
-  dir: data/raw/health_checkins
+  dir: raw/health_checkins
   format: zip
-  files: []
+  files:
+    - {name: consolidated_health_checkin.zip,
+       url: "https://filedev0128.s3.amazonaws.com/22-0128-foia/consolidated_health_checkin.zip"}
+    - {name: consolidated_health_checkin_u3.zip, under3: true,
+       url: "https://filedev0128.s3.amazonaws.com/22-0128-foia/Consolidated_health_checkin_u3%5B1%5D.zip"}
 
 call_center:               # FOIA 23-00925, 23-00926
-  dir: data/raw/call_center
+  dir: raw/call_center
   format: csv
-  files: []
+  files:
+    - {name: vsafe_call_center_data_12142020_05212023_foia_23_00926.csv,
+       url: "https://ican-public.s3.amazonaws.com/productions/vsafe_call_center_data_12142020_05212023_foia_23_00926.csv"}
+    - {name: vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv,
+       url: "https://ican-public.s3.amazonaws.com/productions/vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv"}
 
 pregnancy_registry:
-  dir: data/raw/pregnancy
+  dir: raw/pregnancy
   format: xlsx
-  files: []
+  files:
+    - {name: vsafe_pregnancy_registry_survey_20210413-20210607.xlsx,
+       url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/vsafe_pregnancy_registry_survey_20210413-20210607.xlsx"}
 
 vaers:                     # yearly files, manual download
-  dir: data/raw/vaers
+  dir: raw/vaers
   format: zip
   files: []
 
 openvsafe_vaers_match:     # OpenVSafe match table (score >= 8 of 11), if shared
-  dir: data/raw/openvsafe
+  dir: raw/openvsafe
   format: csv
   files: []
