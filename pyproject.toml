@@ -1,0 +1,37 @@
+[project]
+name = "vsafe-ft"
+version = "0.1.0"
+description = "Reproducible classification of the v-safe free-text corpus, linked to dose timing, survey context, MedDRA coding and VAERS outcome."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Matthew Halma" }]
+dependencies = [
+  "duckdb>=1.0",
+  "polars>=1.0",
+  "pyarrow>=15",
+  "openpyxl>=3.1",
+  "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+embed = ["sentence-transformers>=3", "scikit-learn>=1.4"]
+llm = ["anthropic>=0.40"]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+vsafe-ft = "vsafe_ft.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100

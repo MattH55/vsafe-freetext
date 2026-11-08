@@ -1,0 +1,50 @@
+# Canonical name -> source column name. Every value marked TODO must be confirmed
+# on first contact with the files (docs/open-questions.md) before the link steps run.
+freetext:
+  registrant: TODO           # registrant code column name, unconfirmed
+  survey_static_id: SURVEY_STATIC_ID
+  response_id: RESPONSE_ID
+  started_on: STARTED_ON
+  text_sd: TODO              # symptom-description field
+  text_sro: TODO             # symptom-other field
+  text_hcvo: TODO            # health-care-visit-other field
+  redaction_flag: TODO
+
+registrants:
+  registrant: TODO
+  sex: TODO
+  zip3: TODO                 # never reported (CDC user agreement bars sub-national analysis)
+  registration_date: TODO
+  relationship: TODO
+  guardian: TODO
+
+vaccinations:
+  registrant: TODO
+  manufacturer: TODO
+  dose_number: TODO
+  vaccination_date: TODO
+  age_band: TODO
+
+health_checkins:
+  registrant: TODO
+  survey_static_id: TODO
+  survey_type: TODO
+  survey_day: TODO
+  medical_care: TODO
+  health_impact: TODO
+
+meddra:
+  registrant: TODO
+  date: TODO
+  survey_static_id: TODO
+  field: TODO
+  pt: TODO
+  llt: TODO
+  active: TODO
+
+call_center:
+  registrant: TODO
+  report_date: TODO
+  trigger: TODO
+  outcome: TODO
+  vaers_filed: TODO

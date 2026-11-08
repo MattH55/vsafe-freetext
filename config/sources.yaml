@@ -1,0 +1,59 @@
+# Data sources. URLs are left blank until copied from the ICAN v-safe data page;
+# record the sha256 of every file on download (vsafe-ft download writes it to data/raw/MANIFEST.tsv).
+# Hosts that must be allowed in a cloud session's network settings:
+#   filedev0128.s3.us-east-1.amazonaws.com  (free text, Nov 2024 MedDRA)
+#   filedev0128.s3.amazonaws.com            (registrants, vaccinations, check-ins)
+#   ican-public.s3.amazonaws.com            (older MedDRA, call center)
+# VAERS yearly zips sit behind a CAPTCHA: download by hand into data/raw/vaers/.
+
+freetext_updated:          # 24-01322-FOIA; primary corpus, 7,554,929 entries
+  dir: data/raw/freetext_updated
+  format: xlsx
+  expected_files: 13       # 12 releases + under-3 file
+  files: []                # - {name: ..., url: ..., release: 1}
+
+freetext_original:         # as received from CDC; cross-check only
+  dir: data/raw/freetext_original
+  format: xlsx
+  expected_files: 12
+  files: []
+
+meddra:                    # 30,987,860 codes, 10,737 terms
+  dir: data/raw/meddra
+  format: zip
+  files: []                # Jun 2023, Oct 2023, Nov 2024
+
+registrants:               # 10,147,001 people
+  dir: data/raw/registrants
+  format: zip
+  files: []                # consolidated_registrants, race_ethnicity
+
+vaccinations:
+  dir: data/raw/vaccinations
+  format: zip
+  files: []
+
+health_checkins:           # 151,847,152 check-ins, ~5 GB
+  dir: data/raw/health_checkins
+  format: zip
+  files: []
+
+call_center:               # FOIA 23-00925, 23-00926
+  dir: data/raw/call_center
+  format: csv
+  files: []
+
+pregnancy_registry:
+  dir: data/raw/pregnancy
+  format: xlsx
+  files: []
+
+vaers:                     # yearly files, manual download
+  dir: data/raw/vaers
+  format: zip
+  files: []
+
+openvsafe_vaers_match:     # OpenVSafe match table (score >= 8 of 11), if shared
+  dir: data/raw/openvsafe
+  format: csv
+  files: []

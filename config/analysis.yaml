@@ -1,0 +1,13 @@
+# Fixed analysis parameters. Changes after OSF registration are filed as OSF amendments.
+min_cell_people: 10            # suppress any aggregate cell under this many distinct people
+max_days_since_dose: 400       # entries beyond this are flagged
+outcome_window_days: 90        # call-center / VAERS outcomes linked within this window after an entry
+join_rate_gate: 0.90           # registrant and survey key match rate required at gate 1
+theme_precision_gate: 0.85     # per-theme precision and recall on the gold set for confirmatory reporting
+theme_recall_gate: 0.85
+model_shift_flag: 0.20         # theme count shift between models that flags a theme as model-sensitive
+alpha: 0.05
+ci_level: 0.95
+permutations: 1000             # Q1 co-occurrence null, preserving domain marginals
+gold_set_size: 2000
+long_term_surveys: [3m, 6m, 12m]

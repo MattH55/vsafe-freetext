@@ -1,0 +1,58 @@
+# DRAFT taxonomy v0 (not frozen). Frozen as v1.0 and attached to the OSF registration
+# before any gold-set result is used to tune the classifier.
+# Backbone: MedDRA SOC -> HLGT (mapping table to be added: taxonomy/v0/meddra_map.csv).
+# The eight PACVS candidate domains are themes here, so the phenotype is a query over aggregates.
+version: v0-draft
+
+themes:
+  # --- PACVS candidate domains ---
+  fatigue_pem:
+    domain: pacvs
+    terms: [fatigue, fatigued, exhausted, exhaustion, tired, tiredness, "no energy", lethargic,
+            "post.exertional", "crash(?:ed|es)?", "wiped out", malaise]
+  cognitive:
+    domain: pacvs
+    terms: ["brain fog", foggy, "memory (?:loss|problems?|issues?)", forgetful,
+            "(?:can't|cannot|trouble|difficulty) concentrat\\w*", confusion, confused]
+  dysautonomia:
+    domain: pacvs
+    terms: ["palpitations?", "racing heart", "heart racing", tachycardia, "fast heart ?rate",
+            POTS, "dizz(?:y|iness)", "lightheaded(?:ness)?", "heat intolerance", "pounding heart"]
+  sensory_neuropathic:
+    domain: pacvs
+    terms: [tingling, "pins and needles", "numb(?:ness)?", burning, "paresthesias?", "paraesthesias?",
+            tinnitus, "ringing in (?:my |the )?ears?", "blurr(?:y|ed) vision", neuropathy]
+  sleep:
+    domain: pacvs
+    terms: [insomnia, "can't sleep", "cannot sleep", "trouble sleeping", "night sweats",
+            "unrefreshing sleep"]
+  pain:
+    domain: pacvs
+    terms: ["headaches?", "migraines?", "muscle (?:aches?|pain)", myalgia, "joint (?:pain|aches?)",
+            arthralgia, "chest pain", "body aches?"]
+  gastrointestinal:
+    domain: pacvs
+    terms: [nausea, nauseous, "vomit\\w*", "diarrh(?:o)?ea", "stomach (?:pain|ache|cramps?)",
+            "abdominal pain", bloating, constipation]
+  menstrual:
+    domain: pacvs
+    terms: [period, periods, "menstrua\\w*", "heavy bleeding", spotting, "missed period",
+            "irregular (?:cycle|period)s?"]
+
+  # --- lay-reporting layer (not in the MedDRA backbone) ---
+  persistence:
+    domain: lay
+    terms: ["still (?:have|having|feel|feeling)", "since (?:the|my) (?:shot|vaccine|dose)",
+            "(?:for|over) (?:\\d+|several|many) (?:weeks|months)", "hasn't gone away", ongoing,
+            "not (?:gone|better|improved)"]
+  care_sought:
+    domain: lay
+    terms: ["(?:went to|visited|saw) (?:the |my )?(?:er|emergency|urgent care|doctor|hospital)",
+            "hospitali[sz]ed", admitted, "emergency room"]
+  missed_work_school:
+    domain: lay
+    terms: ["missed (?:work|school)", "(?:couldn't|could not|unable to) (?:work|go to work)",
+            "(?:called|call) (?:in )?sick"]
+  pre_existing_worsened:
+    domain: lay
+    terms: ["flare(?:d|-up)?", "worse(?:ned)? my", "made my .{1,30} worse"]
