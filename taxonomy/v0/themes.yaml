@@ -60,3 +60,17 @@ themes:
     domain: lay
     terms: ["flare(?:d|-up)?", "worse(?:ned)? my", "made my .{1,30} worse"]
 
+  # --- exclusions for case-definition criterion 3 (docs/protocol.md) ---
+  # Draft lists; refined before the taxonomy is frozen. Not PACVS domains.
+  acute_diagnosis:
+    domain: exclusion
+    terms: [myocarditis, pericarditis, "anaphyla\\w*", "bell'?s palsy", "guillain.barr[eé]",
+            "(?-i:GBS)", "blood clots?", "deep vein thrombosis", "(?-i:DVT)", "pulmonary embolism",
+            stroke, "heart attack", appendicitis, shingles, "kidney stones?", "gall ?bladder"]
+  unrelated_cause:
+    domain: exclusion
+    terms: ["(?:had|have|caught|got|positive for|tested positive for) (?:covid|the flu|a cold|strep)",
+            "covid (?:infection|positive)", "sinus infection", "(?-i:UTI)", "urinary tract infection",
+            "ear infection", "food poisoning", "pregnan\\w*", "morning sickness",
+            "(?:car|work) accident", "fell (?:down|off|and)", "broke my", "fractur\\w*",
+            "sprain\\w*", "pulled a muscle", "injur(?:y|ed)"]
