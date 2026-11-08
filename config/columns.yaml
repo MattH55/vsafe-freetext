@@ -1,14 +1,17 @@
 # Canonical name -> source column name. Every value marked TODO must be confirmed
 # on first contact with the files (docs/open-questions.md) before the link steps run.
+# Confirmed 2026-11-08 from the header of updated release 1 (r01.xlsx):
+#   SURVEY_STATIC_ID, REGISTRANT_CODE, RESPONSE_ID, STARTED_ON, SYMPTOMS_DESCRIPTION,
+#   HEALTHCARE_VISITS_OTHER, SYSTEMIC_REACTION_OTHER
+# There is no redaction-flag column: `redacted` is derived from the (b)(6) pattern (normalise.py).
 freetext:
-  registrant: TODO           # registrant code column name, unconfirmed
+  registrant: REGISTRANT_CODE
   survey_static_id: SURVEY_STATIC_ID
   response_id: RESPONSE_ID
   started_on: STARTED_ON
-  text_sd: TODO              # symptom-description field
-  text_sro: TODO             # symptom-other field
-  text_hcvo: TODO            # health-care-visit-other field
-  redaction_flag: TODO
+  text_sd: SYMPTOMS_DESCRIPTION        # symptom-description field (SD)
+  text_sro: SYSTEMIC_REACTION_OTHER    # systemic-reaction-other field (SRO)
+  text_hcvo: HEALTHCARE_VISITS_OTHER   # health-care-visit-other field (HCVO)
 
 registrants:
   registrant: TODO

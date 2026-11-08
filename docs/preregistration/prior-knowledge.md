@@ -7,3 +7,4 @@ week-1 and six-week entries of one updated release are used for the exploratory 
 | Date (UTC) | File | Fields / what was done | What was seen (aggregate only) |
 |---|---|---|---|
 | 2026-11-08 | (none) | Source URLs checked with HTTP HEAD | File names and sizes only (see `MANIFEST.tsv`) |
+| 2026-11-08 | updated r01.xlsx, r12_under3.xlsx; original r01.xlsx, r12_under3.xlsx | Header row only (`vsafe-ft inspect`) | Column names; no data rows |
