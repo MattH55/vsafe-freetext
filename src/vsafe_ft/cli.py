@@ -62,9 +62,20 @@ def _have(part: str) -> bool:
 
 
 def _labelled(part: str) -> list[tuple[str, str]]:
-    """One (parquet path, release label) per ingested file of a part."""
+    """One (parquet path, release label) per ingested file of a part.
+
+    The label is the file's `release:` in config/sources.yaml when it has one (matched on
+    the source file stem, which prefixes the Parquet name), else the Parquet stem.
+    """
+    from pathlib import Path
+
+    from .ingest import _safe_name
+
+    spec = config.load("sources").get(part) or {}
+    labels = {_safe_name(Path(f["name"]).stem): f["release"]
+              for f in spec.get("files") or [] if f.get("release")}
     files = sorted((config.DATA_DIR / "interim" / part).glob("*.parquet"))
-    return [(str(f), f.stem) for f in files]
+    return [(str(f), labels.get(f.stem.split("__")[0], f.stem)) for f in files]
 
 
 def cmd_link(a):

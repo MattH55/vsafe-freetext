@@ -9,3 +9,5 @@ week-1 and six-week entries of one updated release are used for the exploratory 
 | 2026-11-08 | (none) | Source URLs checked with HTTP HEAD | File names and sizes only (see `MANIFEST.tsv`) |
 | 2026-11-08 | updated r01.xlsx, r12_under3.xlsx; original r01.xlsx, r12_under3.xlsx | Header row only (`vsafe-ft inspect`) | Column names; no data rows |
 | 2026-11-08 | updated + original r01, r12_under3 (Parquet) | Row-level cross-check, hashes of all columns | Row and people counts only (phase1-report.md) |
+| 2026-11-08 | consolidated_registrants, consolidated_vaccinations, health check-in (u3 and adult) | Header rows; under-3 `DAYS_SINCE` value distribution | Column names; counts by day since vaccination (no text) |
+| 2026-11-09 | vsafe-MedDRA-110124.zip (covid_meddra_sd/sro/hcvo.csv) | Header row only | Column names; no data rows |

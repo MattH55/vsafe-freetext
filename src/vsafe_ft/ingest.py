@@ -131,7 +131,8 @@ def extract_zip(path: Path) -> list[Path]:
         with zipfile.ZipFile(path) as z:
             z.extractall(tmp)
         tmp.rename(dest)
-    return sorted(p for p in dest.rglob("*") if p.suffix.lower() in TEXT_SUFFIXES)
+    return sorted(p for p in dest.rglob("*") if p.suffix.lower() in TEXT_SUFFIXES
+                  and "__MACOSX" not in p.parts and not p.name.startswith("._"))
 
 
 def header_row(path: Path) -> list[str]:

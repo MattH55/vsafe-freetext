@@ -235,21 +235,29 @@ def join_rates(con) -> dict[str, float]:
 
 def link_meddra(con, sources: list[tuple[str, str]],
                 field_values: dict[str, str] | None = None) -> None:
-    """Join CDC MedDRA codes to entries on (registrant, date, field).
+    """Join CDC MedDRA codes to entries.
 
-    `sources` is [(parquet glob, release label)]. Every release is kept with its label.
-    `field_values` maps the MedDRA file's field codes to SD/SRO/HCVO (identity, upper-cased,
-    when None).
+    The join key is (response_id, field) when the coding file has a response id (the
+    2024-11 files do), else (registrant, date, field). `sources` is [(parquet glob, release
+    label)]; every release is kept with its label. When the `field` column is null in
+    config/columns.yaml the field is read from the file name carried in `_release`
+    (`..._sd`, `..._sro`, `..._hcvo`). `field_values` maps other field codes to SD/SRO/HCVO.
     """
     parts = []
     for glob, label in sources:
-        m = config.columns("meddra", keys=["registrant", "date", "field", "pt", "llt"],
-                           release=label)
+        m = config.columns("meddra", keys=["registrant", "date", "pt", "llt"], release=label)
+        field = (f"upper(trim({_q(m['field'])}))" if m.get("field") not in (None, "TODO")
+                 else "upper(regexp_extract(_release, '_(sd|sro|hcvo)$', 1, 'i'))")
+        rid = (f"{_q(m['response_id'])}" if m.get("response_id") not in (None, "TODO")
+               else "NULL")
+        active = f"{_q(m['active'])}" if m.get("active") not in (None, "TODO") else "NULL"
         parts.append(
             f"""SELECT {_q(m['registrant'])} AS registrant,
+                       CAST({rid} AS VARCHAR) AS response_id,
                        TRY_CAST({_q(m['date'])} AS DATE) AS code_date,
-                       upper(trim({_q(m['field'])})) AS field_raw,
-                       {_q(m['pt'])} AS pt, {_q(m['llt'])} AS llt, {_s(label)} AS meddra_release
+                       {field} AS field_raw,
+                       {_q(m['pt'])} AS pt, {_q(m['llt'])} AS llt,
+                       CAST({active} AS VARCHAR) AS active, {_s(label)} AS meddra_release
                 FROM read_parquet({_s(glob)}, union_by_name = true)"""
         )
     fmap = {k.upper(): v for k, v in (field_values or {}).items()}
@@ -262,12 +270,14 @@ def link_meddra(con, sources: list[tuple[str, str]],
     con.execute(
         """
         CREATE OR REPLACE TABLE entry_meddra AS
-        SELECT e.entry_id, m.meddra_release, m.pt, m.llt
+        SELECT e.entry_id, m.meddra_release, m.pt, m.llt, m.active
         FROM entries e
         JOIN meddra m
-          ON m.registrant = e.registrant
-         AND m.code_date = CAST(e.started_on AS DATE)
-         AND m.field = e.field
+          ON m.field = e.field
+         AND CASE WHEN m.response_id IS NOT NULL
+                  THEN m.response_id = e.response_id AND m.registrant = e.registrant
+                  ELSE m.registrant = e.registrant
+                       AND m.code_date = CAST(e.started_on AS DATE) END
         """
     )
 

@@ -62,3 +62,16 @@ def test_output_names_have_no_glob_characters(tmp_path):
     csv.write_bytes(b"A\n1\n")
     (out, n), = ingest_file(csv, tmp_path / "out")
     assert out.name == "consolidated_x_1.parquet" and n == 1
+
+
+def test_zip_skips_macos_resource_forks(tmp_path):
+    import zipfile
+
+    from vsafe_ft.ingest import ingest_file
+
+    zp = tmp_path / "m.zip"
+    with zipfile.ZipFile(zp, "w") as z:
+        z.writestr("m/covid_meddra_sd.csv", "A\n1\n")
+        z.writestr("__MACOSX/m/._covid_meddra_sd.csv", b"\x00\x05\x16\x07\xb0")
+    outs = list(ingest_file(zp, tmp_path / "out"))
+    assert [o.name for o, _ in outs] == ["m__covid_meddra_sd.parquet"]

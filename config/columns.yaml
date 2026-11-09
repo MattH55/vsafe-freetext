@@ -52,14 +52,21 @@ health_checkins:
   tested_positive: TESTED_POSITIVE    # criterion-3 check-box exclusion (infection)
   pregnant: PREGNANT                  # criterion-3 check-box exclusion (adult file only)
 
+# Confirmed 2026-11-09 from the headers of covid_meddra_{sd,sro,hcvo}.csv in
+# vsafe-MedDRA-110124.zip (identical in all three): SURVEY_STATIC_ID, REGISTRANT_CODE,
+# RESPONSE_ID, STARTED_ON, PT_NAME, LLT_NAME, MEDDRA_VERSION, ACTIVE, NEWCODE, DATEUPDATED,
+# DATECODED. There is no field column: the field is the file name suffix (link.link_meddra).
+# The 2023 releases are not downloaded yet; add meddra_by_release overrides once seen.
 meddra:
-  registrant: TODO
-  date: TODO
-  survey_static_id: TODO
-  field: TODO
-  pt: TODO
-  llt: TODO
-  active: TODO
+  registrant: REGISTRANT_CODE
+  response_id: RESPONSE_ID
+  date: STARTED_ON
+  survey_static_id: SURVEY_STATIC_ID
+  field: null
+  pt: PT_NAME
+  llt: LLT_NAME
+  active: ACTIVE
+  meddra_version: MEDDRA_VERSION
 
 call_center:
   registrant: TODO
