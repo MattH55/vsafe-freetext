@@ -13,6 +13,7 @@ dependencies = [
   "pyarrow>=15",
   "openpyxl>=3.1",
   "pyyaml>=6",
+  "zipfile-deflate64>=0.2",
 ]
 
 [project.optional-dependencies]

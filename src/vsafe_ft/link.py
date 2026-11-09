@@ -169,19 +169,33 @@ def link_dose(con, vaccinations_parquet: str) -> None:
     )
 
 
+# The v-safe check-in files have no survey-type column. Survey type is derived from DAYS_SINCE
+# (days since the vaccination the check-in belongs to): daily check-ins days 0-7, weekly to
+# week 6, then 3-, 6- and 12-month surveys. PROVISIONAL bins: confirm against the DAYS_SINCE
+# distribution (aggregate counts only) before relying on them.
+def survey_type_from_days(col: str) -> str:
+    d = f"TRY_CAST({col} AS INTEGER)"
+    return (f"CASE WHEN {d} BETWEEN 0 AND 7 THEN 'day ' || {d} "
+            f"WHEN {d} BETWEEN 8 AND 42 THEN 'week ' || ceil({d} / 7.0)::INTEGER "
+            f"WHEN {d} BETWEEN 43 AND 135 THEN '3m' WHEN {d} BETWEEN 136 AND 270 THEN '6m' "
+            f"WHEN {d} BETWEEN 271 AND 450 THEN '12m' ELSE NULL END")
+
+
 def load_checkins(con, checkins_parquet: str) -> None:
     """Canonical `checkins` table, one row per survey_static_id."""
-    h = config.columns("health_checkins", keys=["registrant", "survey_static_id", "survey_type",
-                                                "survey_day", "medical_care", "health_impact"])
+    h = config.columns("health_checkins", keys=["registrant", "survey_static_id", "survey_day",
+                                                "medical_care", "health_impact"])
     opt = ", ".join(
         f"{_q(h[k])} AS {k}" if h.get(k) not in (None, "TODO") else f"NULL::VARCHAR AS {k}"
-        for k in ["health_now", "started_on"]
+        for k in ["health_now", "started_on", "tested_positive", "pregnant"]
     )
+    stype = (_q(h["survey_type"]) if h.get("survey_type") not in (None, "TODO")
+             else survey_type_from_days(_q(h["survey_day"])))
     con.execute(
         f"""
         CREATE OR REPLACE TABLE checkins AS
         SELECT {_q(h['survey_static_id'])} AS survey_static_id, {_q(h['registrant'])} AS registrant,
-               {_q(h['survey_type'])} AS survey_type, {_q(h['survey_day'])} AS survey_day,
+               {stype} AS survey_type, {_q(h['survey_day'])} AS survey_day,
                {_q(h['medical_care'])} AS medical_care, {_q(h['health_impact'])} AS health_impact,
                {opt}
         FROM read_parquet({_s(checkins_parquet)}, union_by_name = true)

@@ -125,6 +125,8 @@ def extract_zip(path: Path) -> list[Path]:
     """Unpack a zip into `<its dir>/extracted/<zip stem>/` (once) and list delimited files."""
     dest = path.parent / "extracted" / path.stem
     if not dest.exists():
+        import zipfile_deflate64  # noqa: F401  (adds Deflate64: the check-in zip uses method 9)
+
         tmp = dest.with_name(dest.name + ".part")
         with zipfile.ZipFile(path) as z:
             z.extractall(tmp)

@@ -32,13 +32,25 @@ vaccinations:
   vaccination_date: VACCINATION_DATE
   age_band: null             # not in this file; taken from registrants if present
 
+# Confirmed 2026-11-08 from the header of consolidated_health_checkin.csv (read from the first
+# bytes of the Deflate64 zip) and Consolidated_health_checkin_u3[1].csv. Keys shared by both:
+#   SURVEY_STATIC_ID, REGISTRANT_CODE, RESPONSE_ID, STARTED_ON, STARTED_ON_TIME, DAYS_SINCE,
+#   FEELING_TODAY, HAD_SYMPTOMS, HEALTH_IMPACT, HEALTH_NOW, HEALTH_NOW_COMPARISON,
+#   VACCINE_CAUSED_HEALTH_ISSUES, HEALTHCARE_VISITS, TESTED_POSITIVE, TESTED_POSITIVE_DATE, ...
+# Adult file adds PREGNANT, PREGNANCY_TEST and adult symptom boxes. There is NO survey-type
+# column: survey_type is derived from DAYS_SINCE (link.SURVEY_TYPE_FROM_DAYS, provisional until
+# the DAYS_SINCE distribution is checked). No age column in any file seen so far.
 health_checkins:
-  registrant: TODO
-  survey_static_id: TODO
-  survey_type: TODO
-  survey_day: TODO
-  medical_care: TODO
-  health_impact: TODO
+  registrant: REGISTRANT_CODE
+  survey_static_id: SURVEY_STATIC_ID
+  survey_type: null          # derived from survey_day
+  survey_day: DAYS_SINCE
+  medical_care: HEALTHCARE_VISITS
+  health_impact: HEALTH_IMPACT
+  health_now: HEALTH_NOW_COMPARISON   # compared with before vaccination (case criterion 1)
+  started_on: STARTED_ON
+  tested_positive: TESTED_POSITIVE    # criterion-3 check-box exclusion (infection)
+  pregnant: PREGNANT                  # criterion-3 check-box exclusion (adult file only)
 
 meddra:
   registrant: TODO

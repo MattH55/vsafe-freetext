@@ -191,3 +191,12 @@ def test_duplicate_report(con, monkeypatch):
     assert got["extra_copies_removed"] == 1
     assert got["distinct_entries"] == 4
     assert got["keys_in_under3_and_main_files"] == 0
+
+
+@pytest.mark.parametrize("days,label", [("0", "day 0"), ("7", "day 7"), ("8", "week 2"),
+                                        ("14", "week 2"), ("42", "week 6"), ("90", "3m"),
+                                        ("180", "6m"), ("365", "12m"), ("x", None), ("-1", None)])
+def test_survey_type_from_days(days, label):
+    got = duckdb.connect().execute(
+        f"SELECT {link.survey_type_from_days('d')} FROM (SELECT '{days}' AS d)").fetchall()[0][0]
+    assert got == label

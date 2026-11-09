@@ -32,6 +32,13 @@
   was already on this machine (downloaded by hand for ParentsVaccineGUide); copied to
   `<data dir>/raw/vaers/`. Add to MANIFEST.tsv when the scripted downloads finish.
 
+- Check-ins have no survey-type column: survey type is derived from `DAYS_SINCE`
+  (provisional bins in `link.survey_type_from_days`; verify on the day distribution).
+- `consolidated_health_checkin.zip` is compressed with Deflate64 (zip method 9), which Python's
+  zipfile cannot read; ingest uses `zipfile-deflate64`.
+- Still no age column after check-ins: `age_band` cannot be a reporting dimension unless
+  another file supplies it. Decide whether to drop it from `aggregate.DIMENSIONS`.
+
 ## Immediate next steps
 - [ ] Download the 13 updated free-text files, Nov 2024 MedDRA, registrants, vaccinations, check-ins (~7 GB); add URLs to `config/sources.yaml`.
 - [ ] `vsafe-ft inspect` the first release; fill `config/columns.yaml`.
