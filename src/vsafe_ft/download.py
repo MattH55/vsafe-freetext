@@ -29,10 +29,25 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _expected_total(r, have: int) -> int | None:
+    """Full file size from Content-Range ('bytes a-b/total') or Content-Length."""
+    cr = r.headers.get("Content-Range")
+    if cr and "/" in cr and cr.rsplit("/", 1)[1].isdigit():
+        return int(cr.rsplit("/", 1)[1])
+    cl = r.headers.get("Content-Length")
+    return have + int(cl) if cl and cl.isdigit() else None
+
+
 def fetch(url: str, dest: Path, retries: int = 20) -> None:
-    """Download url -> dest, resuming from dest.part; retries with backoff on errors."""
+    """Download url -> dest, resuming from dest.part; retries with backoff on errors.
+
+    `retries` counts consecutive failures that made no progress, so a long download on a
+    flaky link keeps going as long as bytes keep arriving. The file is renamed into place
+    only when its size equals the size the server declared.
+    """
     tmp = dest.with_name(dest.name + ".part")
-    for attempt in range(retries):
+    failures = 0
+    while failures < retries:
         have = tmp.stat().st_size if tmp.exists() else 0
         req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         if have:
@@ -41,8 +56,12 @@ def fetch(url: str, dest: Path, retries: int = 20) -> None:
             with urllib.request.urlopen(req, timeout=120) as r:
                 if have and r.status != 206:       # server ignored Range: start over
                     have = 0
+                total = _expected_total(r, have)
                 with open(tmp, "ab" if have else "wb") as out:
                     shutil.copyfileobj(r, out, 1 << 20)
+            size = tmp.stat().st_size
+            if total is not None and size != total:
+                raise ConnectionError(f"stream ended at {size} of {total} bytes")
             tmp.replace(dest)
             return
         except urllib.error.HTTPError as e:
@@ -52,10 +71,12 @@ def fetch(url: str, dest: Path, retries: int = 20) -> None:
             err = e
         except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as e:
             err = e
-        wait = min(300, 5 * 2 ** attempt)
-        print(f"[retry] {dest.name}: {err!r}; {have} bytes so far; waiting {wait}s", flush=True)
+        now = tmp.stat().st_size if tmp.exists() else 0
+        failures = 0 if now > have else failures + 1
+        wait = min(300, 5 * 2 ** failures)
+        print(f"[retry] {dest.name}: {err!r}; {now} bytes so far; waiting {wait}s", flush=True)
         time.sleep(wait)
-    raise RuntimeError(f"giving up on {url}")
+    raise RuntimeError(f"giving up on {url} after {retries} failures without progress")
 
 
 def read_manifest(path: Path) -> dict[tuple[str, str], list[str]]:
