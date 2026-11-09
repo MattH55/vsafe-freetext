@@ -278,6 +278,7 @@ def link_meddra(con, sources: list[tuple[str, str]],
                   THEN m.response_id = e.response_id AND m.registrant = e.registrant
                   ELSE m.registrant = e.registrant
                        AND m.code_date = CAST(e.started_on AS DATE) END
+        WHERE m.active IS NULL OR upper(trim(m.active)) IN ('YES', 'Y', 'TRUE', '1')
         """
     )
 

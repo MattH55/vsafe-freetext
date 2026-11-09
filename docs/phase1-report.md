@@ -21,6 +21,9 @@ Aggregates only. Every table below passed `suppress.suppress` + `suppress.assert
 | ingest | original r01.xlsx | 390,000 | 27 s |
 | ingest | original r12_under3.xlsx | 16,418 | 2 s |
 | ingest | vaccinations CSV (909 MB unzipped) | 20,140,862 | 49 s |
+| ingest | registrants CSV | 10,094,310 | 28 s |
+| download | MedDRA 2024-11 zip (383 MB) | | 11,498 s (6 connection resets, resumed) |
+| ingest | MedDRA 2024-11 (3 CSVs, 2.0 GB unzipped) | 14,134,779 | 95 s |
 
 ## Gate 1: join rates
 
@@ -49,4 +52,18 @@ differences. Releases 2-12 to follow as they download.
 
 ## QA: duplicates, MedDRA coverage
 
-_Pending._
+MedDRA 2024-11 release, whole file (all survey types; codes only, no text read):
+
+| Field file | Code rows | People | Responses |
+|---|---|---|---|
+| SD | 7,923,602 | 2,191,402 | 3,612,159 |
+| SRO | 5,844,757 | 2,180,183 | 4,094,478 |
+| HCVO | 366,420 | 263,253 | 318,968 |
+
+- `ACTIVE`: 13,911,745 YES, 223,034 NO (1.6%). Inactive codes are dropped in `link_meddra`.
+- `MEDDRA_VERSION`: 25.1 (44%), 27.0, 26.0, 26.1, 27.1 (<0.1%): the dictionary version
+  changed during coding; check for PT renames across versions when building
+  `taxonomy/v0/meddra_map.csv`.
+- No row lacks `RESPONSE_ID` or `PT_NAME`: codes join to entries on response id + field.
+
+Coverage of release-1 entries: _pending (needs the check-in file for the survey link)._

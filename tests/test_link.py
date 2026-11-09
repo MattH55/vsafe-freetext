@@ -211,10 +211,22 @@ def test_link_meddra_by_response_id_and_file_field(con, tmp_path, monkeypatch):
     pl.DataFrame({"R": ["a", "a", "a"], "RID": ["1", "1", "2"],
                   "D": ["1999-01-01", "1999-01-01", "2021-07-01"],
                   "PT": ["Fatigue", "Fatigue", "Dizziness"], "LLT": ["T", "T", "D"],
-                  "A": ["Y", "Y", "Y"],
+                  "A": ["Y", "Y", "Y"],  # see test below for inactive codes
                   "_release": ["z/covid_meddra_sd", "z/covid_meddra_sro", "z/covid_meddra_SRO"]}
                  ).write_parquet(tmp_path / "m.parquet")
     link.link_meddra(con, [(str(tmp_path / "m.parquet"), "2024-11")])
     got = con.execute("""SELECT e.response_id, e.field, m.meddra_release, m.pt
                          FROM entry_meddra m JOIN entries e USING (entry_id) ORDER BY ALL""").fetchall()
     assert got == [("1", "SD", "2024-11", "Fatigue"), ("2", "SRO", "2024-11", "Dizziness")]
+
+
+def test_link_meddra_drops_inactive_codes(con, tmp_path, monkeypatch):
+    cols = dict(COLS, meddra={"registrant": "R", "response_id": "RID", "date": "D",
+                              "field": None, "pt": "PT", "llt": "LLT", "active": "A"})
+    monkeypatch.setattr(config, "columns",
+                        lambda t, require=True, keys=None, release=None: dict(cols[t]))
+    pl.DataFrame({"R": ["a", "a"], "RID": ["1", "1"], "D": ["2021-03-05"] * 2,
+                  "PT": ["Fatigue", "Old term"], "LLT": ["T", "O"], "A": ["YES", "NO"],
+                  "_release": ["z/covid_meddra_sd"] * 2}).write_parquet(tmp_path / "m.parquet")
+    link.link_meddra(con, [(str(tmp_path / "m.parquet"), "2024-11")])
+    assert con.execute("SELECT pt FROM entry_meddra").fetchall() == [("Fatigue",)]
