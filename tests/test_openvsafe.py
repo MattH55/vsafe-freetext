@@ -70,3 +70,21 @@ def test_retries_on_429():
     openvsafe.crawl(con, ["A"], get=lambda u, t: seq.pop(0), sleep=lambda s: None,
                     log=lambda *_: None)
     assert con.execute("SELECT status FROM ovs_fetch").fetchone()[0] == "match"
+
+
+def test_network_timeout_is_retried_then_error(monkeypatch):
+    import urllib.request
+
+    def boom(*a, **k):
+        raise TimeoutError("The read operation timed out")
+
+    monkeypatch.setattr(urllib.request, "urlopen", boom)
+    assert openvsafe._get("https://example.invalid/x", 1) == (0, "")
+    con = duckdb.connect()
+    con.execute(openvsafe.DDL)
+    run = openvsafe.crawl(con, ["A"], get=lambda u, t: (0, ""), sleep=lambda s: None,
+                          log=lambda *_: None)
+    assert run["errors"] == 1
+    openvsafe.crawl(con, ["A"], get=lambda u, t: (200, page([(9, "high", 9, 1)])),
+                    sleep=lambda s: None, log=lambda *_: None)
+    assert con.execute("SELECT status FROM ovs_fetch").fetchall() == [("match",)]

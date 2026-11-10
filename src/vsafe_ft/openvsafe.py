@@ -90,6 +90,8 @@ def _get(url: str, timeout: float) -> tuple[int, str]:
             return r.status, r.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
         return e.code, ""
+    except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
+        return 0, ""            # network failure: retried, then recorded as an error
 
 
 def connect(path: Path | None = None) -> duckdb.DuckDBPyConnection:
@@ -103,7 +105,8 @@ def connect(path: Path | None = None) -> duckdb.DuckDBPyConnection:
 def crawl(con, registrants: list[str], *, rate: float = 1.0, get=_get, timeout: float = 30,
           sleep=time.sleep, log=print, max_errors: int = 50) -> dict:
     """Fetch and parse each registrant not yet fetched; returns counts only."""
-    done = {r for (r,) in con.execute("SELECT registrant FROM ovs_fetch").fetchall()}
+    done = {r for (r,) in con.execute(
+        "SELECT registrant FROM ovs_fetch WHERE status <> 'error'").fetchall()}   # errors retried
     todo = [r for r in registrants if r not in done]
     n = found = errors = 0
     t0 = time.time()
@@ -111,7 +114,7 @@ def crawl(con, registrants: list[str], *, rate: float = 1.0, get=_get, timeout: 
         start = time.time()
         for attempt in range(4):
             status, html = get(BASE + code, timeout)
-            if status not in (429, 500, 502, 503, 504):
+            if status not in (0, 429, 500, 502, 503, 504):
                 break
             sleep(30 * (attempt + 1))
         if status == 200:
@@ -121,7 +124,7 @@ def crawl(con, registrants: list[str], *, rate: float = 1.0, get=_get, timeout: 
             rows, st = [], "not_found" if status == 404 else "error"
             errors += st == "error"
         del html
-        con.execute("INSERT INTO ovs_fetch VALUES (?, ?, ?, ?, now())",
+        con.execute("INSERT OR REPLACE INTO ovs_fetch VALUES (?, ?, ?, ?, now())",
                     [code, st, status, len(rows)])
         for i, r in enumerate(rows, 1):
             con.execute("INSERT INTO ovs_matches VALUES (?, ?, ?, ?, ?, ?)",
