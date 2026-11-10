@@ -157,3 +157,67 @@ def test_aggregates_are_suppressed(con):
     sh = layer3.model_shift(con, "test/model", "test/second")
     row = sh.filter(sh["theme"] == "fatigue_pem").row(0, named=True)
     assert row["model1_entries"] == row["model2_entries"] == 12 and not row["model_sensitive"]
+
+
+class FakeAnthropic:
+    """Stands in for anthropic.Anthropic: records kwargs, replies with structured JSON."""
+
+    def __init__(self, stop_reason="end_turn"):
+        from types import SimpleNamespace as NS
+
+        self.calls, self.stop_reason, self.NS = [], stop_reason, NS
+        self.beta = NS(messages=NS(create=self._create))
+
+    def _create(self, **kw):
+        self.calls.append(kw)
+        n = kw["messages"][0]["content"].split("Entries:\n")[1].count("\n") + 1
+        body = json.dumps({"results": [{"i": i, "themes": ["pain"], "third_party": False,
+                                        "pre_vaccine": False} for i in range(1, n + 1)]})
+        NS = self.NS
+        content = [] if self.stop_reason == "refusal" else [NS(type="text", text=body)]
+        return NS(stop_reason=self.stop_reason, content=content,
+                  usage=NS(input_tokens=1000, output_tokens=500))
+
+
+def test_claude_request_shape_and_cost():
+    fake = FakeAnthropic()
+    lab = llm.ClaudeAPI(THEMES, model="claude-opus-5-5", client=fake)
+    out = lab.label(["a", "b"])
+    kw = fake.calls[0]
+    assert kw["fallbacks"] == "default" and kw["betas"] == ["server-side-fallback-2026-07-01"]
+    schema = kw["output_config"]["format"]["schema"]
+    assert schema["properties"]["results"]["items"]["properties"]["themes"]["items"]["enum"] == \
+        list(THEMES)
+    assert "temperature" not in kw and "thinking" not in kw
+    assert [o["themes"] for o in out] == [["pain"], ["pain"]]
+    assert lab.cost_usd == pytest.approx((1000 * 4 + 500 * 20) / 1e6)
+
+
+def test_claude_haiku_has_no_fallbacks_and_refusal_is_not_ok():
+    fake = FakeAnthropic(stop_reason="refusal")
+    lab = llm.ClaudeAPI(THEMES, model="claude-haiku-5-5", client=fake)
+    assert lab.label(["a"]) == [None] and lab.refusals == 1
+    assert "fallbacks" not in fake.calls[0]
+
+
+def test_claude_refuses_pii():
+    fake = FakeAnthropic()
+    with pytest.raises(ValueError):
+        llm.ClaudeAPI(THEMES, client=fake).label(["x a@b.com"])
+    assert fake.calls == []
+
+
+def test_nanogpt_uses_subscription_endpoint():
+    urls = []
+
+    def post(url, body, key, timeout):
+        urls.append(url)
+        return FakePost()(url, body, key, timeout)
+
+    llm.NanoGPT(THEMES, key="k", post=post).label(["zebra"])
+    assert urls == [llm.SUBSCRIPTION_URL]
+
+
+def test_make_labeller_dispatch(monkeypatch):
+    monkeypatch.setenv("NANOGPT_API_KEY", "k")
+    assert isinstance(llm.make_labeller(THEMES, "z-ai/glm-5.3"), llm.NanoGPT)

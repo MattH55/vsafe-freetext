@@ -1,12 +1,15 @@
 """Layer 3: closed-list LLM labelling of the ambiguous residue and validation samples.
 
-Provider: NanoGPT (OpenAI-compatible), approved by the protocol owner 2026-11-10; retention
-terms in docs/data-use.md. Rules (protocol, Limitations section; brief rule 4):
+Providers (approved by the protocol owner 2026-11-10; retention terms in docs/data-use.md):
+- primary: a NanoGPT subscription model (OpenAI-compatible), zero-data-retention routes only;
+- second LLM (model-sensitivity check): Claude via the Anthropic API (`ClaudeAPI`), whose
+  default retention is 30 days, so it receives only the comparison sample.
+Rules (protocol, Limitations section; brief rule 4):
 - Send text only: never registrant codes, response ids or any identifier. Entries are numbered
   1..n inside one request; the numbers are positions, not ids.
 - Entries with a detectable email address or phone number are never sent.
-- Every request sets provider.zdr = true and data_collection = deny, so NanoGPT routes only to
-  providers that state zero data retention and fails rather than fall back.
+- Every NanoGPT request sets provider.zdr = true and data_collection = deny, so NanoGPT routes
+  only to providers that state zero data retention and fails rather than fall back.
 - The prompt and the theme list are fixed and versioned with the taxonomy (PROMPT_VERSION).
 - Pre-registration guard: the caller selects only week-1 / six-week entries until the OSF
   registration exists (themes.exploratory_filter_sql); `label_entries` enforces it.
@@ -28,9 +31,10 @@ PII = [
     re.compile(r"\b(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b"),  # phone
 ]
 
-API_URL = "https://api.nano-gpt.com/api/v1/chat/completions"
-DEFAULT_MODEL = "anthropic/claude-haiku-5.5"
-SECOND_MODEL = "openai/gpt-5.4-mini"        # second LLM for the model-sensitivity check
+API_URL = "https://api.nano-gpt.com/api/v1/chat/completions"                   # pay per token
+SUBSCRIPTION_URL = "https://nano-gpt.com/api/subscription/v1/chat/completions"  # subscription
+DEFAULT_MODEL = "z-ai/glm-5.3"              # NanoGPT subscription model, ZDR route verified
+SECOND_MODEL = "claude-opus-5-5"            # Anthropic API: second LLM for model sensitivity
 PROMPT_VERSION = "v0-2026-11-10"
 PROVIDER = {"zdr": True, "data_collection": "deny"}
 
@@ -69,10 +73,10 @@ def build_prompt(themes: dict[str, str], texts: list[str]) -> str:
     return PROMPT.format(themes=th, entries=en)
 
 
-def api_key(data_dir: Path | None = None) -> str:
-    """NANOGPT_API_KEY from the environment, else from <data dir>/.env (never the repo)."""
-    if os.environ.get("NANOGPT_API_KEY"):
-        return os.environ["NANOGPT_API_KEY"]
+def api_key(data_dir: Path | None = None, name: str = "NANOGPT_API_KEY") -> str:
+    """`name` from the environment, else from <data dir>/.env (never the repo)."""
+    if os.environ.get(name):
+        return os.environ[name]
     if data_dir is None:
         from .. import config
         data_dir = config.DATA_DIR
@@ -80,9 +84,9 @@ def api_key(data_dir: Path | None = None) -> str:
     if env.exists():
         for line in env.read_text(encoding="utf-8").splitlines():
             k, _, v = line.partition("=")
-            if k.strip() == "NANOGPT_API_KEY" and v.strip():
+            if k.strip() == name and v.strip():
                 return v.strip()
-    raise RuntimeError("NANOGPT_API_KEY not set (environment or <VSAFE_DATA_DIR>/.env)")
+    raise RuntimeError(f"{name} not set (environment or <VSAFE_DATA_DIR>/.env)")
 
 
 def parse_results(content: str, n: int, allowed: set[str]) -> list[dict | None]:
@@ -134,8 +138,9 @@ class NanoGPT:
 
     def __init__(self, themes: dict[str, str], model: str = DEFAULT_MODEL, key: str | None = None,
                  post: Callable[[str, dict, str, float], dict] | None = None,
-                 timeout: float = 180, retries: int = 4):
+                 timeout: float = 180, retries: int = 4, subscription: bool = True):
         self.themes, self.model = themes, model
+        self.url = SUBSCRIPTION_URL if subscription else API_URL
         self.key = key if key is not None else api_key()
         self.post = post or _http_post
         self.timeout, self.retries = timeout, retries
@@ -162,7 +167,7 @@ class NanoGPT:
     def _post_with_retry(self, body: dict) -> dict:
         for attempt in range(self.retries + 1):
             try:
-                d = self.post(API_URL, body, self.key, self.timeout)
+                d = self.post(self.url, body, self.key, self.timeout)
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504) and attempt < self.retries:
                     time.sleep(2 ** attempt * 5)
@@ -180,3 +185,74 @@ class NanoGPT:
                 raise RuntimeError(f"NanoGPT error: {code}")
             return d
         raise RuntimeError("unreachable")
+
+
+# USD per million tokens (input, output), Claude API list prices 2026-10; for the spend cap only.
+CLAUDE_PRICES = {"claude-opus-5-5": (4.0, 20.0), "claude-sonnet-5-5": (2.0, 10.0),
+                 "claude-haiku-5-5": (0.10, 0.50)}
+
+
+def result_schema(themes: list[str]) -> dict:
+    """JSON schema for structured output: themes constrained to the closed list."""
+    item = {"type": "object", "additionalProperties": False,
+            "required": ["i", "themes", "third_party", "pre_vaccine"],
+            "properties": {"i": {"type": "integer"},
+                           "themes": {"type": "array", "items": {"type": "string", "enum": themes}},
+                           "third_party": {"type": "boolean"},
+                           "pre_vaccine": {"type": "boolean"}}}
+    return {"type": "object", "additionalProperties": False, "required": ["results"],
+            "properties": {"results": {"type": "array", "items": item}}}
+
+
+class ClaudeAPI:
+    """Closed-list labeller over the Anthropic Messages API (second LLM).
+
+    Structured output constrains the reply to the theme list. Opus/Sonnet requests opt into
+    server-side refusal fallbacks; a refusal that survives yields no labels (stored not ok).
+    """
+
+    def __init__(self, themes: dict[str, str], model: str = SECOND_MODEL, client=None,
+                 effort: str = "low"):
+        self.themes, self.model, self.effort = themes, model, effort
+        if client is None:
+            import anthropic
+
+            client = anthropic.Anthropic(api_key=api_key(name="ANTHROPIC_API_KEY"),
+                                         max_retries=4)
+        self.client = client
+        self.cost_usd = 0.0
+        self.tokens = 0
+        self.requests = 0
+        self.refusals = 0
+
+    def label(self, texts: list[str]) -> list[dict | None]:
+        if any(has_pii(t) for t in texts):
+            raise ValueError("refusing to send entries with a detectable email or phone number")
+        kwargs = {}
+        if self.model.startswith(("claude-opus", "claude-fable", "claude-sonnet")):
+            kwargs = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"}
+        r = self.client.beta.messages.create(
+            model=self.model, max_tokens=16000,
+            output_config={"effort": self.effort,
+                           "format": {"type": "json_schema",
+                                      "schema": result_schema(list(self.themes))}},
+            messages=[{"role": "user", "content": build_prompt(self.themes, texts)}],
+            **kwargs)
+        self.requests += 1
+        u = r.usage
+        tin, tout = int(u.input_tokens or 0), int(u.output_tokens or 0)
+        self.tokens += tin + tout
+        pin, pout = CLAUDE_PRICES.get(self.model, (5.0, 25.0))
+        self.cost_usd += (tin * pin + tout * pout) / 1e6
+        if r.stop_reason == "refusal":
+            self.refusals += 1
+            return [None] * len(texts)
+        text = next((b.text for b in r.content if b.type == "text"), "")
+        return parse_results(text, len(texts), set(self.themes))
+
+
+def make_labeller(themes: dict[str, str], model: str):
+    """Claude models go to the Anthropic API; everything else to the NanoGPT subscription."""
+    if model.startswith("claude-"):
+        return ClaudeAPI(themes, model=model)
+    return NanoGPT(themes, model=model)

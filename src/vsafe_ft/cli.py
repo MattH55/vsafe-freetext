@@ -172,10 +172,10 @@ def cmd_meddra_map(a):
 def _llm(model: str):
     import yaml
 
-    from .classify.llm import NanoGPT, theme_list
+    from .classify.llm import make_labeller, theme_list
     from .themes import TAXONOMY
 
-    return NanoGPT(theme_list(yaml.safe_load(TAXONOMY.read_text(encoding="utf-8"))), model=model)
+    return make_labeller(theme_list(yaml.safe_load(TAXONOMY.read_text(encoding="utf-8"))), model)
 
 
 def cmd_llm_label(a):

@@ -85,6 +85,7 @@ def label_entries(con, labeller, *, sample: int, seed: int = 1, residue_only: bo
            "unique_texts_to_label": len(hashes), "texts_sent": done,
            "skipped_pii": sum(pii), "failed": failed, "requests": labeller.requests,
            "tokens": labeller.tokens, "cost_usd": round(labeller.cost_usd, 4),
+           "refusals": getattr(labeller, "refusals", 0),
            "seconds": round(time.time() - t0)}
     con.execute("INSERT INTO llm_runs VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [started, model, PROMPT_VERSION, done, run["skipped_pii"], failed,
