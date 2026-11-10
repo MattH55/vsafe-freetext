@@ -80,7 +80,11 @@ def test_acute_themes_are_not_pacvs():
         encoding="utf-8"))
     pacvs = {t for t, b in spec["themes"].items() if b["domain"] == "pacvs"}
     assert pacvs == {"fatigue_pem", "cognitive", "dysautonomia", "sensory_neuropathic", "sleep",
-                     "pain", "gastrointestinal", "menstrual"}      # the eight protocol domains
+                     "pain", "gastrointestinal", "menstrual",
+                     "cardiorespiratory"}       # the nine protocol domains (2026-11-10)
+    exclusions = {t for t, b in spec["themes"].items() if b["domain"] == "exclusion"}
+    assert {"acute_diagnosis", "unrelated_cause", "upper_respiratory"} <= exclusions
+    assert spec["themes"]["taste_smell"]["domain"] == "acute"
 
 
 @pytest.mark.parametrize("text,hit", [

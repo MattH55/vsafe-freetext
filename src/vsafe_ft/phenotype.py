@@ -7,7 +7,7 @@ Inputs (canonical tables; `prepare` builds them from the linked data):
       worse  = "health now" worse than baseline; impact = unable to do normal activities,
       missed work/school, or needed care.
   ph_entry_themes(registrant, dose_number, response_id, theme, domain)
-      classified free text; domain is 'pacvs' for the eight candidate domains and
+      classified free text; domain is 'pacvs' for the nine candidate domains and
       'exclusion' for named acute diagnoses / unrelated causes.
 
 Case (per registrant x dose), all of:

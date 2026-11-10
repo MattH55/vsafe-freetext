@@ -127,9 +127,10 @@ of the largest n-gram in each (drafted taxonomy):
 | positive test, seasonal allergies | 1,689 | added to `unrelated_cause` |
 
 After the additions the most frequent leftovers are non-specific words (pain, arm, sore,
-mild, none, vaccine, shot, today). Open for the protocol owner: whether `taste_smell` or
-`cardiorespiratory` belong among the PACVS domains (both are long-COVID features), and
-whether `upper_respiratory` should be a criterion-3 exclusion (a likely cold).
+mild, none, vaccine, shot, today). Protocol owner decisions (2026-11-10): `cardiorespiratory`
+becomes a ninth candidate PACVS domain; `taste_smell` stays a labelled acute theme, not a
+domain; `upper_respiratory` is a criterion-3 exclusion. No file carries age, so no output is
+stratified by age band (accepted).
 
 ## MedDRA map and theme precision
 

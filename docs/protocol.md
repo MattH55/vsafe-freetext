@@ -58,7 +58,10 @@ All of:
    or an unrelated cause (injury, pregnancy, infection).
 
 **Domains:** fatigue/PEM; cognitive; dysautonomia; sensory/neuropathic; sleep; pain;
-gastrointestinal; menstrual change. Implemented as themes in `taxonomy/`.
+gastrointestinal; menstrual change; cardiorespiratory (dyspnoea, chest tightness; added
+2026-11-10). Implemented as themes in `taxonomy/`. Altered taste/smell is labelled but is not a
+domain. Upper-respiratory symptoms (sore throat, congestion, cough) count as a criterion-3
+exclusion (likely intercurrent infection).
 
 | Element | Choice |
 |---|---|

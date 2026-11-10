@@ -99,7 +99,8 @@ themes:
     terms: ["lymph ?nodes?", lymphadenopathy, "swollen (?:glands?|nodes?)", "axilla\\w*",
             "arm ?pits?", "under (?:my |the )?arm"]
   upper_respiratory:
-    domain: acute
+    # criterion-3 exclusion (likely intercurrent cold): protocol owner decision 2026-11-10
+    domain: exclusion
     terms: ["sore throat", "scratchy throat", "runny nose", "stuffy nose", "(?:nasal|sinus) congestion",
             "congest\\w*", "sneez\\w*", "post.?nasal drip", "cough\\w*", "nasal drainage"]
   fever_chills:
@@ -110,11 +111,12 @@ themes:
     terms: [rash, "rashes", hives, urticaria, "itch\\w*"]
   taste_smell:
     domain: acute
-    # loss of taste/smell is also a long-COVID feature: flag for the protocol owner
+    # not a PACVS domain: protocol owner decision 2026-11-10
     terms: ["metallic taste", "(?:loss of|lost(?: my| the)?|no|altered|changes? in) (?:taste|smell)",
             "taste in (?:my |the )?mouth", "dry mouth"]
   cardiorespiratory:
-    domain: acute
-    # dyspnoea and chest tightness overlap PACVS exercise intolerance: flag for the protocol owner
+    # ninth candidate PACVS domain (dyspnoea, chest tightness): protocol owner decision
+    # 2026-11-10. Week-1 hits are mostly acute; the domain counts only at long-term surveys.
+    domain: pacvs
     terms: ["short(?:ness)? of breath", "(?:difficulty|trouble) breathing", "chest (?:tightness|pressure)",
             "tight(?:ness in (?:my |the )?)? chest"]
