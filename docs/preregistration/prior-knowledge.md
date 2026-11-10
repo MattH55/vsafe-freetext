@@ -13,3 +13,4 @@ week-1 and six-week entries of one updated release are used for the exploratory 
 | 2026-11-09 | vsafe-MedDRA-110124.zip (covid_meddra_sd/sro/hcvo.csv) | Header row only | Column names; no data rows |
 | 2026-11-09 | consolidated_health_checkin (adult, Parquet) | `DAYS_SINCE` value counts; distinct people and survey ids | Counts by day since vaccination only (phase1-report.md); no text |
 | 2026-11-09 | check-ins (adult + u3), updated r01 (Parquet) | Key checks: counts of rows, non-null and distinct `RESPONSE_ID`, distinct `SURVEY_STATIC_ID`; per form id the count and min/median/max `DAYS_SINCE` | Counts and day summaries only; no text |
+| 2026-11-09 | linked r01 entries (DuckDB) | Join rates; counts by field, survey type, dose, redaction flag; dose-day vs `DAYS_SINCE` agreement | Counts only; no text. r01 has no long-term check-ins |

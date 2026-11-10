@@ -35,7 +35,26 @@ bins in `link.survey_type_from_days` hold for adults too.
 
 ## Gate 1: join rates
 
-_Pending: needs vaccinations, registrants and check-ins ingested._
+Updated release 1 (`vsafe-ft link --release r01 --skip-outcomes`, 1,485 s; `vsafe-ft gate`):
+**PASS**.
+
+| Metric | Rate | Entries not linked |
+|---|---|---|
+| Dose linked (a vaccination on or before the check-in) | 1.000 | 0 of 395,010 |
+| Survey matched (check-in found on response id + registrant) | 1.000 | 0 |
+| Registrant matched (in the registrants file) | 1.000 | 0 |
+| Beyond the dose window | | 0 |
+
+- 395,010 entries (SRO 345,957, SD 41,470, HCVO 7,583) from 390,000 rows.
+- Cross-check: the dose-linked days since vaccination equal the check-in's own `DAYS_SINCE`
+  for 394,959 entries (99.99%); 14 differ by 1 day, 16 by 2-7 days, 21 by more than 7.
+- Release 1 holds only week-1 (342,103 entries, 237,568 people) and weeks 2-6 (52,907
+  entries, 48,808 people) check-ins: no long-term survey text, so the whole release is
+  inside the exploratory scope.
+- Doses: dose 1 351,730 entries, dose 2 43,280.
+- Redaction marker present: HCVO 151, SRO 177, SD 29 entries.
+- Two bugs found on the way, both fixed before this run: check-ins had been keyed on the
+  survey form id, and `MM/DD/YYYY` dates were not parsed (see `docs/open-questions.md`).
 
 ## Layer-1 lexicon coverage (week-1 and six-week entries only)
 
