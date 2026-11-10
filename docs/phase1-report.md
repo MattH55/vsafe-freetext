@@ -251,6 +251,23 @@ model-sensitivity sample after registration is the confirmatory check.
 Caveat: these are week-1 / six-week entries. Long-term surveys, where the PACVS domains matter,
 are untouched until the OSF registration exists.
 
+## Gold set, early period (drawn 2026-11-10)
+
+`vsafe-ft gold draw --size 1000 --seed 1` on release-1 week-1 / six-week entries (2 s);
+blind sheets for coders A and B written to `<DATA_DIR>/gold_set/` (`vsafe-ft gold sheets`).
+Coding guide: `docs/gold-coding-guide.md`. The long-term 1,000 are drawn after the OSF
+registration; classifier P/R is computed only then.
+
+| Stratum (field, layer 1) | Entries | Distinct texts | People | Weight |
+|---|---|---|---|---|
+| HCVO, themed | 85 | 85 | 85 | 11.82 |
+| HCVO, unthemed | 91 | 90 | 90 | 70.63 |
+| SD, themed | 128 | 121 | 128 | 275.13 |
+| SD, unthemed | 91 | 91 | 91 | 68.40 |
+| SRO, themed | 382 | 317 | 382 | 616.35 |
+| SRO, unthemed | 223 | 191 | 223 | 494.77 |
+| **all** | **1,000** | **887 (sheet rows)** | | |
+
 ## Call-center outcomes (task 3.8)
 
 Two FOIA files, ingested 2026-11-10: 23-00926 (CDC; 1,606,548 rows, 2 s) and 23-00925 (GDIT;
