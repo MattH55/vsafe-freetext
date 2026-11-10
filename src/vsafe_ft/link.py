@@ -404,6 +404,19 @@ def link_outcomes(con, sources: list[tuple[str, str]], truthy: tuple[str, ...] =
     )
 
 
+def outcome_rates(con) -> pl.DataFrame:
+    """Entries with a call-center case / VAERS filing in the window, by field (suppressed)."""
+    return safe(frame(con, """
+        SELECT e.field, count(*) AS entries, count(DISTINCT e.registrant) AS people,
+               count(DISTINCT e.registrant) FILTER (WHERE o.cc_cases > 0) AS cc_people,
+               count(DISTINCT e.registrant) FILTER (WHERE o.vaers_filed) AS vaers_filed_people,
+               round(avg((o.cc_cases > 0)::INT), 4) AS share_entries_with_case,
+               round(avg(o.vaers_filed::INT), 4) AS share_entries_vaers_filed
+        FROM entries e JOIN entry_outcomes o USING (entry_id)
+        GROUP BY ROLLUP (e.field) ORDER BY e.field NULLS LAST""").with_columns(
+        pl.col("field").fill_null("all")))
+
+
 def outcome_summary(con) -> pl.DataFrame:
     """Call-center cases by source coverage and VAERS filing (people, suppressed)."""
     return safe(frame(con, """

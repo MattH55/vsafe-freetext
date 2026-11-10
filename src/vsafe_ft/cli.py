@@ -85,6 +85,12 @@ def cmd_link(a):
 
     con = link.connect()
     t0 = time.time()
+    if a.outcomes_only:
+        link.link_outcomes(con, _labelled("call_center"))
+        _write(link.outcome_summary(con), "phase1_call_center_cases")
+        _write(link.outcome_rates(con), "phase1_entry_outcomes")
+        print(f"outcomes linked in {time.time() - t0:.0f}s")
+        return
     ft = (str(config.DATA_DIR / "interim" / "freetext_updated" / f"{a.release}.parquet")
           if a.release else _glob("freetext_updated"))
     link.build_entries(con, ft)
@@ -237,6 +243,8 @@ def main(argv=None):
     s.add_argument("--release", help="one updated release (file stem), e.g. r01")
     s.add_argument("--skip-meddra", action="store_true")
     s.add_argument("--skip-outcomes", action="store_true")
+    s.add_argument("--outcomes-only", action="store_true",
+                   help="relink call-center outcomes onto the existing entries")
     s.set_defaults(func=cmd_link)
 
     s = sub.add_parser("gate", help="report gate-1 join rates")

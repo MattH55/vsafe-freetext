@@ -156,6 +156,38 @@ Issues found and their status:
 | acute_diagnosis | "Pre-existing disease" on 11% of its entries | open: history mentions, not new diagnoses |
 | fatigue_pem, pain | headache / fatigue co-coded | expected: entries list several symptoms |
 
+## Call-center outcomes (task 3.8)
+
+Two FOIA files, ingested 2026-11-10: 23-00926 (CDC; 1,606,548 rows, 2 s) and 23-00925 (GDIT;
+1,605,019 rows, 5 s; cp1252-encoded, transcoded to UTF-8 at ingest). They describe the same
+cases: 1,598,307 (registrant, survey form, reported date) keys appear in both. The CDC file
+carries the trigger (health-impact answers) and care sought; the GDIT file carries call and
+VAERS outcomes. Cases are merged on that key (`link_outcomes`).
+
+| Cases in | Cases | People | VAERS filed (cases) | VAERS filed (people) |
+|---|---|---|---|---|
+| both files | 1,598,712 | 1,125,929 | 71,362 | 44,760 |
+| GDIT only | 3,644 | 3,605 | 304 | 301 |
+| CDC only | <10 people (suppressed) | | | |
+
+VAERS filed = the report outcome says the report was completed by phone or had already been
+filed. "Prefers to complete online" (about 77k people) is intent and is not counted, so this is
+a lower bound on filing.
+
+Release-1 entries with a call-center case within 90 days (`entry_outcomes`):
+
+| Field | Entries | People | People with a case | People with VAERS filed | Share of entries with a case |
+|---|---|---|---|---|---|
+| SD | 41,470 | 40,322 | 20,481 | 836 | 0.52 |
+| SRO | 345,957 | 242,609 | 77,319 | 2,666 | 0.34 |
+| HCVO | 7,583 | 7,038 | 7,038 | 905 | 1.00 |
+| all | 395,010 | 272,304 | 92,428 | 3,167 | 0.37 |
+
+Every HCVO entry has a case, as expected: reporting a care visit triggers a call. Both files
+also carry age at vaccination (`AGE_AT_VX`), but only for called registrants (about 2/3 of
+cases), so it is not a usable age variable for the whole cohort; no output is stratified by
+age (protocol owner, 2026-11-10). Link time: 15 s.
+
 ## QA: original vs updated (task 3.7)
 
 Rows compared as a multiset over the shared columns (REGISTRANT_CODE and the three text
