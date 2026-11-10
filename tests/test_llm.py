@@ -221,3 +221,21 @@ def test_nanogpt_uses_subscription_endpoint():
 def test_make_labeller_dispatch(monkeypatch):
     monkeypatch.setenv("NANOGPT_API_KEY", "k")
     assert isinstance(llm.make_labeller(THEMES, "z-ai/glm-5.3"), llm.NanoGPT)
+
+
+def test_reports_can_restrict_to_the_run_sample(con):
+    layer3.label_entries(con, labeller(), sample=100, log=lambda *_: None)
+    smp = {"sample": 3, "seed": 1, "residue_only": False}
+    cov = layer3.coverage(con, "test/model", sample=smp)
+    # 3 sampled entries -> every cell is under 10 people and suppressed
+    assert cov["suppressed"].all()
+    full = layer3.coverage(con, "test/model")
+    assert full.filter(full["field"] == "all")["entries"][0] == 27
+
+
+def test_model_shift_flag_nulled_when_suppressed(con):
+    layer3.label_entries(con, labeller(), sample=100, log=lambda *_: None)
+    layer3.label_entries(con, labeller(model="test/second"), sample=100, log=lambda *_: None)
+    sh = layer3.model_shift(con, "test/model", "test/second",
+                            sample={"sample": 3, "seed": 1, "residue_only": False})
+    assert sh.filter(sh["suppressed"])["model_sensitive"].is_null().all()

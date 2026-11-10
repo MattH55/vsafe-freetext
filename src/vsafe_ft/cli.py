@@ -194,10 +194,13 @@ def cmd_llm_report(a):
 
     con = link.connect()
     tag = a.model[0].split("/")[-1].replace(".", "_").replace("-", "_")
-    _write(layer3.coverage(con, a.model[0]), f"phase1_llm_coverage_{tag}")
-    _write(layer3.agreement(con, a.model[0]), f"phase1_llm_agreement_{tag}")
+    smp = {"sample": a.sample, "seed": a.seed, "residue_only": a.residue}
+    tag += f"_{'residue' if a.residue else 'random'}{a.sample}_s{a.seed}"
+    _write(layer3.coverage(con, a.model[0], sample=smp), f"phase1_llm_coverage_{tag}")
+    _write(layer3.agreement(con, a.model[0], sample=smp), f"phase1_llm_agreement_{tag}")
     if len(a.model) > 1:
-        _write(layer3.model_shift(con, a.model[0], a.model[1]), "phase1_llm_model_shift")
+        _write(layer3.model_shift(con, a.model[0], a.model[1], sample=smp),
+               f"phase1_llm_model_shift_{tag}")
 
 
 def _has_table(con, name: str) -> bool:
@@ -273,6 +276,9 @@ def main(argv=None):
 
     s = sub.add_parser("llm-report", help="layer-3 coverage, agreement, model shift (aggregates)")
     s.add_argument("--model", nargs="+", default=[DEFAULT_MODEL])
+    s.add_argument("--sample", type=int, default=1000, help="the run's sample size")
+    s.add_argument("--seed", type=int, default=1)
+    s.add_argument("--residue", action="store_true")
     s.set_defaults(func=cmd_llm_report)
 
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")

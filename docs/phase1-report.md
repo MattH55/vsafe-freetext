@@ -161,6 +161,76 @@ Issues found and their status:
 | acute_diagnosis | "Pre-existing disease" on 11% of its entries | open: history mentions, not new diagnoses |
 | fatigue_pem, pain | headache / fatigue co-coded | expected: entries list several symptoms |
 
+## Layer-3 pilot (LLM, week-1 and six-week entries of release 1)
+
+Providers and terms: `docs/data-use.md`. Same fixed prompt (`PROMPT_VERSION v0-2026-11-10`) and
+closed list of 21 themes for both models; text only, numbered per request, 20 entries per
+request; identical texts sent once. Samples are drawn by a stable hash of response id + field.
+
+| Run | Model | Entries sampled | Unique texts sent | Requests | Failed | Refusals | Cost | Time |
+|---|---|---|---|---|---|---|---|---|
+| random, seed 1 | `z-ai/glm-5.3` (NanoGPT subscription, ZDR) | 2,000 | 1,591 | 80 | 0 | 0 | $0 (subscription) | 884 s |
+| random, seed 1 | `claude-opus-5-5` (Anthropic API, effort low) | 2,000 | 1,591 | 80 | 0 | 0 | $1.87 | 570 s |
+| layer-1 residue, seed 2 | `z-ai/glm-5.3` | 1,000 | 778 | 39 | 0 | 0 | $0 | 452 s |
+
+An earlier attempt on the same random sample with `anthropic/claude-haiku-5.5` through NanoGPT's
+pay-per-token endpoint ($0.06) lost every reply to truncation (reasoning tokens counted against
+`max_tokens`); fixed in the parser, and those labels are stored as not ok and unused.
+
+**Coverage, random sample (2,000 entries):** share of entries with at least one theme.
+
+| Field | Entries | Layer 1 | Layer 3 (GLM) | Either |
+|---|---|---|---|---|
+| SD | 193 | 0.85 | 0.97 | 0.97 |
+| SRO | 1,772 | 0.68 | 0.86 | 0.87 |
+| HCVO | 35 | 0.14 | 0.63 | 0.63 |
+| all | 2,000 | 0.69 | 0.87 | 0.88 |
+
+Layer 1's 69% here matches its 69% on the whole release. The LLM adds most where the lexicon is
+weakest (HCVO, which mostly names the kind of care visit).
+
+**Layer-1 residue (1,000 entries no lexicon theme matched):** GLM assigns a theme to 62%
+(SD 87%, HCVO 66%, SRO 60%). The rest are mostly entries with nothing to label (e.g. "none",
+"mild") by the aggregate n-gram profile; not inspected individually.
+
+**Layer 1 vs layer 3 (random sample):** where the lexicon assigns `pain`, GLM agrees for 95% of
+entries; `injection_site` 84%. GLM adds `pain` to 142 and `injection_site` to 71 entries the
+lexicon missed. Other themes have a disagreement cell under 10 people (suppressed); the gold
+set, not this table, will measure precision and recall.
+
+**Model sensitivity, GLM-5.3 vs Claude Opus 5.5 (same 2,000 entries):** entries per theme by
+model and the relative shift (flag at > 0.20, `analysis.yaml model_shift_flag`).
+
+| Theme | GLM | Claude | Shift |
+|---|---|---|---|
+| upper_respiratory | 415 | 425 | 0.02 |
+| pain | 337 | 329 | 0.02 |
+| injection_site | 238 | 233 | 0.02 |
+| dysautonomia | 174 | 174 | 0.00 |
+| lymphadenopathy | 149 | 150 | 0.01 |
+| sensory_neuropathic | 119 | 137 | 0.13 |
+| fever_chills | 112 | 117 | 0.04 |
+| unrelated_cause | 103 | 126 | 0.18 |
+| fatigue_pem | 95 | 113 | 0.16 |
+| gastrointestinal | 93 | 96 | 0.03 |
+| skin | 89 | 82 | 0.08 |
+| taste_smell | 63 | 70 | 0.10 |
+| cardiorespiratory | 60 | 59 | 0.02 |
+| **persistence** | **36** | **63** | **0.43 (model-sensitive)** |
+| pre_existing_worsened | 34 | 29 | 0.15 |
+| sleep | 34 | 33 | 0.03 |
+| cognitive | 32 | 32 | 0.00 |
+| care_sought | 30 | 34 | 0.12 |
+| acute_diagnosis | 17 | 15 | 0.12 |
+| menstrual, missed_work_school | <10 people (suppressed) | | |
+
+Only `persistence` is model-sensitive: Claude reads duration phrases as persistence more often.
+Its definition needs a sharper description (e.g. "lasting beyond the expected few days") before
+the taxonomy is frozen. `unrelated_cause` (0.18) and `fatigue_pem` (0.16) are close to the flag.
+
+Caveat: these are week-1 / six-week entries. Long-term surveys, where the PACVS domains matter,
+are untouched until the OSF registration exists.
+
 ## Call-center outcomes (task 3.8)
 
 Two FOIA files, ingested 2026-11-10: 23-00926 (CDC; 1,606,548 rows, 2 s) and 23-00925 (GDIT;

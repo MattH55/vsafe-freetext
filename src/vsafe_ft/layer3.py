@@ -93,23 +93,32 @@ def label_entries(con, labeller, *, sample: int, seed: int = 1, residue_only: bo
     return run
 
 
-def _labelled_entries(model: str, source: str) -> str:
-    """Exploratory entries whose text has an ok label from `model` (the labelled sample)."""
+def _labelled_entries(model: str, source: str, sample: dict | None = None) -> str:
+    """Exploratory entries whose text has an ok label from `model`.
+
+    With `sample` (the candidate_sql arguments of a run: sample, seed, residue_only), only the
+    entries of that run's sample; otherwise every entry sharing a labelled text, which weights
+    the result towards frequent short texts.
+    """
+    in_sample = ""
+    if sample:
+        in_sample = f"AND e.entry_id IN (SELECT entry_id FROM ({candidate_sql(source=source, **sample)}))"
     return f"""
         SELECT e.entry_id, e.registrant, e.field, l.themes AS llm_themes
         FROM {source} e
         JOIN llm_labels l ON l.text_hash = md5(e.text) AND l.model = '{model}'
              AND l.prompt_version = '{PROMPT_VERSION}' AND l.ok
-        WHERE {exploratory_filter_sql('e')}"""
+        WHERE {exploratory_filter_sql('e')} {in_sample}"""
 
 
-def agreement(con, model: str, source: str = "entries_survey") -> pl.DataFrame:
+def agreement(con, model: str, source: str = "entries_survey",
+              sample: dict | None = None) -> pl.DataFrame:
     """Per theme, layer 1 vs layer 3 on the labelled entries: both / lexicon only / LLM only.
 
     Counts are entries and distinct people; all *_people cells are suppressed below k.
     """
     df = frame(con, f"""
-        WITH s AS ({_labelled_entries(model, source)}),
+        WITH s AS ({_labelled_entries(model, source, sample)}),
         llm AS (SELECT entry_id, registrant, unnest(llm_themes) AS theme FROM s),
         lex AS (SELECT t.entry_id, s.registrant, t.theme FROM entry_themes t
                 JOIN s USING (entry_id)),
@@ -131,10 +140,11 @@ def agreement(con, model: str, source: str = "entries_survey") -> pl.DataFrame:
     return safe(df)
 
 
-def coverage(con, model: str, source: str = "entries_survey") -> pl.DataFrame:
+def coverage(con, model: str, source: str = "entries_survey",
+              sample: dict | None = None) -> pl.DataFrame:
     """Share of labelled entries with >= 1 theme from layer 1, layer 3, and either, by field."""
     df = frame(con, f"""
-        WITH s AS ({_labelled_entries(model, source)}),
+        WITH s AS ({_labelled_entries(model, source, sample)}),
         lx AS (SELECT DISTINCT entry_id FROM entry_themes)
         SELECT s.field, count(*) AS entries, count(DISTINCT s.registrant) AS people,
                round(avg((lx.entry_id IS NOT NULL)::INT), 3) AS share_layer1,
@@ -147,12 +157,14 @@ def coverage(con, model: str, source: str = "entries_survey") -> pl.DataFrame:
     return safe(df)
 
 
-def model_shift(con, m1: str, m2: str, source: str = "entries_survey") -> pl.DataFrame:
+def model_shift(con, m1: str, m2: str, source: str = "entries_survey",
+                sample: dict | None = None) -> pl.DataFrame:
     """Per theme, entries labelled by each model on texts both labelled; flags shifts above
     analysis.yaml model_shift_flag (relative to the larger count)."""
     flag = float(config.analysis()["model_shift_flag"])
     df = frame(con, f"""
-        WITH a AS ({_labelled_entries(m1, source)}), b AS ({_labelled_entries(m2, source)}),
+        WITH a AS ({_labelled_entries(m1, source, sample)}),
+             b AS ({_labelled_entries(m2, source, sample)}),
         both_ AS (SELECT a.entry_id, a.registrant, a.llm_themes AS t1, b.llm_themes AS t2
                   FROM a JOIN b USING (entry_id)),
         x AS (SELECT entry_id, registrant, unnest(t1) AS theme, 1 AS m FROM both_
@@ -168,4 +180,8 @@ def model_shift(con, m1: str, m2: str, source: str = "entries_survey") -> pl.Dat
         df = df.with_columns(
             (abs(pl.col("model1_entries") - pl.col("model2_entries")) / hi).round(3).alias("shift"),
         ).with_columns((pl.col("shift") > flag).alias("model_sensitive"))
-    return safe(df)
+    out = safe(df)
+    if "model_sensitive" in out.columns:    # suppress() nulls numbers only: null the flag too
+        out = out.with_columns(pl.when(pl.col("suppressed")).then(None)
+                               .otherwise(pl.col("model_sensitive")).alias("model_sensitive"))
+    return out
