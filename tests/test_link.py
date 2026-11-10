@@ -230,3 +230,12 @@ def test_link_meddra_drops_inactive_codes(con, tmp_path, monkeypatch):
                   "_release": ["z/covid_meddra_sd"] * 2}).write_parquet(tmp_path / "m.parquet")
     link.link_meddra(con, [(str(tmp_path / "m.parquet"), "2024-11")])
     assert con.execute("SELECT pt FROM entry_meddra").fetchall() == [("Fatigue",)]
+
+
+def test_build_entries_on_a_connect_connection(tmp_path, monkeypatch):
+    """link.connect() registers the UDFs; build_entries must not fail registering them again."""
+    monkeypatch.setattr(config, "columns", fake_columns)
+    _ft(FT).write_parquet(tmp_path / "ft.parquet")
+    c = link.connect(tmp_path / "t.duckdb")
+    link.build_entries(c, str(tmp_path / "ft.parquet"))
+    assert c.execute("SELECT count(*) FROM entries").fetchall()[0][0] == 4

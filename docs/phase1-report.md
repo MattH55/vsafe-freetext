@@ -24,6 +24,14 @@ Aggregates only. Every table below passed `suppress.suppress` + `suppress.assert
 | ingest | registrants CSV | 10,094,310 | 28 s |
 | download | MedDRA 2024-11 zip (383 MB) | | 11,498 s (6 connection resets, resumed) |
 | ingest | MedDRA 2024-11 (3 CSVs, 2.0 GB unzipped) | 14,134,779 | 95 s |
+| download | adult check-in zip (5.76 GB) | | 48,116 s (2 timeouts, resumed) |
+| ingest | adult check-in CSV (25.0 GB unzipped, Deflate64) | 144,856,043 | 13,269 s |
+
+Adult check-ins: 9,552,127 people, 117 survey ids, every `DAYS_SINCE` value numeric. By the
+derived survey-type bins: 0-7 days 82.6M, 8-42 days 44.7M, 43-135 days 7.8M, 136-270 days
+6.5M, 271-450 days 3.2M, over 450 days 7 rows. Modes after day 7 are days 14, 21, 28, 35
+and 42 (weekly) and 91, 182 and 365 (3, 6 and 12 months), as in the under-3 file, so the
+bins in `link.survey_type_from_days` hold for adults too.
 
 ## Gate 1: join rates
 

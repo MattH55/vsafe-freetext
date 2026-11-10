@@ -44,8 +44,8 @@ def register_udfs(con) -> None:
                           ("vsafe_is_redacted", is_redacted, "BOOLEAN")]:
         try:
             con.create_function(name, fn, ["VARCHAR"], ret, side_effects=False)
-        except duckdb.CatalogException:
-            pass  # already registered on this connection
+        except (duckdb.CatalogException, duckdb.NotImplementedException):
+            pass  # already registered on this connection (duckdb 2.0 raises NotImplemented)
 
 
 def _q(col: str) -> str:
