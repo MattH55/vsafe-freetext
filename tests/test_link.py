@@ -147,13 +147,43 @@ def test_meddra_coverage_is_suppressed(con, tmp_path):
 def test_link_outcomes_window(con, tmp_path, monkeypatch):
     pl.DataFrame({"REG": ["a", "a", "a"], "RDATE": ["2021-03-10", "2021-09-01", "2021-07-15"],
                   "VAERS": ["N", "Y", "yes"]}).write_parquet(tmp_path / "cc.parquet")
-    link.link_outcomes(con, [(str(tmp_path / "cc.parquet"), "cc")])
+    link.link_outcomes(con, [(str(tmp_path / "cc.parquet"), "cc")], vaers_pattern="")
     got = con.execute("""SELECT e.survey_static_id, o.cc_cases, o.vaers_filed
                          FROM entry_outcomes o JOIN entries e USING (entry_id)
                          WHERE e.registrant = 'a' ORDER BY 1""").fetchall()
     # s1 (2021-03-05): only 03-10 is within 90 d (07-15 is 132 d later).
     # s2 (2021-07-01): 07-15 (14 d) and 09-01 (62 d), one of them a VAERS filing.
     assert got == [("s1", 1, False), ("s2", 2, True)]
+
+
+def test_link_outcomes_merges_two_files(con, tmp_path, monkeypatch):
+    """CDC file (trigger, care) and GDIT file (VAERS outcome) describe the same case."""
+    cols = {"cdc": {"registrant": "R", "report_date": "D", "survey_static_id": "S",
+                    "trigger": "IMPACT", "care": "VISITS", "outcome": None, "vaers_filed": None},
+            "gdit": {"registrant": "RegistrantCode", "report_date": "ReportedDate",
+                     "survey_static_id": "SurveyStaticID", "trigger": None, "care": None,
+                     "outcome": "FinalOutcome", "vaers_filed": "AllReportOutcomes"}}
+    monkeypatch.setattr(config, "columns", lambda table, require=True, keys=None, release=None:
+                        cols[release] if table == "call_center" else COLS[table])
+    pl.DataFrame({"R": ["a", "a"], "D": ["03/10/2021", "07/15/2021"], "S": ["f1", "f2"],
+                  "IMPACT": ["x", "y"], "VISITS": ["Emergency room:Hospitalization", None]}
+                 ).write_parquet(tmp_path / "cdc.parquet")
+    pl.DataFrame({"RegistrantCode": ["a", "a"], "ReportedDate": ["03/10/2021", "07/15/2021"],
+                  "SurveyStaticID": ["f1", "f2"], "FinalOutcome": ["Successful", "Unsuccessful"],
+                  "AllReportOutcomes": ["Completed over the phone",
+                                        "Participant prefers to complete VAERS report online"]}
+                 ).write_parquet(tmp_path / "gdit.parquet")
+    link.link_outcomes(con, [(str(tmp_path / "cdc.parquet"), "cdc"),
+                             (str(tmp_path / "gdit.parquet"), "gdit")],
+                       vaers_pattern="(?i)completed over the phone|reported to vaers")
+    cases = con.execute("""SELECT survey_static_id, vaers_filed, cc_care IS NOT NULL, cc_outcome,
+                                  len(cc_sources) FROM call_center ORDER BY 1""").fetchall()
+    assert cases == [("f1", True, True, "Successful", 2), ("f2", False, False, "Unsuccessful", 2)]
+    got = con.execute("""SELECT e.survey_static_id, o.cc_cases, o.vaers_filed, o.cc_hospitalised,
+                                o.cc_emergency
+                         FROM entry_outcomes o JOIN entries e USING (entry_id)
+                         WHERE e.registrant = 'a' ORDER BY 1""").fetchall()
+    assert got == [("s1", 1, True, True, True), ("s2", 1, False, False, False)]
 
 
 def test_crosscheck_counts(tmp_path):

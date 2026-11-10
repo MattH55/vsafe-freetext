@@ -112,10 +112,22 @@ def csv_to_parquet(path: Path, out: Path, release: str, under3: bool = False) ->
     """Stream one delimited file to Parquet with DuckDB; every column read as VARCHAR."""
     out.parent.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect()
-    src = _sql_str(path.as_posix())
+    enc = csv_encoding(path)
+    tmp = None
+    if enc != "utf-8":
+        tmp = transcode_utf8(path, out.with_name(out.stem + ".utf8.tmp.csv"), enc)
+    src = _sql_str((tmp or path).as_posix())
     rel = f"""SELECT *, {_sql_str(release)} AS _release, {str(under3).upper()} AS _under3
               FROM read_csv({src}, all_varchar = true, header = true, sample_size = -1)"""
-    con.execute(f"COPY ({rel}) TO {_sql_str(out.as_posix())} (FORMAT parquet, COMPRESSION zstd)")
+    try:
+        con.execute(f"COPY ({rel}) TO {_sql_str(out.as_posix())} "
+                    "(FORMAT parquet, COMPRESSION zstd)")
+    except duckdb.Error as e:
+        con.close()
+        raise sanitised(e) from None
+    finally:
+        if tmp is not None:
+            tmp.unlink(missing_ok=True)
     n = con.execute(f"SELECT count(*) FROM read_parquet({_sql_str(out.as_posix())})").fetchall()[0][0]
     con.close()
     return n
@@ -136,15 +148,54 @@ def extract_zip(path: Path) -> list[Path]:
 
 
 def header_row(path: Path) -> list[str]:
-    """Column names only (no data rows) of an .xlsx or delimited file."""
+    """Column names only (no data rows) of an .xlsx or delimited file.
+
+    For delimited files only the bytes up to the first line break are read, so neither the
+    result nor any error can contain a data row.
+    """
     if path.suffix.lower() == ".xlsx":
         return inspect_xlsx(path, 0)[0]
-    con = duckdb.connect()
-    cols = con.execute(
-        f"DESCRIBE SELECT * FROM read_csv({_sql_str(path.as_posix())}, all_varchar = true)"
-    ).fetchall()
-    con.close()
-    return [c[0] for c in cols]
+    import csv
+
+    with open(path, "rb") as fh:
+        head = fh.read(1 << 16)
+    line = re.split(rb"\r\n|\r|\n", head, maxsplit=1)[0]
+    text = line.decode("utf-8-sig", errors="replace")
+    delim = "\t" if path.suffix.lower() == ".tsv" or ("\t" in text and "," not in text) else ","
+    return next(csv.reader([text], delimiter=delim))
+
+
+def csv_encoding(path: Path, chunk: int = 1 << 24) -> str:
+    """'utf-8' if the whole file decodes as UTF-8, else 'cp1252' (Windows exports)."""
+    import codecs
+
+    dec = codecs.getincrementaldecoder("utf-8")()
+    with open(path, "rb") as fh:
+        try:
+            while b := fh.read(chunk):
+                dec.decode(b)
+            dec.decode(b"", final=True)
+        except UnicodeDecodeError:
+            return "cp1252"
+    return "utf-8"
+
+
+def transcode_utf8(path: Path, out: Path, encoding: str, chunk: int = 1 << 24) -> Path:
+    """Streamed copy of a delimited file as UTF-8 (undecodable bytes replaced)."""
+    import codecs
+
+    dec = codecs.getincrementaldecoder(encoding)(errors="replace")
+    with open(path, "rb") as src, open(out, "w", encoding="utf-8", newline="") as dst:
+        while b := src.read(chunk):
+            dst.write(dec.decode(b))
+        dst.write(dec.decode(b"", final=True))
+    return out
+
+
+def sanitised(e: Exception) -> RuntimeError:
+    """DuckDB CSV errors quote the offending data row: keep only the first message line."""
+    first = str(e).splitlines()[0] if str(e) else type(e).__name__
+    return RuntimeError(f"{type(e).__name__}: {first} (message truncated: may quote a data row)")
 
 
 def _safe_name(stem: str) -> str:

@@ -75,3 +75,32 @@ def test_zip_skips_macos_resource_forks(tmp_path):
         z.writestr("__MACOSX/m/._covid_meddra_sd.csv", b"\x00\x05\x16\x07\xb0")
     outs = list(ingest_file(zp, tmp_path / "out"))
     assert [o.name for o, _ in outs] == ["m__covid_meddra_sd.parquet"]
+
+
+def test_header_row_reads_first_line_only(tmp_path):
+    from vsafe_ft.ingest import header_row
+
+    p = tmp_path / "h.csv"
+    p.write_bytes(b"A,B,\"C,D\"\r\nsecret1,\xff\xfe,x\r\n")
+    assert header_row(p) == ["A", "B", "C,D"]
+
+
+def test_cp1252_csv_is_transcoded(tmp_path):
+    import polars as pl
+
+    from vsafe_ft.ingest import csv_encoding, csv_to_parquet
+
+    p = tmp_path / "w.csv"
+    p.write_bytes("A,B\n1,café – ok\n".encode("cp1252"))
+    assert csv_encoding(p) == "cp1252"
+    out = tmp_path / "w.parquet"
+    assert csv_to_parquet(p, out, "r") == 1
+    assert pl.read_parquet(out)["B"][0] == "café – ok"
+    assert not list(tmp_path.glob("*.tmp.csv"))
+
+
+def test_duckdb_errors_do_not_quote_rows():
+    from vsafe_ft.ingest import sanitised
+
+    e = sanitised(ValueError("CSV Error on Line: 9\nOriginal Line:\nsecret row text"))
+    assert "secret" not in str(e) and "Line: 9" in str(e)

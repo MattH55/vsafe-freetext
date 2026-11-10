@@ -69,9 +69,27 @@ meddra:
   active: ACTIVE
   meddra_version: MEDDRA_VERSION
 
-call_center:
-  registrant: TODO
-  report_date: TODO
-  trigger: TODO
-  outcome: TODO
-  vaers_filed: TODO
+# Confirmed 2026-11-10 from the headers. The two FOIA files describe the same call-center cases
+# (1,598,307 (registrant, survey, reported date) keys in both): 23-00926 (CDC) carries the trigger
+# and care answers, 23-00925 (GDIT) the call and VAERS outcomes. Dates are MM/DD/YYYY.
+# ZIP_CODE (00926) is never read: no sub-national output. AGE_AT_VX exists only for called people.
+call_center:                     # release cc_cdc (23-00926)
+  registrant: REGISTRANT_CODE
+  report_date: REPORTED_DATE
+  survey_static_id: SURVEY_STATIC_ID
+  trigger: HEALTH_IMPACT         # picklist, ':'-joined multi-select
+  care: HEALTHCARE_VISITS        # picklist, ':'-joined multi-select
+  outcome: null
+  vaers_filed: null
+call_center_by_release:
+  cc_gdit:                       # 23-00925
+    registrant: RegistrantCode
+    report_date: ReportedDate
+    survey_static_id: SurveyStaticID
+    trigger: null
+    care: null
+    outcome: FinalOutcome        # Successful / Unsuccessful / priority 2/3
+    vaers_filed: AllReportOutcomes
+# A case counts as VAERS-filed when vaers_filed matches this (filed by phone, or already filed).
+# "Prefers to complete VAERS report online" is intent, not a filing, and does not count.
+call_center_vaers_filed_pattern: "(?i)completed over the phone|reported to vaers"

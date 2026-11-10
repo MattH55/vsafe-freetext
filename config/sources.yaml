@@ -112,9 +112,9 @@ call_center:               # FOIA 23-00925, 23-00926
   dir: raw/call_center
   format: csv
   files:
-    - {name: vsafe_call_center_data_12142020_05212023_foia_23_00926.csv,
+    - {name: vsafe_call_center_data_12142020_05212023_foia_23_00926.csv, release: cc_cdc,
        url: "https://ican-public.s3.amazonaws.com/productions/vsafe_call_center_data_12142020_05212023_foia_23_00926.csv"}
-    - {name: vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv,
+    - {name: vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv, release: cc_gdit,
        url: "https://ican-public.s3.amazonaws.com/productions/vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv"}
 
 pregnancy_registry:

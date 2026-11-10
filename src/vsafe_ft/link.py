@@ -337,32 +337,63 @@ def meddra_coverage(con) -> pl.DataFrame:
 TRUTHY = ("Y", "YES", "TRUE", "T", "1")
 
 
-def link_outcomes(con, sources: list[tuple[str, str]], truthy: tuple[str, ...] = TRUTHY) -> None:
+def link_outcomes(con, sources: list[tuple[str, str]], truthy: tuple[str, ...] = TRUTHY,
+                  vaers_pattern: str | None = None) -> None:
     """Call-center cases and VAERS filing within `outcome_window_days` after each entry.
 
-    `sources` is [(parquet glob, label)] so the two FOIA files can map columns separately
-    (`call_center_by_release` in columns.yaml).
+    `sources` is [(parquet glob, label)]; columns per file come from `call_center` with
+    `call_center_by_release` overrides. Rows from different files describing the same case
+    (registrant, survey form, reported date) are merged into one case. `vaers_filed` is true
+    when the column matches `vaers_pattern` (default: `call_center_vaers_filed_pattern` in
+    columns.yaml), or, with no pattern, when it is a truthy flag.
     """
     window = int(config.analysis()["outcome_window_days"])
+    if vaers_pattern is None:
+        vaers_pattern = config.load("columns").get("call_center_vaers_filed_pattern")
     parts = []
     for glob, label in sources:
-        c = config.columns("call_center", keys=["registrant", "report_date", "vaers_filed"],
-                           release=label)
+        c = config.columns("call_center", keys=["registrant", "report_date"], release=label)
+
+        def col(key, c=c):
+            v = c.get(key)
+            return _q(v) if v not in (None, "TODO") else "NULL"
+
+        vf = col("vaers_filed")
+        if vf == "NULL":
+            filed = "CAST(NULL AS BOOLEAN)"
+        elif vaers_pattern:
+            filed = f"coalesce(regexp_matches({vf}, {_s(vaers_pattern)}), false)"
+        else:
+            filed = f"upper(trim({vf})) IN ({', '.join(map(_s, truthy))})"
         parts.append(
-            f"""SELECT {_q(c['registrant'])} AS registrant,
-                       {parse_date(_q(c['report_date']))} AS report_date,
-                       upper(trim({_q(c['vaers_filed'])})) IN ({", ".join(map(_s, truthy))})
-                           AS vaers_filed,
-                       {_s(label)} AS cc_source
+            f"""SELECT {col('registrant')} AS registrant,
+                       CAST({col('survey_static_id')} AS VARCHAR) AS survey_static_id,
+                       {parse_date(col('report_date'))} AS report_date,
+                       CAST({col('trigger')} AS VARCHAR) AS cc_trigger,
+                       CAST({col('care')} AS VARCHAR) AS cc_care,
+                       CAST({col('outcome')} AS VARCHAR) AS cc_outcome,
+                       {filed} AS vaers_filed, {_s(label)} AS cc_source
                 FROM read_parquet({_s(glob)}, union_by_name = true)"""
         )
-    con.execute(f"CREATE OR REPLACE TABLE call_center AS {' UNION ALL '.join(parts)}")
+    con.execute(f"""
+        CREATE OR REPLACE TABLE call_center AS
+        SELECT registrant, survey_static_id, report_date,
+               any_value(cc_trigger) FILTER (WHERE cc_trigger IS NOT NULL) AS cc_trigger,
+               any_value(cc_care) FILTER (WHERE cc_care IS NOT NULL) AS cc_care,
+               any_value(cc_outcome) FILTER (WHERE cc_outcome IS NOT NULL) AS cc_outcome,
+               bool_or(vaers_filed) AS vaers_filed,
+               list(DISTINCT cc_source ORDER BY cc_source) AS cc_sources
+        FROM ({' UNION ALL '.join(parts)})
+        WHERE registrant IS NOT NULL AND report_date IS NOT NULL
+        GROUP BY registrant, survey_static_id, report_date""")
     con.execute(
         f"""
         CREATE OR REPLACE TABLE entry_outcomes AS
         SELECT e.entry_id,
                count(c.registrant) AS cc_cases,
-               coalesce(bool_or(c.vaers_filed), false) AS vaers_filed
+               coalesce(bool_or(c.vaers_filed), false) AS vaers_filed,
+               coalesce(bool_or(c.cc_care ILIKE '%hospitali%'), false) AS cc_hospitalised,
+               coalesce(bool_or(c.cc_care ILIKE '%emergency%'), false) AS cc_emergency
         FROM entries e
         LEFT JOIN call_center c
           ON c.registrant = e.registrant
@@ -371,6 +402,16 @@ def link_outcomes(con, sources: list[tuple[str, str]], truthy: tuple[str, ...] =
         GROUP BY e.entry_id
         """
     )
+
+
+def outcome_summary(con) -> pl.DataFrame:
+    """Call-center cases by source coverage and VAERS filing (people, suppressed)."""
+    return safe(frame(con, """
+        SELECT array_to_string(cc_sources, '+') AS sources,
+               count(*) AS cases, count(DISTINCT registrant) AS people,
+               count(*) FILTER (WHERE vaers_filed) AS vaers_filed_cases,
+               count(DISTINCT registrant) FILTER (WHERE vaers_filed) AS vaers_filed_people
+        FROM call_center GROUP BY ALL ORDER BY ALL"""))
 
 
 # --------------------------------------------------------------------------- QA reports
