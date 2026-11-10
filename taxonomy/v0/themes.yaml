@@ -18,7 +18,8 @@ themes:
   dysautonomia:
     domain: pacvs
     terms: ["palpitations?", "racing heart", "heart racing", tachycardia, "fast heart ?rate",
-            "(?-i:POTS)", "dizz(?:y|iness)", "lightheaded(?:ness)?", "heat intolerance", "pounding heart"]
+            "(?-i:POTS)", "dizz(?:y|iness)", "light[ -]?headed(?:ness)?", "heat intolerance", "pounding heart",
+            "(?:elevated|high|increased|rapid|racing) (?:heart ?rate|pulse)", vertigo]
   sensory_neuropathic:
     domain: pacvs
     terms: [tingling, "pins and needles", "numb(?:ness)?", burning, "paresthesias?", "paraesthesias?",
@@ -30,11 +31,13 @@ themes:
   pain:
     domain: pacvs
     terms: ["headaches?", "migraines?", "muscle (?:aches?|pain)", myalgia, "joint (?:pain|aches?)",
-            arthralgia, "chest pain", "body aches?"]
+            arthralgia, "chest pain", "body aches?",
+            "(?:back|neck|jaw|hip|knee|leg|ear) (?:pain|aches?)", "achy", "aching"]
   gastrointestinal:
     domain: pacvs
     terms: [nausea, nauseous, "vomit\\w*", "diarrh(?:o)?ea", "stomach (?:pain|ache|cramps?)",
-            "abdominal pain", bloating, constipation]
+            "abdominal pain", bloating, constipation, "upset stomach",
+            "(?:loss of|lost my|no|decreased|poor) appetite"]
   menstrual:
     domain: pacvs
     # "period(s)" only when not "period(s) of ..." and not "short/long/... period" (time spans)
@@ -70,7 +73,45 @@ themes:
   unrelated_cause:
     domain: exclusion
     terms: ["(?:had|have|caught|got|positive for|tested positive for) (?:covid|the flu|a cold|strep)",
-            "covid (?:infection|positive)", "sinus infection", "(?-i:UTI)", "urinary tract infection",
+            "covid (?:infection|positive)", "tested positive", "positive (?:covid|test)",
+            "seasonal allergies", "sinus infection", "(?-i:UTI)", "urinary tract infection",
             "ear infection", "food poisoning", "pregnan\\w*", "morning sickness",
             "(?:car|work) accident", "fell (?:down|off|and)", "broke my", "fractur\\w*",
             "sprain\\w*", "pulled a muscle", "injur(?:y|ed)"]
+
+  # --- acute reaction profile (domain: acute) -------------------------------------------
+  # Proposed 2026-11-09 from the release-1 n-gram pass (candidate n-grams in entries no theme
+  # matched, >= 10 people each; aggregate counts in docs/phase1-report.md). Not PACVS domains
+  # and not exclusions: they describe the expected week-1 reaction profile so it is labelled
+  # rather than left as "unthemed". Whether any of them should count as a criterion-3
+  # exclusion (e.g. upper_respiratory as a likely cold) is a protocol decision for the human.
+  injection_site:
+    domain: acute
+    terms: ["injection (?:site|arm|side|area)", "(?:at|around|near|on) (?:the )?(?:injection|shot) (?:site|area)",
+            "sore (?:arm|shoulder)", "(?:arm|shoulder) (?:pain|soreness|is sore|hurts)",
+            "(?:pain|soreness|sore) (?:in|on) (?:my |the )?(?:left |right |upper )?arm",
+            "bruis\\w*", "(?:at|around) (?:the )?site"]
+  lymphadenopathy:
+    domain: acute
+    terms: ["lymph ?nodes?", lymphadenopathy, "swollen (?:glands?|nodes?)", "axilla\\w*",
+            "arm ?pits?", "under (?:my |the )?arm"]
+  upper_respiratory:
+    domain: acute
+    terms: ["sore throat", "scratchy throat", "runny nose", "stuffy nose", "(?:nasal|sinus) congestion",
+            "congest\\w*", "sneez\\w*", "post.?nasal drip", "cough\\w*", "nasal drainage"]
+  fever_chills:
+    domain: acute
+    terms: ["fever\\w*", chills, "hot flash\\w*", "flush(?:ed|ing)", "sweat(?:s|ing|y)?"]
+  skin:
+    domain: acute
+    terms: [rash, "rashes", hives, urticaria, "itch\\w*"]
+  taste_smell:
+    domain: acute
+    # loss of taste/smell is also a long-COVID feature: flag for the protocol owner
+    terms: ["metallic taste", "(?:loss of|lost(?: my| the)?|no|altered|changes? in) (?:taste|smell)",
+            "taste in (?:my |the )?mouth", "dry mouth"]
+  cardiorespiratory:
+    domain: acute
+    # dyspnoea and chest tightness overlap PACVS exercise intolerance: flag for the protocol owner
+    terms: ["short(?:ness)? of breath", "(?:difficulty|trouble) breathing", "chest (?:tightness|pressure)",
+            "tight(?:ness in (?:my |the )?)? chest"]

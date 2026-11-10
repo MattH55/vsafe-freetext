@@ -52,3 +52,32 @@ def test_period_as_time_span_is_not_menstrual(text):
                                   "period was 10 days late"])
 def test_period_menstrual(text):
     assert "menstrual" in themes(text)
+
+
+@pytest.mark.parametrize("text,theme", [
+    ("sore arm at the injection site", "injection_site"),
+    ("swollen lymph nodes under my arm", "lymphadenopathy"),
+    ("runny nose and sneezing", "upper_respiratory"),
+    ("chills and hot flashes overnight", "fever_chills"),
+    ("itchy rash on chest", "skin"),
+    ("lost taste for a day", "taste_smell"),
+    ("metallic taste in my mouth", "taste_smell"),
+    ("short of breath climbing stairs", "cardiorespiratory"),
+    ("felt light headed", "dysautonomia"),
+    ("elevated heart rate", "dysautonomia"),
+    ("lower back pain", "pain"),
+    ("loss of appetite", "gastrointestinal"),
+    ("tested positive two days later", "unrelated_cause"),
+])
+def test_phase1_additions(text, theme):
+    assert theme in themes(text)
+
+
+def test_acute_themes_are_not_pacvs():
+    import yaml
+
+    spec = yaml.safe_load((Path(__file__).parents[1] / "taxonomy" / "v0" / "themes.yaml").read_text(
+        encoding="utf-8"))
+    pacvs = {t for t, b in spec["themes"].items() if b["domain"] == "pacvs"}
+    assert pacvs == {"fatigue_pem", "cognitive", "dysautonomia", "sensory_neuropathic", "sleep",
+                     "pain", "gastrointestinal", "menstrual"}      # the eight protocol domains

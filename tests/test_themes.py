@@ -19,7 +19,7 @@ def con():
     for p in range(15):                       # 15 people, week 1: lexicon hit
         rows.append((i := i + 1, f"p{p}", "SD", "brain fog and tired", True, "1", "day 1"))
     for p in range(12):                       # 12 people, week 1: unlabelled, shared phrase
-        rows.append((i := i + 1, f"q{p}", "SRO", "weird metallic taste", True, "3", "day 3"))
+        rows.append((i := i + 1, f"q{p}", "SRO", "weird zebra glow", True, "3", "day 3"))
     for p in range(5):                        # 5 people: unlabelled phrase below the cell size
         rows.append((i := i + 1, f"r{p}", "SRO", "purple toes", True, "7", "day 7"))
     for p in range(12):                       # long-term survey: must never be read pre-registration
@@ -65,7 +65,7 @@ def test_candidate_ngrams_respect_cell_size(con):
     themes.build_entry_themes(con)
     ng = explore.candidate_ngrams(con)
     grams = set(ng["ngram"])
-    assert "weird metallic taste" in grams and "metallic" in grams
+    assert "weird zebra glow" in grams and "zebra" in grams
     assert not {"purple", "purple toes", "toes"} & grams        # only 5 people
     assert not grams & {"brain fog", "fog"}                       # labelled entries excluded
     assert (ng["people"] >= 10).all()
