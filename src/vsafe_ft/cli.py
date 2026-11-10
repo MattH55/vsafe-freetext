@@ -223,6 +223,40 @@ def cmd_qa(a):
         print(json.dumps(cols, indent=2))
 
 
+def _theme_names() -> list[str]:
+    import yaml
+
+    from .themes import TAXONOMY
+
+    return list(yaml.safe_load(TAXONOMY.read_text(encoding="utf-8"))["themes"])
+
+
+def cmd_gold(a):
+    """Gold set: draw, write blind sheets, load codes, agreement, adjudication, evaluation."""
+    from pathlib import Path
+
+    from . import gold, link
+
+    con = link.connect()
+    th = _theme_names()
+    if a.action == "draw":
+        print(json.dumps(gold.draw(con, size=a.size, period=a.period or "early", seed=a.seed), indent=2))
+        _write(gold.strata_summary(con), "gold_strata")
+    elif a.action == "sheets":
+        for c in a.coders:
+            print(f"wrote {gold.write_sheet(con, c, th)}")
+    elif a.action == "load":
+        print(json.dumps(gold.load_codes(con, Path(a.path), a.coder, th), indent=2))
+    elif a.action == "agreement":
+        _write(gold.agreement(con, *a.coders), "gold_agreement")
+    elif a.action == "adjudicate":
+        print(f"wrote {gold.write_adjudication(con, *a.coders, th)}")
+    elif a.action == "evaluate":
+        tag = a.layer if a.layer == "lexicon" else a.model.split("/")[-1].replace(".", "_")
+        _write(gold.evaluate(con, *a.coders, layer=a.layer, model=a.model, period=a.period),
+               f"gold_eval_{tag}_{a.period or 'all'}")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
@@ -283,6 +317,20 @@ def main(argv=None):
 
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")
     s.set_defaults(func=cmd_qa)
+
+    s = sub.add_parser("gold", help="gold set: draw | sheets | load | agreement | adjudicate | evaluate")
+    s.add_argument("action", choices=["draw", "sheets", "load", "agreement", "adjudicate",
+                                      "evaluate"])
+    s.add_argument("--size", type=int, default=1000, help="draw: entries for this period")
+    s.add_argument("--period", choices=["early", "long_term"], default=None,
+                   help="draw (default early) / evaluate (default both)")
+    s.add_argument("--seed", type=int, default=1)
+    s.add_argument("--coders", nargs="+", default=["A", "B"])
+    s.add_argument("--coder", help="load: whose sheet (A, B or adjudication)")
+    s.add_argument("--path", help="load: the completed sheet")
+    s.add_argument("--layer", choices=["lexicon", "llm"], default="lexicon")
+    s.add_argument("--model", default=DEFAULT_MODEL)
+    s.set_defaults(func=cmd_gold)
 
     a = p.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
