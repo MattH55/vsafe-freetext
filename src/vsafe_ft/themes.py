@@ -18,7 +18,7 @@ from .db import frame
 from .suppress import safe
 
 LONG_TERM_PATTERN = r"(?i)(\b(3|6|12|three|six|twelve)\s*-?\s*(m|mo|mon|month)s?\b)|(\byear)"
-TAXONOMY = config.REPO_ROOT / "taxonomy" / "v0" / "themes.yaml"
+TAXONOMY = config.REPO_ROOT / "taxonomy" / "v1.0" / "themes.yaml"   # frozen 2026-11-10
 
 
 def exploratory_filter_sql(alias: str = "e") -> str:

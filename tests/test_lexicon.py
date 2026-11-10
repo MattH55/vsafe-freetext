@@ -4,7 +4,7 @@ import pytest
 
 from vsafe_ft.classify.lexicon import Lexicon, negated
 
-LEX = Lexicon.load(Path(__file__).parents[1] / "taxonomy" / "v0" / "themes.yaml")
+LEX = Lexicon.load(Path(__file__).parents[1] / "taxonomy" / "v1.0" / "themes.yaml")
 
 
 def themes(text):
@@ -76,7 +76,7 @@ def test_phase1_additions(text, theme):
 def test_acute_themes_are_not_pacvs():
     import yaml
 
-    spec = yaml.safe_load((Path(__file__).parents[1] / "taxonomy" / "v0" / "themes.yaml").read_text(
+    spec = yaml.safe_load((Path(__file__).parents[1] / "taxonomy" / "v1.0" / "themes.yaml").read_text(
         encoding="utf-8"))
     pacvs = {t for t, b in spec["themes"].items() if b["domain"] == "pacvs"}
     assert pacvs == {"fatigue_pem", "cognitive", "dysautonomia", "sensory_neuropathic", "sleep",
@@ -92,3 +92,12 @@ def test_acute_themes_are_not_pacvs():
     ("burning when urinating", False), ("burning in my stomach", False)])
 def test_burning_is_neuropathic_only(text, hit):
     assert ("sensory_neuropathic" in themes(text)) is hit
+
+
+def test_frozen_taxonomy_matches_its_checksums():
+    import hashlib
+
+    root = Path(__file__).parents[1] / "taxonomy" / "v1.0"
+    for line in (root / "SHA256SUMS").read_text(encoding="utf-8").splitlines():
+        digest, name = line.split("  ", 1)
+        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name

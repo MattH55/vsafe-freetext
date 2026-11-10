@@ -219,7 +219,8 @@ fails the gate.
 
 ## 9. Attachments at filing
 
-- `taxonomy/v1.0/` and its sha256
+- `taxonomy/v1.0/` (frozen 2026-11-10; sha256 of `SHA256SUMS`:
+  `7c3dad37944e6fb62839797daef1aba96d943106f22aad65353e397382c5307d`)
 - the git commit hash of this repository at filing
 - `config/analysis.yaml`
 - `data/raw/MANIFEST.tsv`
@@ -228,11 +229,10 @@ fails the gate.
 
 ## 10. Open items before filing
 
-Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
+Done 2026-11-10: taxonomy frozen as v1.0 (the pipeline now reads it). Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
 above; OpenVSafe's VAERS matches; `pre_vaccine` entries dropped, third-party entries kept.
 
 1. Request OpenVSafe's v-safe-to-VAERS match table (protocol owner).
 2. Add gold-set coders and other contributors as authors (section 2).
-3. Freeze the taxonomy: `python scripts/freeze_taxonomy.py`, which creates `taxonomy/v1.0`.
-4. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
-5. File on OSF, then set `osf_registration` in `config/analysis.yaml`.
+3. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
+4. File on OSF, then set `osf_registration` in `config/analysis.yaml`.
