@@ -70,6 +70,18 @@ zero-retention route; Anthropic receives only the comparison sample.
   2026-11-10; rotate them before the full run.
 - **Spend:** each run has a dollar cap (`--max-usd`); runs are logged in the `llm_runs` table.
 
+## OpenVSafe VAERS matches (read 2026-11-10)
+
+OpenVSafe (openvsafe.org, a project of OpenVAERS) publishes its v-safe-to-VAERS matches only
+as a table on each person page. Q3 uses them (protocol owner, 2026-11-10). `vsafe-ft
+openvsafe` requests `/registrant/<code>` for each person our call-center data marks as
+VAERS-filed, one request at a time, at most one per second, with a generic user agent.
+robots.txt allows these pages (it disallows `/search`, `/api/` and `/fragment/`, which are
+never requested); the site has no terms of use, and its privacy policy does not address
+automated access. The registrant codes sent are the public FOIA codes the site itself
+publishes. Only VAERS ID, confidence, score and runner-up score are kept; state, symptoms
+and the person's free text on the page are discarded unread.
+
 ## Rules for people
 - Quotations in the report or manuscript are paraphrased or composited, never verbatim, never with a registrant code.
 - Redacted (b)(6) words are not reconstructed or guessed.

@@ -257,6 +257,29 @@ def cmd_gold(a):
                f"gold_eval_{tag}_{a.period or 'all'}")
 
 
+def cmd_openvsafe(a):
+    """Read OpenVSafe's VAERS matches for the call-center people with a VAERS-filed case."""
+    import duckdb
+    import polars as pl
+
+    from . import openvsafe
+    from .suppress import safe
+
+    main_db = config.DATA_DIR / "interim" / "vsafe.duckdb"
+    with duckdb.connect(str(main_db), read_only=True) as m:
+        regs = [r for (r,) in m.execute(
+            "SELECT DISTINCT registrant FROM call_center WHERE vaers_filed "
+            "ORDER BY hash(registrant)").fetchall()]
+    if a.limit:
+        regs = regs[: a.limit]
+    con = openvsafe.connect()
+    if not a.summary_only:
+        print(json.dumps(openvsafe.crawl(con, regs, rate=a.rate), indent=2))
+    df = pl.DataFrame(openvsafe.summary(con), schema=["status", "confidence", "people"],
+                      orient="row")
+    _write(safe(df), "openvsafe_match_summary")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
@@ -317,6 +340,12 @@ def main(argv=None):
 
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")
     s.set_defaults(func=cmd_qa)
+
+    s = sub.add_parser("openvsafe", help="read OpenVSafe's VAERS matches (VAERS-filed people)")
+    s.add_argument("--rate", type=float, default=1.0, help="requests per second")
+    s.add_argument("--limit", type=int, help="only the first N people (stable order)")
+    s.add_argument("--summary-only", action="store_true")
+    s.set_defaults(func=cmd_openvsafe)
 
     s = sub.add_parser("gold", help="gold set: draw | sheets | load | agreement | adjudicate | evaluate")
     s.add_argument("action", choices=["draw", "sheets", "load", "agreement", "adjudicate",
