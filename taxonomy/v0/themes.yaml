@@ -59,7 +59,7 @@ themes:
   # --- lay-reporting layer (not in the MedDRA backbone) ---
   persistence:
     domain: lay
-    description: "the symptom is described as ongoing, persisting or lasting weeks or months"
+    description: "the writer says a symptom has lasted weeks or months, has not gone away since vaccination, or keeps coming back; not a duration of hours or a few days"
     terms: ["still (?:have|having|feel|feeling)", "since (?:the|my) (?:shot|vaccine|dose)",
             "(?:for|over) (?:\\d+|several|many) (?:weeks|months)", "hasn't gone away", ongoing,
             "not (?:gone|better|improved)"]

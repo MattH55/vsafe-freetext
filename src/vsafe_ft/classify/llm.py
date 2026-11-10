@@ -35,7 +35,7 @@ API_URL = "https://api.nano-gpt.com/api/v1/chat/completions"                   #
 SUBSCRIPTION_URL = "https://nano-gpt.com/api/subscription/v1/chat/completions"  # subscription
 DEFAULT_MODEL = "z-ai/glm-5.3"              # NanoGPT subscription model, ZDR route verified
 SECOND_MODEL = "claude-opus-5-5"            # Anthropic API: second LLM for model sensitivity
-PROMPT_VERSION = "v0-2026-11-10"
+PROMPT_VERSION = "v0.1-2026-11-10"
 PROVIDER = {"zdr": True, "data_collection": "deny"}
 
 

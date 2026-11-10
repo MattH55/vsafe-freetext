@@ -163,7 +163,7 @@ Issues found and their status:
 
 ## Layer-3 pilot (LLM, week-1 and six-week entries of release 1)
 
-Providers and terms: `docs/data-use.md`. Same fixed prompt (`PROMPT_VERSION v0-2026-11-10`) and
+Providers and terms: `docs/data-use.md`. Same fixed prompt (`PROMPT_VERSION v0-2026-11-10`, then `v0.1` below) and
 closed list of 21 themes for both models; text only, numbered per request, 20 entries per
 request; identical texts sent once. Samples are drawn by a stable hash of response id + field.
 
@@ -227,6 +227,26 @@ model and the relative shift (flag at > 0.20, `analysis.yaml model_shift_flag`).
 Only `persistence` is model-sensitive: Claude reads duration phrases as persistence more often.
 Its definition needs a sharper description (e.g. "lasting beyond the expected few days") before
 the taxonomy is frozen. `unrelated_cause` (0.18) and `fatigue_pem` (0.16) are close to the flag.
+
+**Re-run after sharpening `persistence` (prompt `v0.1-2026-11-10`, same 2,000 entries).**
+New description: "the writer says a symptom has lasted weeks or months, has not gone away since
+vaccination, or keeps coming back; not a duration of hours or a few days". Both models
+relabelled all 1,591 texts (GLM 0 failed; Claude 0 failed, 0 refusals, $1.87, 555 s; 24 min
+in all).
+
+| Theme | GLM | Claude | Shift |
+|---|---|---|---|
+| persistence | 25 | 21 | 0.16 (was 0.43) |
+| unrelated_cause | 105 | 125 | 0.16 |
+| fatigue_pem | 99 | 113 | 0.12 |
+| **acute_diagnosis** | **19** | **14** | **0.26 (was 0.12; model-sensitive)** |
+| every other theme | | | <= 0.11 |
+
+`persistence` is no longer model-sensitive, and both models now tag it less often (the
+description excludes short durations). `acute_diagnosis` crossed the flag on a difference of
+5 entries out of fewer than 20: at this size the shift statistic is noisy (it moved from 0.12
+to 0.26 with an unchanged description). The flag stays as computed; the long-term
+model-sensitivity sample after registration is the confirmatory check.
 
 Caveat: these are week-1 / six-week entries. Long-term surveys, where the PACVS domains matter,
 are untouched until the OSF registration exists.
