@@ -26,6 +26,11 @@ Aggregates only. Every table below passed `suppress.suppress` + `suppress.assert
 | ingest | MedDRA 2024-11 (3 CSVs, 2.0 GB unzipped) | 14,134,779 | 95 s |
 | download | adult check-in zip (5.76 GB) | | 48,116 s (2 timeouts, resumed) |
 | ingest | adult check-in CSV (25.0 GB unzipped, Deflate64) | 144,856,043 | 13,269 s |
+| ingest | original r02-r12.xlsx (11 files) | 7,148,511 | 659 s |
+| ingest | updated r02-r12.xlsx (11 files) | 7,148,511 | 1,170 s |
+| ingest | call-center CSVs (CDC 23-00926, GDIT 23-00925) | 1,606,548 + 1,605,019 | 2 s + 5 s |
+| link | call-center outcomes onto r01 entries | 395,010 entries | 15 s |
+| qa | original vs updated, 13 releases (hashes only) | 7,948,511 x 2 | 28 s |
 
 Adult check-ins: 9,552,127 people, 117 survey ids, every `DAYS_SINCE` value numeric. By the
 derived survey-type bins: 0-7 days 82.6M, 8-42 days 44.7M, 43-135 days 7.8M, 136-270 days
@@ -196,10 +201,24 @@ fields).
 | Release | Rows (original) | Rows (updated) | People | Rows only in original | Rows only in updated |
 |---|---|---|---|---|---|
 | 1 | 390,000 | 390,000 | 272,544 | 0 | 0 |
+| 2 | 390,000 | 390,000 | 298,471 | 0 | 0 |
+| 3 | 390,000 | 390,000 | 296,200 | <10 | <10 |
+| 4 | 650,000 | 650,000 | 468,307 | 0 | 0 |
+| 5 | 650,000 | 650,000 | 459,022 | 0 | 0 |
+| 6 | 650,000 | 650,000 | 453,851 | 0 | 0 |
+| 7 | 780,000 | 780,000 | 536,169 | 0 | 0 |
+| 8 | 780,000 | 780,000 | 532,779 | 0 | 0 |
+| 9 | 780,000 | 780,000 | 611,767 | 0 | 0 |
+| 10 | 780,000 | 780,000 | 524,042 | 0 | 0 |
+| 11 | 780,000 | 780,000 | 662,093 | 0 | 0 |
+| 12 | 518,511 | 518,511 | 377,718 | 0 | 0 |
 | under-3 | 16,418 | 16,418 | 8,181 | 0 | 0 |
 
-Columns: updated = original + `SURVEY_STATIC_ID`, `RESPONSE_ID`, `STARTED_ON`; no other
-differences. Releases 2-12 to follow as they download.
+All 13 files, 7,948,511 rows each side. Columns in every release: updated = original +
+`SURVEY_STATIC_ID`, `RESPONSE_ID`, `STARTED_ON`; no other column differences. Release 3 has
+fewer than 10 rows on each side that differ (equal numbers, so cells edited in place, not rows
+added or removed); the updated file is used. Zero cells here are exact zeros, checked locally
+before suppression. Cross-check run time: 28 s.
 
 ## QA: duplicates, MedDRA coverage
 
