@@ -259,3 +259,19 @@ def test_survey_join_is_on_response_id_not_form_id(tmp_path, monkeypatch):
     assert c.execute("SELECT count(*) FROM checkins").fetchall()[0][0] == 2
     got = c.execute("SELECT response_id, survey_matched FROM entries_survey ORDER BY 1").fetchall()
     assert got == [("1", True), ("2", False), ("3", False), ("4", False)]
+
+
+def test_us_format_dates_link(tmp_path, monkeypatch):
+    """The CSV exports write dates as MM/DD/YYYY; the .xlsx free text as ISO timestamps."""
+    monkeypatch.setattr(config, "columns", fake_columns)
+    _ft(FT).write_parquet(tmp_path / "ft.parquet")
+    pl.DataFrame({"REG": ["a", "a"], "VDATE": ["03/01/2021", "03/29/2021"], "DOSE": ["1", "2"],
+                  "MFR": ["X", "X"], "AGE": [None, None]}).write_parquet(tmp_path / "vax.parquet")
+    c = duckdb.connect()
+    link.build_entries(c, str(tmp_path / "ft.parquet"))
+    link.link_dose(c, str(tmp_path / "vax.parquet"))
+    got = c.execute("""SELECT response_id, dose_number, days_since_dose FROM entries_dose
+                       WHERE registrant = 'a' ORDER BY 1""").fetchall()
+    assert got == [("1", "1", 4), ("2", "2", 94)]
+    assert link.parse_date("'12/31/2021'") and c.execute(
+        f"SELECT {link.parse_date(chr(39) + '12/31/2021' + chr(39))}").fetchall()[0][0].day == 31

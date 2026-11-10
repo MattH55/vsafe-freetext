@@ -56,3 +56,11 @@ every one of the 390,000 response ids in updated release 1 is found in the check
 Entries now join check-ins on (response id, registrant) and dedupe on (registrant, response
 id, field, text). Survey type stays derived from `DAYS_SINCE`: a form id's days can span up
 to a year.
+
+## Date formats (resolved 2026-11-09)
+
+All CSV exports (check-ins, registrants, vaccinations, MedDRA) write dates as `MM/DD/YYYY`
+(month first: no value has a first part above 12, 11,966,730 vaccination dates have a second
+part above 12). The `.xlsx` free-text files give ISO timestamps. `link.parse_date` and
+`link.parse_ts` read both; a plain cast left every vaccination date NULL, so the first gate-1
+run showed dose_linked = 0.

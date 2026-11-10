@@ -56,6 +56,17 @@ def _s(val: str) -> str:
     return "'" + str(val).replace("'", "''") + "'"
 
 
+def parse_ts(expr: str) -> str:
+    """Timestamp from ISO text (the .xlsx exports) or US 'MM/DD/YYYY' text (the CSV exports)."""
+    return (f"coalesce(TRY_CAST({expr} AS TIMESTAMP), "
+            f"TRY_STRPTIME(CAST({expr} AS VARCHAR), '%m/%d/%Y'))")
+
+
+def parse_date(expr: str) -> str:
+    """DATE from ISO or US 'MM/DD/YYYY' text (all CSV exports are month first: checked)."""
+    return f"CAST({parse_ts(expr)} AS DATE)"
+
+
 # --------------------------------------------------------------------------- entries
 
 def build_entries(con, parquet_glob: str) -> None:
@@ -73,7 +84,7 @@ def build_entries(con, parquet_glob: str) -> None:
         f"""SELECT {_q(c['registrant'])} AS registrant,
                    {_q(c['survey_static_id'])} AS survey_static_id,
                    {_q(c['response_id'])} AS response_id,
-                   TRY_CAST({_q(c['started_on'])} AS TIMESTAMP) AS started_on,
+                   {parse_ts(_q(c['started_on']))} AS started_on,
                    '{f}' AS field, {_q(col)} AS text_orig,
                    _release, _row, _content_hash, coalesce(_under3, false) AS under3
             FROM read_parquet({_s(parquet_glob)}, union_by_name = true)
@@ -148,7 +159,7 @@ def link_dose(con, vaccinations_parquet: str) -> None:
         f"""
         CREATE OR REPLACE TABLE vax AS
         SELECT {_q(v['registrant'])} AS registrant,
-               TRY_CAST({_q(v['vaccination_date'])} AS DATE) AS vax_date,
+               {parse_date(_q(v['vaccination_date']))} AS vax_date,
                {_q(v['dose_number'])} AS dose_number, {_q(v['manufacturer'])} AS manufacturer,
                {age} AS age_band
         FROM read_parquet({_s(vaccinations_parquet)}, union_by_name = true)
@@ -192,8 +203,10 @@ def load_checkins(con, checkins_parquet: str) -> None:
                                                 "survey_day", "medical_care", "health_impact"])
     opt = ", ".join(
         f"{_q(h[k])} AS {k}" if h.get(k) not in (None, "TODO") else f"NULL::VARCHAR AS {k}"
-        for k in ["health_now", "started_on", "tested_positive", "pregnant"]
+        for k in ["health_now", "tested_positive", "pregnant"]
     )
+    started = (parse_date(_q(h["started_on"])) if h.get("started_on") not in (None, "TODO")
+               else "NULL::DATE")
     stype = (_q(h["survey_type"]) if h.get("survey_type") not in (None, "TODO")
              else survey_type_from_days(_q(h["survey_day"])))
     con.execute(
@@ -203,7 +216,7 @@ def load_checkins(con, checkins_parquet: str) -> None:
                {_q(h['survey_static_id'])} AS survey_static_id,
                {stype} AS survey_type, {_q(h['survey_day'])} AS survey_day,
                {_q(h['medical_care'])} AS medical_care, {_q(h['health_impact'])} AS health_impact,
-               {opt}
+               {started} AS started_on, {opt}
         FROM read_parquet({_s(checkins_parquet)}, union_by_name = true)
         QUALIFY row_number() OVER (PARTITION BY {_q(h['response_id'])}
                                    ORDER BY {_q(h['registrant'])}, {_q(h['survey_day'])}) = 1
@@ -261,7 +274,7 @@ def link_meddra(con, sources: list[tuple[str, str]],
         parts.append(
             f"""SELECT {_q(m['registrant'])} AS registrant,
                        CAST({rid} AS VARCHAR) AS response_id,
-                       TRY_CAST({_q(m['date'])} AS DATE) AS code_date,
+                       {parse_date(_q(m['date']))} AS code_date,
                        {field} AS field_raw,
                        {_q(m['pt'])} AS pt, {_q(m['llt'])} AS llt,
                        CAST({active} AS VARCHAR) AS active, {_s(label)} AS meddra_release
@@ -277,15 +290,22 @@ def link_meddra(con, sources: list[tuple[str, str]],
     con.execute(
         """
         CREATE OR REPLACE TABLE entry_meddra AS
+        -- two plain equi-joins (a CASE in ON forces a nested-loop join over 14M codes)
+        WITH m AS (
+            SELECT * FROM meddra
+            WHERE active IS NULL OR upper(trim(active)) IN ('YES', 'Y', 'TRUE', '1')
+        )
         SELECT e.entry_id, m.meddra_release, m.pt, m.llt, m.active
         FROM entries e
-        JOIN meddra m
-          ON m.field = e.field
-         AND CASE WHEN m.response_id IS NOT NULL
-                  THEN m.response_id = e.response_id AND m.registrant = e.registrant
-                  ELSE m.registrant = e.registrant
-                       AND m.code_date = CAST(e.started_on AS DATE) END
-        WHERE m.active IS NULL OR upper(trim(m.active)) IN ('YES', 'Y', 'TRUE', '1')
+        JOIN m ON m.response_id = e.response_id AND m.registrant = e.registrant
+              AND m.field = e.field
+        WHERE m.response_id IS NOT NULL
+        UNION ALL
+        SELECT e.entry_id, m.meddra_release, m.pt, m.llt, m.active
+        FROM entries e
+        JOIN m ON m.registrant = e.registrant AND m.code_date = CAST(e.started_on AS DATE)
+              AND m.field = e.field
+        WHERE m.response_id IS NULL
         """
     )
 
@@ -330,7 +350,7 @@ def link_outcomes(con, sources: list[tuple[str, str]], truthy: tuple[str, ...] =
                            release=label)
         parts.append(
             f"""SELECT {_q(c['registrant'])} AS registrant,
-                       TRY_CAST({_q(c['report_date'])} AS DATE) AS report_date,
+                       {parse_date(_q(c['report_date']))} AS report_date,
                        upper(trim({_q(c['vaers_filed'])})) IN ({", ".join(map(_s, truthy))})
                            AS vaers_filed,
                        {_s(label)} AS cc_source
