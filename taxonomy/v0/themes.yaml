@@ -22,7 +22,10 @@ themes:
             "(?:elevated|high|increased|rapid|racing) (?:heart ?rate|pulse)", vertigo]
   sensory_neuropathic:
     domain: pacvs
-    terms: [tingling, "pins and needles", "numb(?:ness)?", burning, "paresthesias?", "paraesthesias?",
+    # bare "burning" also matched burning urination/stomach/throat/eyes (MedDRA map, 2026-11-09)
+    terms: [tingling, "pins and needles", "numb(?:ness)?", "burning (?:sensation|feeling)",
+            "(?:skin|feet|hands?|legs?|arms?|face|nerves?) (?:is |are |was |were )?burning",
+            "burning (?:skin|feet|hands?|legs?|nerves?)", "paresthesias?", "paraesthesias?",
             tinnitus, "ringing in (?:my |the )?ears?", "blurr(?:y|ed) vision", neuropathy]
   sleep:
     domain: pacvs

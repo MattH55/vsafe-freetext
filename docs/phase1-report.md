@@ -131,6 +131,30 @@ mild, none, vaccine, shot, today). Open for the protocol owner: whether `taste_s
 `cardiorespiratory` belong among the PACVS domains (both are long-COVID features), and
 whether `upper_respiratory` should be a criterion-3 exclusion (a likely cold).
 
+## MedDRA map and theme precision
+
+`vsafe-ft meddra-map` writes `taxonomy/v0/meddra_map.csv`: theme -> MedDRA PT, where the
+lexicon matches the PT name or an LLT CDC coded under it, using only codes on in-scope
+(week-1 / six-week) entries and only PTs coded for >= 10 people. Current draft: 248 rows,
+229 PTs. Inputs and outputs are MedDRA dictionary terms, not participant text.
+
+Precision check (`phase1_theme_pt_cooccurrence`): the PTs CDC coded on the same entries as
+each theme. The top PT is the expected one for most themes, e.g. `fatigue_pem` -> Fatigue
+(90% of its entries), `dysautonomia` -> Dizziness (78%), `lymphadenopathy` ->
+Lymphadenopathy (66%), `cardiorespiratory` -> Dyspnoea (70%), `fever_chills` -> Pyrexia /
+Chills, `taste_smell` -> Dysgeusia / Ageusia / Anosmia, `unrelated_cause` -> SARS-CoV-2 test
+positive / COVID-19 (60%), `sleep` -> Insomnia / Night sweats.
+
+Issues found and their status:
+
+| Theme | Signal | Status |
+|---|---|---|
+| sensory_neuropathic | bare "burning" mapped to dysuria, dyspepsia, throat/eye irritation | fixed: neuropathic phrasing only (35 -> 24 PTs) |
+| menstrual | top co-coded PT is "Unevaluable event" (21% of its entries) | open: likely "period" as a time span; needs gold-set review |
+| cognitive | 84% co-coded "Feeling abnormal", only 8% "Confusional state" | open: vague wording; check in gold set |
+| acute_diagnosis | "Pre-existing disease" on 11% of its entries | open: history mentions, not new diagnoses |
+| fatigue_pem, pain | headache / fatigue co-coded | expected: entries list several symptoms |
+
 ## QA: original vs updated (task 3.7)
 
 Rows compared as a multiset over the shared columns (REGISTRANT_CODE and the three text

@@ -69,3 +69,31 @@ def test_candidate_ngrams_respect_cell_size(con):
     assert not {"purple", "purple toes", "toes"} & grams        # only 5 people
     assert not grams & {"brain fog", "fog"}                       # labelled entries excluded
     assert (ng["people"] >= 10).all()
+
+
+def _codes(con):
+    """PT 'Fatigue' on the 15 week-1 entries; PT 'Long term only' on the 12 six-month ones."""
+    con.execute("""CREATE TABLE entry_meddra AS
+                   SELECT entry_id, '2024-11' AS meddra_release,
+                          CASE WHEN survey_type = '6 month' THEN 'Long term only' ELSE 'Fatigue' END AS pt,
+                          CASE WHEN survey_type = '6 month' THEN 'Brain fog' ELSE 'Tiredness' END AS llt,
+                          'YES' AS active
+                   FROM entries_survey WHERE text LIKE 'brain fog%'""")
+
+
+def test_meddra_map_uses_only_in_scope_codes(con):
+    from vsafe_ft.classify.lexicon import Lexicon
+
+    _codes(con)
+    m = explore.meddra_theme_map(con, Lexicon.load(themes.TAXONOMY))
+    assert set(zip(m["theme"], m["pt"])) == {("fatigue_pem", "Fatigue")}
+    assert "Long term only" not in set(m["pt"])          # six-month codes never read
+
+
+def test_theme_pt_cooccurrence_is_suppressed_and_in_scope(con):
+    themes.build_entry_themes(con)
+    _codes(con)
+    co = explore.theme_pt_cooccurrence(con)
+    got = {(t, p) for t, p, s in zip(co["theme"], co["pt"], co["suppressed"]) if not s}
+    assert got == {("cognitive", "Fatigue"), ("fatigue_pem", "Fatigue")}
+    assert co.filter(co["pt"] == "Fatigue")["people"].to_list() == [15, 15]

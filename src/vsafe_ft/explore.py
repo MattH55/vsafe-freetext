@@ -77,31 +77,60 @@ def text_length_profile(con, source: str = "entries_survey") -> pl.DataFrame:
     return safe(df)
 
 
-def meddra_theme_map(con, lexicon: Lexicon) -> pl.DataFrame:
-    """theme -> MedDRA PT list, from terms seen in the CDC coding file.
+def meddra_theme_map(con, lexicon: Lexicon, source: str = "entries_survey") -> pl.DataFrame:
+    """theme -> MedDRA PT, from the dictionary terms CDC assigned to in-scope entries.
 
-    A PT maps to a theme when the lexicon matches the PT name or any LLT coded under it.
-    Only PTs coded for >= min_cell_people people are listed. SOC/HLGT are carried when the
-    coding file has them (columns `soc`/`hlgt` on the `meddra` table), else left blank.
+    Only codes on exploratory (week-1 / six-week) entries are used, so nothing is learnt from
+    long-term check-ins before the registration. A PT maps to a theme when the lexicon matches
+    the PT name or any LLT coded under it; only PTs coded for >= min_cell_people people are
+    listed. Inputs and outputs are MedDRA dictionary terms, never participant text.
     """
     from . import config
 
-    k = config.analysis()["min_cell_people"]
-    cols = {r[0] for r in con.execute("DESCRIBE meddra").fetchall()}
-    soc = "any_value(soc)" if "soc" in cols else "NULL"
-    hlgt = "any_value(hlgt)" if "hlgt" in cols else "NULL"
+    k = int(config.analysis()["min_cell_people"])
     terms = con.execute(
         f"""
-        SELECT pt, list(DISTINCT llt) AS llts, {soc} AS soc, {hlgt} AS hlgt,
-               count(DISTINCT registrant) AS people
-        FROM meddra WHERE pt IS NOT NULL GROUP BY pt HAVING count(DISTINCT registrant) >= {k}
+        SELECT m.pt, list(DISTINCT m.llt) AS llts, count(DISTINCT e.registrant) AS people
+        FROM entry_meddra m JOIN {source} e USING (entry_id)
+        WHERE m.pt IS NOT NULL AND {exploratory_filter_sql("e")}
+        GROUP BY m.pt HAVING count(DISTINCT e.registrant) >= {k}
         """
     ).fetchall()
     rows = []
-    for pt, llts, s, h, _ in terms:
+    for pt, llts, people in terms:
         hits = set()
         for name in [pt, *(llts or [])]:
             hits |= {lab.theme for lab in lexicon.classify(str(name))[0]}
-        rows += [{"theme": t, "soc": s or "", "hlgt": h or "", "pt": pt} for t in hits]
-    return pl.DataFrame(rows, schema={"theme": pl.String, "soc": pl.String, "hlgt": pl.String,
-                                      "pt": pl.String}).unique().sort(["theme", "pt"])
+        rows += [{"theme": t, "pt": pt, "people": people} for t in hits]
+    return (pl.DataFrame(rows, schema={"theme": pl.String, "pt": pl.String, "people": pl.Int64})
+            .unique().sort(["theme", "people", "pt"], descending=[False, True, False]))
+
+
+def theme_pt_cooccurrence(con, top: int = 5, source: str = "entries_survey") -> pl.DataFrame:
+    """For each theme, the PTs most often coded on the same entries (precision check).
+
+    Counts entries and people per (theme, PT) over exploratory entries; keeps the `top` PTs
+    per theme by people, then suppresses cells under min_cell_people.
+    """
+    df = frame(con, f"""
+        WITH x AS (
+            SELECT t.theme, m.pt, count(DISTINCT e.entry_id) AS entries,
+                   count(DISTINCT e.registrant) AS people
+            FROM entry_themes t
+            JOIN {source} e USING (entry_id)
+            JOIN entry_meddra m USING (entry_id)
+            WHERE {exploratory_filter_sql("e")}
+            GROUP BY ALL
+        ),
+        tot AS (
+            SELECT t.theme, count(DISTINCT t.entry_id) AS theme_entries
+            FROM entry_themes t JOIN {source} e USING (entry_id)
+            WHERE {exploratory_filter_sql("e")} GROUP BY ALL
+        )
+        SELECT x.theme, x.pt, x.entries, x.people,
+               x.entries / tot.theme_entries AS share_of_theme_entries
+        FROM x JOIN tot USING (theme)
+        QUALIFY row_number() OVER (PARTITION BY x.theme ORDER BY x.people DESC, x.pt) <= {int(top)}
+        ORDER BY x.theme, x.people DESC
+    """)
+    return safe(df)

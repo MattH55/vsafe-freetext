@@ -1,0 +1,249 @@
+theme,pt,people
+acute_diagnosis,Epistaxis,702
+acute_diagnosis,Herpes zoster,370
+acute_diagnosis,Anaphylactic reaction,133
+acute_diagnosis,Bell's palsy,90
+acute_diagnosis,Anaphylaxis treatment,87
+acute_diagnosis,Nephrolithiasis,79
+acute_diagnosis,Appendicitis,33
+acute_diagnosis,Cholecystectomy,19
+acute_diagnosis,Biliary colic,15
+acute_diagnosis,Deep vein thrombosis,15
+acute_diagnosis,Pericarditis,12
+acute_diagnosis,Myocardial infarction,11
+acute_diagnosis,Anaphylactic shock,10
+acute_diagnosis,Cholelithiasis,10
+acute_diagnosis,Gallbladder disorder,10
+cardiorespiratory,Dyspnoea,4784
+cardiorespiratory,Chest discomfort,3165
+cognitive,Feeling abnormal,4366
+cognitive,Confusional state,225
+cognitive,Brain fog,53
+cognitive,Amnesia,42
+dysautonomia,Dizziness,22284
+dysautonomia,Heart rate increased,2647
+dysautonomia,Palpitations,2495
+dysautonomia,Vertigo,1558
+dysautonomia,Tachycardia,1440
+dysautonomia,Dizziness postural,107
+dysautonomia,Vertigo positional,35
+dysautonomia,Temperature intolerance,29
+dysautonomia,Supraventricular tachycardia,27
+dysautonomia,Sinus tachycardia,16
+dysautonomia,Dizziness exertional,11
+fatigue_pem,Fatigue,15439
+fatigue_pem,Malaise,2382
+fatigue_pem,Lethargy,356
+fatigue_pem,Asthenopia,155
+fatigue_pem,Muscle fatigue,96
+fatigue_pem,Mental fatigue,19
+fever_chills,Pyrexia,7477
+fever_chills,Chills,7130
+fever_chills,Flushing,3126
+fever_chills,Hyperhidrosis,2979
+fever_chills,Hot flush,2192
+fever_chills,Night sweats,1977
+fever_chills,Oral herpes,1292
+fever_chills,Cold sweat,544
+fever_chills,Seasonal allergy,100
+fever_chills,Skin odour abnormal,17
+gastrointestinal,Nausea,5548
+gastrointestinal,Diarrhoea,4079
+gastrointestinal,Decreased appetite,2074
+gastrointestinal,Abdominal discomfort,1483
+gastrointestinal,Abdominal pain,1214
+gastrointestinal,Vomiting,1197
+gastrointestinal,Abdominal pain upper,904
+gastrointestinal,Constipation,486
+gastrointestinal,Abdominal distension,453
+gastrointestinal,Abdominal pain lower,98
+gastrointestinal,Diarrhoea haemorrhagic,19
+injection_site,Injection site pain,17254
+injection_site,Pain in extremity,12254
+injection_site,Arthralgia,6650
+injection_site,Injection site erythema,3963
+injection_site,Injection site pruritus,2848
+injection_site,Injection site swelling,2736
+injection_site,Injection site warmth,2584
+injection_site,Injection site bruising,2362
+injection_site,Injection site rash,1402
+injection_site,Injection site reaction,1192
+injection_site,Injection site discomfort,1032
+injection_site,Contusion,836
+injection_site,Injection site induration,680
+injection_site,Injection site mass,481
+injection_site,Injection site nodule,379
+injection_site,Injection site paraesthesia,303
+injection_site,Injection site urticaria,291
+injection_site,Injection site hypoaesthesia,264
+injection_site,Injection site discolouration,244
+injection_site,Injection site cellulitis,149
+injection_site,Injection site inflammation,130
+injection_site,Injection site joint pain,89
+injection_site,Injection site haemorrhage,81
+injection_site,Injection site coldness,54
+injection_site,Injection site hypersensitivity,47
+injection_site,Injection site vesicles,46
+injection_site,Injection site irritation,44
+injection_site,Injection site haematoma,42
+injection_site,Injection site lymphadenopathy,36
+injection_site,Injection site infection,28
+injection_site,Injection site oedema,27
+injection_site,Injection site muscle weakness,26
+injection_site,Injection site movement impairment,24
+injection_site,Injection site scab,21
+injection_site,Vaccination site bruising,20
+injection_site,Injection site discharge,16
+injection_site,Injection site joint warmth,14
+injection_site,Injection site dryness,13
+injection_site,Injection site papule,12
+injection_site,Increased tendency to bruise,11
+injection_site,Injection site scar,11
+lymphadenopathy,Lymphadenopathy,13123
+lymphadenopathy,Axillary pain,4530
+lymphadenopathy,Lymph node pain,4530
+lymphadenopathy,Hyperhidrosis,2979
+lymphadenopathy,Contusion,836
+lymphadenopathy,Axillary mass,248
+lymphadenopathy,Lymphadenitis,192
+lymphadenopathy,Lymph node palpable,45
+lymphadenopathy,Injection site lymphadenopathy,36
+lymphadenopathy,Axillary lymphadenectomy,20
+menstrual,Migraine,1854
+menstrual,Menstruation irregular,230
+menstrual,Menstrual disorder,145
+menstrual,Vaginal haemorrhage,132
+menstrual,Heavy menstrual bleeding,120
+menstrual,Intermenstrual bleeding,107
+menstrual,Dysmenorrhoea,92
+menstrual,Menstruation delayed,82
+menstrual,Polymenorrhoea,64
+menstrual,Menstruation normal,54
+menstrual,Amenorrhoea,21
+menstrual,Oligomenorrhoea,16
+menstrual,Postmenopausal haemorrhage,13
+menstrual,Abnormal menstrual clots,10
+pain,Headache,19007
+pain,Injection site pain,17254
+pain,Pain in extremity,12254
+pain,Pain,11219
+pain,Arthralgia,6650
+pain,Myalgia,5029
+pain,Back pain,4293
+pain,Neck pain,3983
+pain,Chest pain,2580
+pain,Ear pain,2209
+pain,Migraine,1854
+pain,Eye pain,839
+pain,Pain in jaw,797
+pain,Influenza like illness,587
+pain,Sinus headache,344
+pain,Musculoskeletal chest pain,273
+pain,Injection site joint pain,89
+pain,Ophthalmic migraine,87
+pain,Tension headache,86
+pain,Migraine with aura,77
+pain,Angina pectoris,58
+pain,Temporomandibular joint syndrome,53
+pain,External ear pain,17
+pain,Cluster headache,15
+pain,New daily persistent headache,15
+pre_existing_worsened,Arthritis,266
+pre_existing_worsened,Rheumatoid arthritis,206
+pre_existing_worsened,Gout,72
+pre_existing_worsened,Psoriasis,52
+pre_existing_worsened,Autoimmune disorder,29
+sensory_neuropathic,Arthralgia,6650
+sensory_neuropathic,Paraesthesia,6134
+sensory_neuropathic,Myalgia,5029
+sensory_neuropathic,Hypoaesthesia,4069
+sensory_neuropathic,Throat irritation,3761
+sensory_neuropathic,Paraesthesia oral,1649
+sensory_neuropathic,Abdominal discomfort,1483
+sensory_neuropathic,Tinnitus,1284
+sensory_neuropathic,Hypoaesthesia oral,992
+sensory_neuropathic,Dyspepsia,960
+sensory_neuropathic,Vision blurred,931
+sensory_neuropathic,Ear discomfort,837
+sensory_neuropathic,Burning sensation,771
+sensory_neuropathic,Eye irritation,597
+sensory_neuropathic,Injection site paraesthesia,303
+sensory_neuropathic,Injection site hypoaesthesia,264
+sensory_neuropathic,Skin burning sensation,154
+sensory_neuropathic,Pharyngeal paraesthesia,137
+sensory_neuropathic,Neuropathy peripheral,117
+sensory_neuropathic,Oral discomfort,110
+sensory_neuropathic,Pharyngeal hypoaesthesia,73
+sensory_neuropathic,Hypoaesthesia eye,29
+sensory_neuropathic,Eyelid irritation,21
+sensory_neuropathic,Eyelid sensory disorder,10
+skin,Pruritus,4940
+skin,Throat irritation,3761
+skin,Rash,2951
+skin,Injection site pruritus,2848
+skin,Urticaria,1579
+skin,Injection site rash,1402
+skin,Eye pruritus,698
+skin,Rash pruritic,524
+skin,Rash erythematous,468
+skin,Injection site urticaria,291
+skin,Rash macular,206
+skin,Rash papular,188
+skin,Nasal pruritus,157
+skin,Eczema,141
+skin,Oral pruritus,89
+skin,Petechiae,81
+skin,Tongue pruritus,78
+skin,Lip pruritus,73
+skin,Angioedema,60
+skin,Cheilitis,44
+skin,Oral mucosal eruption,40
+skin,Vaccination site rash,35
+skin,Rash vesicular,31
+skin,Eyelids pruritus,28
+skin,Dermatitis contact,24
+skin,Dermatitis allergic,19
+skin,Eyelid rash,18
+skin,Tongue eruption,14
+skin,Vulvovaginal pruritus,13
+skin,Dermatitis acneiform,11
+skin,Rash maculo-papular,11
+sleep,Insomnia,2891
+sleep,Night sweats,1977
+sleep,Middle insomnia,131
+sleep,Initial insomnia,56
+taste_smell,Ageusia,2225
+taste_smell,Anosmia,2171
+taste_smell,Dry mouth,1493
+taste_smell,Parosmia,441
+unrelated_cause,Pregnancy,735
+unrelated_cause,Sinusitis,538
+unrelated_cause,Urinary tract infection,379
+unrelated_cause,Ear infection,147
+unrelated_cause,Exposure during pregnancy,95
+unrelated_cause,Abortion spontaneous,51
+unrelated_cause,Pregnancy test positive,31
+unrelated_cause,Food poisoning,23
+unrelated_cause,Ligament sprain,23
+unrelated_cause,Head injury,21
+unrelated_cause,Limb injury,17
+unrelated_cause,Maternal exposure during pregnancy,16
+unrelated_cause,Joint injury,11
+unrelated_cause,Uterine contractions during pregnancy,10
+upper_respiratory,Oropharyngeal pain,20471
+upper_respiratory,Cough,14305
+upper_respiratory,Rhinorrhoea,12474
+upper_respiratory,Respiratory tract congestion,7849
+upper_respiratory,Nasal congestion,7096
+upper_respiratory,Sneezing,3885
+upper_respiratory,Throat irritation,3761
+upper_respiratory,Sinus congestion,1580
+upper_respiratory,Upper-airway cough syndrome,1074
+upper_respiratory,Productive cough,647
+upper_respiratory,Ocular hyperaemia,492
+upper_respiratory,Ear congestion,146
+upper_respiratory,Upper respiratory tract congestion,121
+upper_respiratory,Pharyngitis streptococcal,58
+upper_respiratory,Pulmonary congestion,53
+upper_respiratory,Haemoptysis,29
+upper_respiratory,Lower respiratory tract congestion,11

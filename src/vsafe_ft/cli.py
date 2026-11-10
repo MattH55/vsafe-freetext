@@ -144,6 +144,28 @@ def cmd_explore(a):
     con = link.connect()
     _write(explore.text_length_profile(con), "phase1_length_profile")
     _write(explore.candidate_ngrams(con, n_max=a.n, top=a.top), "phase1_candidate_ngrams")
+    if _has_table(con, "entry_meddra"):
+        _write(explore.theme_pt_cooccurrence(con), "phase1_theme_pt_cooccurrence")
+
+
+def cmd_meddra_map(a):
+    """Write taxonomy/v0/meddra_map.csv (theme -> PT, dictionary terms, >= k people per PT)."""
+    from . import explore, link
+    from .classify.lexicon import Lexicon
+    from .suppress import assert_safe
+    from .themes import TAXONOMY
+
+    con = link.connect()
+    df = explore.meddra_theme_map(con, Lexicon.load(TAXONOMY))
+    assert_safe(df)
+    out = config.REPO_ROOT / "taxonomy" / "v0" / "meddra_map.csv"
+    out.write_bytes(df.write_csv().encode("utf-8"))
+    print(f"wrote {out} ({df.height} rows, {df['pt'].n_unique()} PTs)")
+
+
+def _has_table(con, name: str) -> bool:
+    return bool(con.execute("SELECT count(*) FROM duckdb_tables() WHERE table_name = ?",
+                            [name]).fetchall()[0][0])
 
 
 def cmd_qa(a):
@@ -197,6 +219,8 @@ def main(argv=None):
     s.add_argument("--top", type=int, default=300)
     s.set_defaults(func=cmd_explore)
 
+    s = sub.add_parser("meddra-map", help="write taxonomy/v0/meddra_map.csv")
+    s.set_defaults(func=cmd_meddra_map)
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")
     s.set_defaults(func=cmd_qa)
 

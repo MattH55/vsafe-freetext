@@ -81,3 +81,10 @@ def test_acute_themes_are_not_pacvs():
     pacvs = {t for t, b in spec["themes"].items() if b["domain"] == "pacvs"}
     assert pacvs == {"fatigue_pem", "cognitive", "dysautonomia", "sensory_neuropathic", "sleep",
                      "pain", "gastrointestinal", "menstrual"}      # the eight protocol domains
+
+
+@pytest.mark.parametrize("text,hit", [
+    ("burning sensation in my feet", True), ("hands are burning", True),
+    ("burning when urinating", False), ("burning in my stomach", False)])
+def test_burning_is_neuropathic_only(text, hit):
+    assert ("sensory_neuropathic" in themes(text)) is hit
