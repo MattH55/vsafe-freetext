@@ -58,11 +58,78 @@ Updated release 1 (`vsafe-ft link --release r01 --skip-outcomes`, 1,485 s; `vsaf
 
 ## Layer-1 lexicon coverage (week-1 and six-week entries only)
 
-_Pending._
+Release 1, all 395,010 entries in scope (no long-term check-ins in this release).
+`vsafe-ft classify`: 94 s. Share of entries matched by at least one theme:
+
+| Field | Entries | Taxonomy as drafted | After n-gram additions (`a9810ec`) |
+|---|---|---|---|
+| SD | 41,470 | 52.0% | 85.0% |
+| SRO | 345,957 | 24.6% | 68.3% |
+| HCVO | 7,583 | 8.6% | 13.5% |
+| All | 395,010 | 27.2% | 69.0% |
+
+HCVO stays low: the field mostly records the kind of care visit, not symptoms.
+
+Entries per theme after the additions (all fields; every cell >= 10 people):
+
+| Theme | Domain | Entries |
+|---|---|---|
+| upper_respiratory | acute | 67,311 |
+| pain | pacvs | 40,572 |
+| injection_site | acute | 39,851 |
+| dysautonomia | pacvs | 32,067 |
+| lymphadenopathy | acute | 28,093 |
+| fever_chills | acute | 22,366 |
+| fatigue_pem | pacvs | 17,278 |
+| sensory_neuropathic | pacvs | 16,156 |
+| skin | acute | 16,020 |
+| gastrointestinal | pacvs | 12,207 |
+| unrelated_cause | exclusion | 10,060 |
+| taste_smell | acute | 7,885 |
+| cardiorespiratory | acute | 5,751 |
+| sleep | pacvs | 3,586 |
+| cognitive | pacvs | 2,715 |
+| persistence | lay | 2,453 |
+| menstrual | pacvs | 1,430 |
+| acute_diagnosis | exclusion | 1,399 |
+| pre_existing_worsened | lay | 798 |
+| care_sought | lay | 592 |
+| missed_work_school | lay | 143 |
+
+Attribution flags (drafted taxonomy): third-party wording in 464 SRO and 103 SD entries;
+pre-vaccine wording in 243 SRO and 14 SD entries; HCVO cells suppressed (< 10 people).
+
+Text length (characters): SRO 41% under 20, 36% 20-49, 22% 50-199, 1% 200+; SD 24% under
+20, 36% 20-49, 35% 50-199, 4% 200+; HCVO 34% under 20, 43% 20-49, 23% 50-199, 1% 200+.
+
+Caveat for the protocol: at week 1, the PACVS-domain themes mostly capture the acute
+reaction (dizziness, headache, muscle aches, tingling at the arm). Domain hits at week 1
+are not evidence of PACVS; the case definition uses long-term surveys only.
 
 ## Candidate themes from n-grams (>= 10 people)
 
-_Pending._
+`vsafe-ft explore` (178 s): the 300 most frequent 1-3-grams in entries no theme matched,
+stop words removed, each used by >= 10 people. Clusters among them, with the people count
+of the largest n-gram in each (drafted taxonomy):
+
+| Cluster | Largest n-gram people | Action |
+|---|---|---|
+| injection site: soreness, swelling, redness, itch, bruising | 20,129 | new theme `injection_site` |
+| upper respiratory: sore throat, runny/stuffy nose, congestion, cough, sneezing | 17,519 | new theme `upper_respiratory` |
+| lymph nodes: swollen nodes, armpit, axilla | 11,563 | new theme `lymphadenopathy` |
+| fever, chills, hot flashes, flushing, sweating | 4,635 | new theme `fever_chills` |
+| rash, hives, itching | 4,393 | new theme `skin` |
+| taste/smell: metallic taste, loss of taste or smell, dry mouth | 2,132 | new theme `taste_smell` |
+| shortness of breath, chest tightness or pressure | 2,075 | new theme `cardiorespiratory` |
+| "light headed" (two words), heart rate | 2,365 | added to `dysautonomia` |
+| back, neck, jaw pain; aches | 2,422 | added to `pain` |
+| appetite | 1,670 | added to `gastrointestinal` |
+| positive test, seasonal allergies | 1,689 | added to `unrelated_cause` |
+
+After the additions the most frequent leftovers are non-specific words (pain, arm, sore,
+mild, none, vaccine, shot, today). Open for the protocol owner: whether `taste_smell` or
+`cardiorespiratory` belong among the PACVS domains (both are long-COVID features), and
+whether `upper_respiratory` should be a criterion-3 exclusion (a likely cold).
 
 ## QA: original vs updated (task 3.7)
 
@@ -93,4 +160,9 @@ MedDRA 2024-11 release, whole file (all survey types; codes only, no text read):
   `taxonomy/v0/meddra_map.csv`.
 - No row lacks `RESPONSE_ID` or `PT_NAME`: codes join to entries on response id + field.
 
-Coverage of release-1 entries: _pending (needs the check-in file for the survey link)._
+Coverage of release-1 entries: **100%** in every field (SD 41,470, SRO 345,957, HCVO
+7,583 entries all have at least one active code from the 2024-11 release).
+
+Duplicates in release 1: 395,010 entries before and after dedupe; within-release copies,
+cross-release keys and under-3/main overlaps are all below 10 people (suppressed), as
+expected for a single release.
