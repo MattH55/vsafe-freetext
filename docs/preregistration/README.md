@@ -11,8 +11,9 @@ Attach at registration:
 
 Tiers:
 - **Confirmatory:** Q1 coherence (co-occurrence vs 1,000-permutation null preserving domain
-  marginals; LCA with BIC), Q2 onset and persistence, Q3 VAERS capture-rate ratio and PT dispersion.
-- **Exploratory (labelled):** blind clustering of long-term free text, taxonomy discovery,
+  marginals), Q2 onset and persistence, Q3 VAERS capture-rate ratio and PT dispersion.
+- **Exploratory (labelled):** LCA with BIC (decided 2026-11-10), blind clustering of long-term
+  free text, taxonomy discovery,
   menstrual/neurological/cardiac deep dives.
 
 Prior-knowledge disclosure: record here which release was opened in phase 1, what was seen,

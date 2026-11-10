@@ -53,8 +53,8 @@ The nine candidate symptom domains are listed in `taxonomy/v1.0/themes.yaml` (`d
 | VAERS public data (1990–2026, data dated 2026-06-03) | VAERS arm, Q3 | vaers.hhs.gov |
 
 Each file has its sha256 recorded at download. All files were downloaded between 2026-11-08 and
-2026-11-10. **[DECIDE]** Whether to request OpenVAERS's v-safe-to-VAERS match table, or rebuild
-the 11-field matcher (score ≥ 8 of 11).
+2026-11-10. VAERS matching uses OpenVSafe's v-safe-to-VAERS matches (score ≥ 8 of 11 fields;
+decided 2026-11-10). The protocol owner requests the match table.
 
 ## 5. Prior knowledge of the data (disclosure)
 
@@ -92,7 +92,9 @@ completed long-term survey (3, 6 or 12 months).
 **Classified free text.** Each entry gets themes from three layers: lexicon, then embeddings,
 then an LLM restricted to the closed theme list. Each entry also gets two flags:
 `third_party` (the entry is about someone else) and `pre_vaccine` (it reports something
-before vaccination). Proposed: entries flagged either way do not count towards any criterion (**[DECIDE]**; `phenotype.prepare` does not yet drop them).
+before vaccination). Entries flagged `pre_vaccine` do not count towards any criterion
+(`phenotype.prepare` drops them). Entries about another person do count: a registrant often
+reports for a dependant (decided 2026-11-10).
 
 | Theme group | Themes | Role |
 |---|---|---|
@@ -132,10 +134,9 @@ column, so age is not a stratum (decided 2026-11-10).
 - **Gold set.** Entries are stratified by field × period × whether the lexicon labelled them.
   Half of the sample is allocated equally across strata and half in proportion to stratum
   size. Each entry carries an inverse-probability weight. Two coders code each entry blind to
-  the classifiers, and disagreements are adjudicated (`src/vsafe_ft/gold.py`). **[DECIDE]**
-  The split between periods. Proposed: 1,000 week-1 / six-week entries drawn before filing,
-  and 1,000 long-term entries drawn only after filing. The total of 2,000 is set in
-  `analysis.yaml`.
+  the classifiers, and disagreements are adjudicated (`src/vsafe_ft/gold.py`). 1,000
+  week-1 / six-week entries are drawn before filing, and 1,000 long-term entries only after
+  filing (2,000 in total, `analysis.yaml`).
 - **Coder agreement.** Cohen's kappa for each theme.
 - **Classifier performance.** Weighted precision and recall for each theme, computed for each
   layer and for the final union of layers.
@@ -164,7 +165,8 @@ column, so age is not a stratum (decided 2026-11-10).
 - **Null.** 1,000 permutations. Each permutation shuffles every domain column independently,
   so each domain's marginal frequency is kept exactly. Seed 20261110.
 - **Decision.** One-sided p = (1 + #{null ≥ observed}) / 1,001. We reject H0 at α = 0.05.
-  - The per-pair p-values are secondary, with Holm adjustment across the 36 pairs.
+  - The per-pair p-values are secondary, with Holm adjustment across the 36 pairs
+    (`stats.holm`).
   - The number of people with 2 or more domains is descriptive only.
 - **Stability.** The test is repeated within each manufacturer and each dose. We call the
   pattern reproducible if the Q1 test rejects in every stratum with at least 1,000 people.
@@ -172,30 +174,31 @@ column, so age is not a stratum (decided 2026-11-10).
   and the same test is applied there.
 - **Latent class analysis (LCA).** We fit models with 1–6 classes on the domain matrix and
   choose the number of classes by BIC. This is reported descriptively: a class with high
-  probability on 2 or more domains supports H1 but is not a test. **[DECIDE]** The LCA code
-  is not written yet. Either write and test it on synthetic data before filing, or mark LCA
-  as exploratory.
+  probability on 2 or more domains is descriptive. LCA is **exploratory** (decided
+  2026-11-10): it supports or weakens H1 but is not a test.
 
 **Q2**
 
 - **Onset.** For cases, onset is the first survey at which the case domains appear: week 1,
   six weeks, or a long-term survey. We compare the share with onset at or before six weeks
-  against the share expected if onset were spread evenly over the surveys completed, using a
-  one-sided exact binomial test.
+  against the share expected if onset were spread evenly over the surveys completed. Each
+  case's null probability of early onset is the share of their completed surveys of that dose
+  that are week-1 or six-week; the number of early-onset cases is compared with that
+  Poisson-binomial null by an exact one-sided test (`stats.onset_test`).
 - **Persistence.** We compare cases with group (c) on the share reporting at least one PACVS
   domain at a later long-term survey, among people who completed one. This uses a risk
-  difference with a 95% Newcombe interval and a one-sided test at α = 0.05.
+  difference with a 95% Newcombe hybrid score interval and a one-sided pooled z-test at
+  α = 0.05 (`stats.risk_difference`).
 - **Cadence.** All counts over time are rates per 1,000 check-ins of that survey type.
-- **[DECIDE]** The onset null is a proposal. The alternative is "acute-onset vs de novo"
-  reported descriptively only.
 
 **Q3**
 
 - **Capture.** The rate ratio for any VAERS report (call-center VAERS-filed disposition or a
-  matched VAERS report), cases vs group (b), with a 95% CI. We reject H0 if the upper limit is
-  below 1.
+  matched VAERS report), cases vs group (b), with a 95% log-scale Wald CI. We reject H0 if
+  the upper limit is below 1 (`stats.risk_ratio`).
 - **Dispersion.** On matched reports, we compare the Shannon entropy of the MedDRA PTs for
-  cases with that for group (b), using a permutation test with 1,000 permutations.
+  cases with that for group (b), using a one-sided permutation test of the group labels with
+  1,000 permutations (`stats.dispersion_test`).
 
 **Q4.** Rates per 1,000 people for health-impact answers, medical care, and call-center cases,
 for cases and each comparison group. Descriptive only.
@@ -225,13 +228,11 @@ fails the gate.
 
 ## 10. Open items before filing
 
-1. **[DECIDE]** The gold-set period split (section 7).
-2. **[DECIDE]** LCA: confirmatory-adjacent (descriptive) or exploratory (section 8). Q2 onset
-   null (section 8).
-3. **[DECIDE]** VAERS matching route (section 4).
-4. Freeze the taxonomy: `python scripts/freeze_taxonomy.py`, which creates `taxonomy/v1.0`.
-   Run it after the decisions above, since freezing locks the theme list and descriptions.
-5. Drop `third_party` / `pre_vaccine` entries in `phenotype.prepare` if that rule is kept (section 6).
-6. Write the Q2 and Q3 analysis code and test it on synthetic data (Q1 and the attrition code
-   already exist).
-7. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
+Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
+above; OpenVSafe's VAERS matches; `pre_vaccine` entries dropped, third-party entries kept.
+
+1. Request OpenVSafe's v-safe-to-VAERS match table (protocol owner).
+2. Add gold-set coders and other contributors as authors (section 2).
+3. Freeze the taxonomy: `python scripts/freeze_taxonomy.py`, which creates `taxonomy/v1.0`.
+4. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
+5. File on OSF, then set `osf_registration` in `config/analysis.yaml`.

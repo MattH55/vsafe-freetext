@@ -156,11 +156,18 @@ def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
         """
     )
     dom = " ".join(f"WHEN '{t}' THEN '{d}'" for t, d in domains.items())
+    # Entries about something before vaccination do not count (protocol owner, 2026-11-10);
+    # entries about another person (third_party) do count.
+    has_flags = con.execute("SELECT count(*) FROM duckdb_tables() "
+                            "WHERE table_name = 'entry_flags'").fetchone()[0]
+    drop = ("AND NOT EXISTS (SELECT 1 FROM entry_flags f WHERE f.entry_id = t.entry_id "
+            "AND f.pre_vaccine)") if has_flags else ""
     con.execute(
         f"""
         CREATE OR REPLACE TABLE ph_entry_themes AS
         SELECT e.registrant, e.dose_number, e.response_id, t.theme,
                CASE t.theme {dom} END AS domain
         FROM entry_themes t JOIN entries_survey e USING (entry_id)
+        WHERE TRUE {drop}
         """
     )

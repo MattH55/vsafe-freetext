@@ -11,6 +11,7 @@ is well (lower) or unwell (upper).
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -94,3 +95,153 @@ def attrition_bounds(cases: int, responders: int, non_responders: int) -> Attrit
         lower=cases / eligible,
         upper=(cases + non_responders) / eligible,
     )
+
+
+# --- Q1 secondary: Holm adjustment of the per-pair p-values ---------------------------------
+
+def holm(p) -> np.ndarray:
+    """Holm step-down adjusted p-values (same shape as p)."""
+    p = np.asarray(p, dtype=float)
+    flat = p.ravel()
+    order = np.argsort(flat)
+    m = flat.size
+    adj = np.maximum.accumulate((m - np.arange(m)) * flat[order])
+    out = np.empty(m)
+    out[order] = np.minimum(adj, 1.0)
+    return out.reshape(p.shape)
+
+
+def _phi(z: float) -> float:
+    return 0.5 * (1 + math.erf(z / math.sqrt(2)))
+
+
+def _z(level: float) -> float:
+    """Two-sided normal quantile for a confidence level, by bisection (no scipy)."""
+    target, lo, hi = 1 - (1 - level) / 2, 0.0, 10.0
+    for _ in range(100):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if _phi(mid) < target else (lo, mid)
+    return (lo + hi) / 2
+
+
+# --- Q2 onset: early onset vs onset spread evenly over the surveys completed ------------------
+
+@dataclass(frozen=True)
+class OnsetResult:
+    cases: int
+    early: int            # cases with onset at week 1 or six weeks
+    expected: float       # sum of per-case null probabilities
+    p: float              # one-sided P(X >= early) under the Poisson-binomial null
+
+
+def onset_test(early, p0) -> OnsetResult:
+    """Exact one-sided test that onset is concentrated in the first six weeks.
+
+    early: per case, True if the case domains first appear at week 1 or six weeks.
+    p0: per case, the null probability of early onset = share of that person's completed
+        surveys of the dose that are week-1 / six-week (onset uniform over completed surveys).
+    X = sum of independent Bernoulli(p0_i) (Poisson-binomial), computed exactly.
+    """
+    e = np.asarray(early, dtype=bool)
+    q = np.asarray(p0, dtype=float)
+    if e.shape != q.shape or ((q < 0) | (q > 1)).any():
+        raise ValueError("early and p0 must have the same length; p0 in [0, 1]")
+    dist = np.zeros(e.size + 1)
+    dist[0] = 1.0
+    for pi in q:
+        dist[1:] = dist[1:] * (1 - pi) + dist[:-1] * pi
+        dist[0] *= 1 - pi
+    k = int(e.sum())
+    return OnsetResult(cases=int(e.size), early=k, expected=float(q.sum()),
+                       p=float(min(1.0, dist[k:].sum())))
+
+
+# --- Q2 persistence: risk difference, cases vs group (c) --------------------------------------
+
+def _wilson(x: int, n: int, z: float) -> tuple[float, float]:
+    p = x / n
+    c = (p + z * z / (2 * n)) / (1 + z * z / n)
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+    return c - h, c + h
+
+
+@dataclass(frozen=True)
+class RiskDifference:
+    p1: float
+    p2: float
+    diff: float
+    lower: float          # Newcombe hybrid score interval (method 10)
+    upper: float
+    p_one_sided: float    # pooled z-test, H1: p1 > p2
+
+
+def risk_difference(x1: int, n1: int, x2: int, n2: int, level: float = 0.95) -> RiskDifference:
+    if not (0 <= x1 <= n1 and 0 <= x2 <= n2 and n1 > 0 and n2 > 0):
+        raise ValueError("need 0 <= x <= n and n > 0 for both groups")
+    z = _z(level)
+    p1, p2 = x1 / n1, x2 / n2
+    l1, u1 = _wilson(x1, n1, z)
+    l2, u2 = _wilson(x2, n2, z)
+    d = p1 - p2
+    lo = d - math.sqrt((p1 - l1) ** 2 + (u2 - p2) ** 2)
+    hi = d + math.sqrt((u1 - p1) ** 2 + (p2 - l2) ** 2)
+    pp = (x1 + x2) / (n1 + n2)
+    se = math.sqrt(pp * (1 - pp) * (1 / n1 + 1 / n2))
+    pval = 0.5 if se == 0 else 1 - _phi(d / se)
+    return RiskDifference(p1, p2, d, lo, hi, pval)
+
+
+# --- Q3 capture: risk ratio, cases vs group (b) -----------------------------------------------
+
+@dataclass(frozen=True)
+class RiskRatio:
+    ratio: float
+    lower: float
+    upper: float
+    lower_capture: bool   # H1 (cases captured less often): upper < 1
+
+
+def risk_ratio(x1: int, n1: int, x2: int, n2: int, level: float = 0.95) -> RiskRatio:
+    """Ratio of proportions with a log-scale Wald interval (0.5 added to every cell if a
+    count is zero)."""
+    if not (0 <= x1 <= n1 and 0 <= x2 <= n2 and n1 > 0 and n2 > 0):
+        raise ValueError("need 0 <= x <= n and n > 0 for both groups")
+    if 0 in (x1, x2, n1 - x1, n2 - x2):
+        x1, x2, n1, n2 = x1 + 0.5, x2 + 0.5, n1 + 1, n2 + 1
+    rr = (x1 / n1) / (x2 / n2)
+    se = math.sqrt(1 / x1 - 1 / n1 + 1 / x2 - 1 / n2)
+    z = _z(level)
+    lo, hi = rr * math.exp(-z * se), rr * math.exp(z * se)
+    return RiskRatio(rr, lo, hi, hi < 1)
+
+
+# --- Q3 dispersion: Shannon entropy of MedDRA PTs, permutation test ---------------------------
+
+def entropy(labels) -> float:
+    _, c = np.unique(np.asarray(labels), return_counts=True)
+    q = c / c.sum()
+    return float(-(q * np.log2(q)).sum())
+
+
+@dataclass(frozen=True)
+class DispersionResult:
+    entropy_cases: float
+    entropy_comparison: float
+    diff: float
+    p: float              # one-sided, H1: cases' PTs more dispersed
+    permutations: int
+
+
+def dispersion_test(pts_cases, pts_comparison, permutations: int = 1000,
+                    seed: int | None = None) -> DispersionResult:
+    """PT entropy of cases minus comparison; null shuffles the group label of each PT code."""
+    a, b = np.asarray(pts_cases), np.asarray(pts_comparison)
+    obs = entropy(a) - entropy(b)
+    pool = np.concatenate([a, b])
+    rng = np.random.default_rng(seed)
+    ge = 0
+    for _ in range(permutations):
+        s = rng.permutation(pool)
+        ge += entropy(s[: a.size]) - entropy(s[a.size:]) >= obs
+    return DispersionResult(entropy(a), entropy(b), obs, (1 + ge) / (1 + permutations),
+                            permutations)

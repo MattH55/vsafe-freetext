@@ -31,7 +31,7 @@ The decisive fact: ICAN's updated free-text files carry `SURVEY_STATIC_ID`, `RES
 2. Free text → `SURVEY_STATIC_ID` → check-ins: boxes ticked, severity, medical-care answer.
 3. Free text → (registrant, date, field) → MedDRA: CDC coding of the same entry.
 4. Registrant → call center → VAERS filing.
-5. OpenVSafe's VAERS matches (score ≥8 of 11): request or rebuild.
+5. OpenVSafe's VAERS matches (score ≥8 of 11): used for Q3 (decided 2026-11-10); match table requested.
 
 ## Research questions
 
@@ -56,6 +56,9 @@ All of:
 2. Free text at that survey, or at ≥2 surveys, classified to ≥2 candidate symptom domains.
 3. No free text or check-box at the same survey attributing symptoms to a named acute diagnosis
    or an unrelated cause (injury, pregnancy, infection).
+
+Entries about something before vaccination do not count; entries about another person (a
+dependant) do (decided 2026-11-10).
 
 **Domains:** fatigue/PEM; cognitive; dysautonomia; sensory/neuropathic; sleep; pain;
 gastrointestinal; menstrual change; cardiorespiratory (dyspnoea, chest tightness; added

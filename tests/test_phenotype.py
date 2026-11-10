@@ -65,3 +65,24 @@ def test_denominator_is_long_term_completers(groups):
 def test_long_term_prepare_refused_before_registration():
     with pytest.raises(PermissionError):
         phenotype.prepare(duckdb.connect(), {"MONTH_3": "3m"}, [], [], {})
+
+
+def test_prepare_drops_pre_vaccine_keeps_third_party():
+    con = duckdb.connect()
+    con.execute("""CREATE TABLE checkins AS SELECT * FROM (VALUES
+        ('p', 'r1', 'DAY_1', 'worse', 'none', '2021-01-02')) t(registrant, response_id,
+        survey_type, health_now, health_impact, started_on)""")
+    con.execute("""CREATE TABLE vax AS SELECT * FROM (VALUES ('p', '1', DATE '2021-01-01'))
+                   t(registrant, dose_number, vax_date)""")
+    con.execute("""CREATE TABLE entries_survey AS SELECT * FROM (VALUES
+        (1, 'p', '1', 'r1'), (2, 'p', '1', 'r1'), (3, 'p', '1', 'r1'))
+        t(entry_id, registrant, dose_number, response_id)""")
+    con.execute("""CREATE TABLE entry_themes AS SELECT * FROM (VALUES
+        (1, 'pain'), (2, 'sleep'), (3, 'cognitive')) t(entry_id, theme)""")
+    con.execute("""CREATE TABLE entry_flags AS SELECT * FROM (VALUES
+        (1, false, false), (2, true, false), (3, false, true))
+        t(entry_id, third_party, pre_vaccine)""")
+    phenotype.prepare(con, {"DAY_1": "w1"}, ["worse"], [], {"pain": "pacvs", "sleep": "pacvs",
+                                                          "cognitive": "pacvs"})
+    kept = {r[0] for r in con.execute("SELECT theme FROM ph_entry_themes").fetchall()}
+    assert kept == {"pain", "sleep"}
