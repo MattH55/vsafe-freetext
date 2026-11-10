@@ -33,10 +33,10 @@ THEMES = [
 def groups():
     con = duckdb.connect()
     con.execute("""CREATE TABLE ph_surveys (registrant VARCHAR, dose_number VARCHAR,
-                   survey_static_id VARCHAR, survey_type VARCHAR, worse BOOLEAN, impact BOOLEAN)""")
+                   response_id VARCHAR, survey_type VARCHAR, worse BOOLEAN, impact BOOLEAN)""")
     con.executemany("INSERT INTO ph_surveys VALUES (?, ?, ?, ?, ?, ?)", SURVEYS)
     con.execute("""CREATE TABLE ph_entry_themes (registrant VARCHAR, dose_number VARCHAR,
-                   survey_static_id VARCHAR, theme VARCHAR, domain VARCHAR)""")
+                   response_id VARCHAR, theme VARCHAR, domain VARCHAR)""")
     con.executemany("INSERT INTO ph_entry_themes VALUES (?, ?, ?, ?, ?)", THEMES)
     phenotype.build(con)
     rows = con.execute("SELECT registrant, grp, in_denominator FROM phenotype_groups").fetchall()

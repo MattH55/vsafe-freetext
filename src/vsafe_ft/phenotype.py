@@ -2,11 +2,11 @@
 
 Inputs (canonical tables; `prepare` builds them from the linked data):
 
-  ph_surveys(registrant, dose_number, survey_static_id, survey_type, worse, impact)
+  ph_surveys(registrant, dose_number, response_id, survey_type, worse, impact)
       one row per completed check-in. survey_type is canonical: w1, 6w, 3m, 6m, 12m.
       worse  = "health now" worse than baseline; impact = unable to do normal activities,
       missed work/school, or needed care.
-  ph_entry_themes(registrant, dose_number, survey_static_id, theme, domain)
+  ph_entry_themes(registrant, dose_number, response_id, theme, domain)
       classified free text; domain is 'pacvs' for the eight candidate domains and
       'exclusion' for named acute diagnoses / unrelated causes.
 
@@ -44,26 +44,26 @@ pd AS (
     SELECT t.* FROM ph_entry_themes t
     WHERE t.domain = 'pacvs'
 ),
-pd_lt AS (SELECT pd.* FROM pd SEMI JOIN lt USING (survey_static_id)),
+pd_lt AS (SELECT pd.* FROM pd SEMI JOIN lt USING (response_id)),
 per_survey AS (
-    SELECT survey_static_id, count(DISTINCT theme) AS n_dom FROM pd_lt GROUP BY ALL
+    SELECT response_id, count(DISTINCT theme) AS n_dom FROM pd_lt GROUP BY ALL
 ),
 across AS (
-    SELECT registrant, dose_number, count(DISTINCT survey_static_id) AS n_surveys,
+    SELECT registrant, dose_number, count(DISTINCT response_id) AS n_surveys,
            count(DISTINCT theme) AS n_dom
     FROM pd_lt GROUP BY ALL
 ),
 excluded AS (
-    SELECT DISTINCT survey_static_id FROM ph_entry_themes WHERE domain = 'exclusion'
+    SELECT DISTINCT response_id FROM ph_entry_themes WHERE domain = 'exclusion'
 ),
 cases AS (
     SELECT DISTINCT s.registrant, s.dose_number
     FROM lt s
-    LEFT JOIN per_survey p USING (survey_static_id)
+    LEFT JOIN per_survey p USING (response_id)
     LEFT JOIN across a ON a.registrant = s.registrant AND a.dose_number = s.dose_number
     WHERE (s.worse OR s.impact)
       AND (coalesce(p.n_dom, 0) >= 2 OR (coalesce(a.n_surveys, 0) >= 2 AND a.n_dom >= 2))
-      AND NOT EXISTS (SELECT 1 FROM excluded x WHERE x.survey_static_id = s.survey_static_id)
+      AND NOT EXISTS (SELECT 1 FROM excluded x WHERE x.response_id = s.response_id)
 ),
 lt_unwell AS (
     SELECT DISTINCT registrant, dose_number FROM lt WHERE worse OR impact
@@ -75,8 +75,8 @@ acute AS (
 w1_severe AS (
     SELECT DISTINCT s.registrant, s.dose_number
     FROM ph_surveys s
-    LEFT JOIN (SELECT survey_static_id, count(DISTINCT theme) AS n FROM pd GROUP BY ALL) w
-      USING (survey_static_id)
+    LEFT JOIN (SELECT response_id, count(DISTINCT theme) AS n FROM pd GROUP BY ALL) w
+      USING (response_id)
     WHERE s.survey_type IN {week1} AND (s.impact OR coalesce(w.n, 0) >= 2)
 ),
 everyone AS (
@@ -145,7 +145,7 @@ def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
     con.execute(
         f"""
         CREATE OR REPLACE TABLE ph_surveys AS
-        SELECT h.registrant, x.dose_number, h.survey_static_id,
+        SELECT h.registrant, x.dose_number, h.response_id,
                CASE h.survey_type {cases} END AS survey_type,
                coalesce(h.health_now IN ({worse}), false) AS worse,
                coalesce(h.health_impact IN ({impact}), false) AS impact
@@ -159,7 +159,7 @@ def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
     con.execute(
         f"""
         CREATE OR REPLACE TABLE ph_entry_themes AS
-        SELECT e.registrant, e.dose_number, e.survey_static_id, t.theme,
+        SELECT e.registrant, e.dose_number, e.response_id, t.theme,
                CASE t.theme {dom} END AS domain
         FROM entry_themes t JOIN entries_survey e USING (entry_id)
         """

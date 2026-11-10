@@ -47,3 +47,12 @@
 - [ ] Recruit one or two gold-set coders for weeks 6–9.
 - [ ] Ask OpenVAERS for the v-safe-to-VAERS match table (else rebuild the 11-field matcher).
 - [ ] Start the VAERS-narrative arm (public data; can begin before v-safe files are in hand).
+
+## Check-in key (resolved 2026-11-09)
+
+`SURVEY_STATIC_ID` identifies the survey form (146 values across 144,972,337 check-ins), not
+a check-in. `RESPONSE_ID` is the check-in key: never null, unique but for 236 values, and
+every one of the 390,000 response ids in updated release 1 is found in the check-in files.
+Entries now join check-ins on (response id, registrant) and dedupe on (registrant, response
+id, field, text). Survey type stays derived from `DAYS_SINCE`: a form id's days can span up
+to a year.

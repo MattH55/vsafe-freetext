@@ -14,7 +14,8 @@ COLS = {
                     "relationship": "REL", "guardian": "GUARD"},
     "vaccinations": {"registrant": "REG", "vaccination_date": "VDATE", "dose_number": "DOSE",
                      "manufacturer": "MFR", "age_band": "AGE"},
-    "health_checkins": {"registrant": "REG", "survey_static_id": "SID", "survey_type": "STYPE",
+    "health_checkins": {"registrant": "REG", "response_id": "RID", "survey_static_id": "SID",
+                        "survey_type": "STYPE",
                         "survey_day": "SDAY", "medical_care": "CARE", "health_impact": "IMPACT",
                         "health_now": "TODO"},
     "meddra": {"registrant": "R", "date": "D", "field": "F", "pt": "PT", "llt": "LLT"},
@@ -66,7 +67,7 @@ def con(tmp_path, monkeypatch):
                  ).write_parquet(tmp_path / "reg.parquet")
     pl.DataFrame({"REG": ["a", "a"], "VDATE": ["2021-03-01", "2021-03-29"], "DOSE": ["1", "2"],
                   "MFR": ["X", "X"], "AGE": ["30-39"] * 2}).write_parquet(tmp_path / "vax.parquet")
-    pl.DataFrame({"REG": ["a", "a"], "SID": ["s1", "s2"], "STYPE": ["day", "3m"],
+    pl.DataFrame({"REG": ["a", "a"], "RID": ["1", "2"], "SID": ["s1", "s2"], "STYPE": ["day", "3m"],
                   "SDAY": ["4", "90"], "CARE": [None, "doctor"], "IMPACT": [None, "missed work"]}
                  ).write_parquet(tmp_path / "chk.parquet")
     c = duckdb.connect()
@@ -239,3 +240,22 @@ def test_build_entries_on_a_connect_connection(tmp_path, monkeypatch):
     c = link.connect(tmp_path / "t.duckdb")
     link.build_entries(c, str(tmp_path / "ft.parquet"))
     assert c.execute("SELECT count(*) FROM entries").fetchall()[0][0] == 4
+
+
+def test_survey_join_is_on_response_id_not_form_id(tmp_path, monkeypatch):
+    """SURVEY_STATIC_ID is a survey FORM id shared by many check-ins; only RESPONSE_ID links."""
+    monkeypatch.setattr(config, "columns", fake_columns)
+    _ft(FT).write_parquet(tmp_path / "ft.parquet")
+    # two check-ins of the same form; response "2" belongs to a different registrant
+    pl.DataFrame({"REG": ["a", "z"], "RID": ["1", "2"], "SID": ["form", "form"],
+                  "STYPE": ["day", "day"], "SDAY": ["4", "4"], "CARE": [None, None],
+                  "IMPACT": [None, None]}).write_parquet(tmp_path / "chk.parquet")
+    pl.DataFrame({"REG": ["a"], "VDATE": ["2021-03-01"], "DOSE": ["1"], "MFR": ["X"],
+                  "AGE": ["30-39"]}).write_parquet(tmp_path / "vax.parquet")
+    c = duckdb.connect()
+    link.build_entries(c, str(tmp_path / "ft.parquet"))
+    link.link_dose(c, str(tmp_path / "vax.parquet"))
+    link.link_survey(c, str(tmp_path / "chk.parquet"))
+    assert c.execute("SELECT count(*) FROM checkins").fetchall()[0][0] == 2
+    got = c.execute("SELECT response_id, survey_matched FROM entries_survey ORDER BY 1").fetchall()
+    assert got == [("1", True), ("2", False), ("3", False), ("4", False)]

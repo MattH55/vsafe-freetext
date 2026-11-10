@@ -6,7 +6,7 @@
 # There is no redaction-flag column: `redacted` is derived from the (b)(6) pattern (normalise.py).
 freetext:
   registrant: REGISTRANT_CODE
-  survey_static_id: SURVEY_STATIC_ID
+  survey_static_id: SURVEY_STATIC_ID   # survey form id; entries join check-ins on RESPONSE_ID
   response_id: RESPONSE_ID
   started_on: STARTED_ON
   text_sd: SYMPTOMS_DESCRIPTION        # symptom-description field (SD)
@@ -42,7 +42,8 @@ vaccinations:
 # the DAYS_SINCE distribution is checked). No age column in any file seen so far.
 health_checkins:
   registrant: REGISTRANT_CODE
-  survey_static_id: SURVEY_STATIC_ID
+  response_id: RESPONSE_ID           # the check-in key (unique but for 236 of 145M)
+  survey_static_id: SURVEY_STATIC_ID  # survey FORM id (146 values), not a check-in key
   survey_type: null          # derived from survey_day
   survey_day: DAYS_SINCE
   medical_care: HEALTHCARE_VISITS

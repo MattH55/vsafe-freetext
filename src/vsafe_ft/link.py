@@ -86,11 +86,11 @@ def build_entries(con, parquet_glob: str) -> None:
         CREATE OR REPLACE TABLE entries AS
         WITH d AS (
             SELECT *,
-                   count(*) OVER (PARTITION BY registrant, survey_static_id, field, text_orig)
+                   count(*) OVER (PARTITION BY registrant, response_id, field, text_orig)
                        AS n_copies
             FROM entries_raw
             QUALIFY row_number() OVER (
-                PARTITION BY registrant, survey_static_id, field, text_orig
+                PARTITION BY registrant, response_id, field, text_orig
                 ORDER BY under3, _release, _row) = 1
         )
         SELECT row_number() OVER (ORDER BY _release, _row, field) AS entry_id,
@@ -182,9 +182,14 @@ def survey_type_from_days(col: str) -> str:
 
 
 def load_checkins(con, checkins_parquet: str) -> None:
-    """Canonical `checkins` table, one row per survey_static_id."""
-    h = config.columns("health_checkins", keys=["registrant", "survey_static_id", "survey_day",
-                                                "medical_care", "health_impact"])
+    """Canonical `checkins` table, one row per check-in (response id).
+
+    SURVEY_STATIC_ID identifies the survey form (146 values across 145M check-ins), not a
+    check-in; it is carried as an attribute only. The few response ids that appear twice
+    (236 of 145M) keep one row, deterministically.
+    """
+    h = config.columns("health_checkins", keys=["registrant", "response_id", "survey_static_id",
+                                                "survey_day", "medical_care", "health_impact"])
     opt = ", ".join(
         f"{_q(h[k])} AS {k}" if h.get(k) not in (None, "TODO") else f"NULL::VARCHAR AS {k}"
         for k in ["health_now", "started_on", "tested_positive", "pregnant"]
@@ -194,12 +199,14 @@ def load_checkins(con, checkins_parquet: str) -> None:
     con.execute(
         f"""
         CREATE OR REPLACE TABLE checkins AS
-        SELECT {_q(h['survey_static_id'])} AS survey_static_id, {_q(h['registrant'])} AS registrant,
+        SELECT {_q(h['response_id'])} AS response_id, {_q(h['registrant'])} AS registrant,
+               {_q(h['survey_static_id'])} AS survey_static_id,
                {stype} AS survey_type, {_q(h['survey_day'])} AS survey_day,
                {_q(h['medical_care'])} AS medical_care, {_q(h['health_impact'])} AS health_impact,
                {opt}
         FROM read_parquet({_s(checkins_parquet)}, union_by_name = true)
-        QUALIFY row_number() OVER (PARTITION BY {_q(h['survey_static_id'])}) = 1
+        QUALIFY row_number() OVER (PARTITION BY {_q(h['response_id'])}
+                                   ORDER BY {_q(h['registrant'])}, {_q(h['survey_day'])}) = 1
         """
     )
 
@@ -211,9 +218,9 @@ def link_survey(con, checkins_parquet: str | None = None) -> None:
         """
         CREATE OR REPLACE TABLE entries_survey AS
         SELECT e.*, h.survey_type, h.survey_day, h.medical_care, h.health_impact, h.health_now,
-               h.survey_static_id IS NOT NULL AS survey_matched
+               h.response_id IS NOT NULL AS survey_matched
         FROM entries_dose e
-        LEFT JOIN checkins h ON e.survey_static_id = h.survey_static_id
+        LEFT JOIN checkins h ON e.response_id = h.response_id AND e.registrant = h.registrant
         """
     )
 
@@ -402,17 +409,17 @@ def crosscheck(con, original: Path, updated: Path, registrant_col: str,
 def duplicate_report(con) -> pl.DataFrame:
     """Duplicates within a release, across releases, and between the under-3 file and the rest.
 
-    Counts on `entries_raw` (before dedupe), keyed on (registrant, survey, field, text).
+    Counts on `entries_raw` (before dedupe), keyed on (registrant, response id, field, text).
     """
     df = frame(con, 
         """
         WITH k AS (
-            SELECT registrant, survey_static_id, field, text_orig, _release, under3,
+            SELECT registrant, response_id, field, text_orig, _release, under3,
                    count(*) AS n
             FROM entries_raw GROUP BY ALL
         ),
         per_key AS (
-            SELECT registrant, survey_static_id, field, text_orig,
+            SELECT registrant, response_id, field, text_orig,
                    sum(n) AS copies,
                    count(DISTINCT _release) FILTER (WHERE NOT under3) AS main_releases,
                    bool_or(under3) AS in_u3, bool_or(NOT under3) AS in_main
