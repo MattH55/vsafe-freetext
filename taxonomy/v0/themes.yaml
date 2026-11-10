@@ -9,19 +9,23 @@ themes:
   # --- PACVS candidate domains ---
   fatigue_pem:
     domain: pacvs
+    description: "fatigue, exhaustion, low energy, malaise, post-exertional crash"
     terms: [fatigue, fatigued, exhausted, exhaustion, tired, tiredness, "no energy", lethargic,
             "post.exertional", "crash(?:ed|es)?", "wiped out", malaise]
   cognitive:
     domain: pacvs
+    description: "brain fog, memory problems, trouble concentrating, confusion"
     terms: ["brain fog", foggy, "memory (?:loss|problems?|issues?)", forgetful,
             "(?:can't|cannot|trouble|difficulty) concentrat\\w*", confusion, confused]
   dysautonomia:
     domain: pacvs
+    description: "palpitations, racing or fast heart rate, dizziness, light-headedness, vertigo, POTS, heat intolerance"
     terms: ["palpitations?", "racing heart", "heart racing", tachycardia, "fast heart ?rate",
             "(?-i:POTS)", "dizz(?:y|iness)", "light[ -]?headed(?:ness)?", "heat intolerance", "pounding heart",
             "(?:elevated|high|increased|rapid|racing) (?:heart ?rate|pulse)", vertigo]
   sensory_neuropathic:
     domain: pacvs
+    description: "tingling, numbness, pins and needles, nerve-type burning, tinnitus, blurred vision, neuropathy"
     # bare "burning" also matched burning urination/stomach/throat/eyes (MedDRA map, 2026-11-09)
     terms: [tingling, "pins and needles", "numb(?:ness)?", "burning (?:sensation|feeling)",
             "(?:skin|feet|hands?|legs?|arms?|face|nerves?) (?:is |are |was |were )?burning",
@@ -29,20 +33,24 @@ themes:
             tinnitus, "ringing in (?:my |the )?ears?", "blurr(?:y|ed) vision", neuropathy]
   sleep:
     domain: pacvs
+    description: "insomnia, trouble sleeping, night sweats, unrefreshing sleep"
     terms: [insomnia, "can't sleep", "cannot sleep", "trouble sleeping", "night sweats",
             "unrefreshing sleep"]
   pain:
     domain: pacvs
+    description: "headache, migraine, muscle/joint/body aches, back/neck/limb pain, chest pain (not injection-site soreness)"
     terms: ["headaches?", "migraines?", "muscle (?:aches?|pain)", myalgia, "joint (?:pain|aches?)",
             arthralgia, "chest pain", "body aches?",
             "(?:back|neck|jaw|hip|knee|leg|ear) (?:pain|aches?)", "achy", "aching"]
   gastrointestinal:
     domain: pacvs
+    description: "nausea, vomiting, diarrhoea, stomach or abdominal pain, bloating, constipation, appetite loss"
     terms: [nausea, nauseous, "vomit\\w*", "diarrh(?:o)?ea", "stomach (?:pain|ache|cramps?)",
             "abdominal pain", bloating, constipation, "upset stomach",
             "(?:loss of|lost my|no|decreased|poor) appetite"]
   menstrual:
     domain: pacvs
+    description: "menstrual period changes: heavy, early, late, missed or irregular periods, spotting"
     # "period(s)" only when not "period(s) of ..." and not "short/long/... period" (time spans)
     terms: ["(?<!short )(?<!long )(?<!brief )(?<!same )(?<!time )(?<!trial )(?<!grace )(?<!waiting )periods?(?!\\s+of\\b)",
             "menstrua\\w*", "heavy bleeding", spotting, "missed period",
@@ -51,30 +59,36 @@ themes:
   # --- lay-reporting layer (not in the MedDRA backbone) ---
   persistence:
     domain: lay
+    description: "the symptom is described as ongoing, persisting or lasting weeks or months"
     terms: ["still (?:have|having|feel|feeling)", "since (?:the|my) (?:shot|vaccine|dose)",
             "(?:for|over) (?:\\d+|several|many) (?:weeks|months)", "hasn't gone away", ongoing,
             "not (?:gone|better|improved)"]
   care_sought:
     domain: lay
+    description: "visited a doctor, urgent care, emergency room, or was hospitalised"
     terms: ["(?:went to|visited|saw) (?:the |my )?(?:er|emergency|urgent care|doctor|hospital)",
             "hospitali[sz]ed", admitted, "emergency room"]
   missed_work_school:
     domain: lay
+    description: "missed work or school or could not work"
     terms: ["missed (?:work|school)", "(?:couldn't|could not|unable to) (?:work|go to work)",
             "(?:called|call) (?:in )?sick"]
   pre_existing_worsened:
     domain: lay
+    description: "a pre-existing condition flared or got worse"
     terms: ["flare(?:d|-up)?", "worse(?:ned)? my", "made my .{1,30} worse"]
 
   # --- exclusions for case-definition criterion 3 (docs/protocol.md) ---
   # Draft lists; refined before the taxonomy is frozen. Not PACVS domains.
   acute_diagnosis:
     domain: exclusion
+    description: "a named acute diagnosis: myocarditis, pericarditis, anaphylaxis, Bell's palsy, Guillain-Barre, blood clot, stroke, heart attack, shingles, etc."
     terms: [myocarditis, pericarditis, "anaphyla\\w*", "bell'?s palsy", "guillain.barr[eé]",
             "(?-i:GBS)", "blood clots?", "deep vein thrombosis", "(?-i:DVT)", "pulmonary embolism",
             stroke, "heart attack", appendicitis, shingles, "kidney stones?", "gall ?bladder"]
   unrelated_cause:
     domain: exclusion
+    description: "symptoms attributed to another cause: COVID or flu infection, other infection, allergies, pregnancy, injury, accident"
     terms: ["(?:had|have|caught|got|positive for|tested positive for) (?:covid|the flu|a cold|strep)",
             "covid (?:infection|positive)", "tested positive", "positive (?:covid|test)",
             "seasonal allergies", "sinus infection", "(?-i:UTI)", "urinary tract infection",
@@ -90,27 +104,33 @@ themes:
   # exclusion (e.g. upper_respiratory as a likely cold) is a protocol decision for the human.
   injection_site:
     domain: acute
+    description: "pain, soreness, swelling, redness or bruising at the injection site or arm"
     terms: ["injection (?:site|arm|side|area)", "(?:at|around|near|on) (?:the )?(?:injection|shot) (?:site|area)",
             "sore (?:arm|shoulder)", "(?:arm|shoulder) (?:pain|soreness|is sore|hurts)",
             "(?:pain|soreness|sore) (?:in|on) (?:my |the )?(?:left |right |upper )?arm",
             "bruis\\w*", "(?:at|around) (?:the )?site"]
   lymphadenopathy:
     domain: acute
+    description: "swollen lymph nodes or glands, armpit swelling"
     terms: ["lymph ?nodes?", lymphadenopathy, "swollen (?:glands?|nodes?)", "axilla\\w*",
             "arm ?pits?", "under (?:my |the )?arm"]
   upper_respiratory:
     # criterion-3 exclusion (likely intercurrent cold): protocol owner decision 2026-11-10
     domain: exclusion
+    description: "sore throat, runny or stuffy nose, congestion, sneezing, cough"
     terms: ["sore throat", "scratchy throat", "runny nose", "stuffy nose", "(?:nasal|sinus) congestion",
             "congest\\w*", "sneez\\w*", "post.?nasal drip", "cough\\w*", "nasal drainage"]
   fever_chills:
     domain: acute
+    description: "fever, chills, hot flashes, flushing, sweating"
     terms: ["fever\\w*", chills, "hot flash\\w*", "flush(?:ed|ing)", "sweat(?:s|ing|y)?"]
   skin:
     domain: acute
+    description: "rash, hives, itching"
     terms: [rash, "rashes", hives, urticaria, "itch\\w*"]
   taste_smell:
     domain: acute
+    description: "altered or lost taste or smell, metallic taste, dry mouth"
     # not a PACVS domain: protocol owner decision 2026-11-10
     terms: ["metallic taste", "(?:loss of|lost(?: my| the)?|no|altered|changes? in) (?:taste|smell)",
             "taste in (?:my |the )?mouth", "dry mouth"]
@@ -118,5 +138,6 @@ themes:
     # ninth candidate PACVS domain (dyspnoea, chest tightness): protocol owner decision
     # 2026-11-10. Week-1 hits are mostly acute; the domain counts only at long-term surveys.
     domain: pacvs
+    description: "shortness of breath, difficulty breathing, chest tightness or pressure"
     terms: ["short(?:ness)? of breath", "(?:difficulty|trouble) breathing", "chest (?:tightness|pressure)",
             "tight(?:ness in (?:my |the )?)? chest"]

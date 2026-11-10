@@ -163,6 +163,37 @@ def cmd_meddra_map(a):
     print(f"wrote {out} ({df.height} rows, {df['pt'].n_unique()} PTs)")
 
 
+def _llm(model: str):
+    import yaml
+
+    from .classify.llm import NanoGPT, theme_list
+    from .themes import TAXONOMY
+
+    return NanoGPT(theme_list(yaml.safe_load(TAXONOMY.read_text(encoding="utf-8"))), model=model)
+
+
+def cmd_llm_label(a):
+    """Layer 3 on a sample of week-1 / six-week entries (NanoGPT, zero-data-retention routes)."""
+    from . import layer3, link
+
+    con = link.connect()
+    for model in a.model:
+        run = layer3.label_entries(con, _llm(model), sample=a.sample, seed=a.seed,
+                                   residue_only=a.residue, batch=a.batch, max_usd=a.max_usd)
+        print(json.dumps(run, indent=2))
+
+
+def cmd_llm_report(a):
+    from . import layer3, link
+
+    con = link.connect()
+    tag = a.model[0].split("/")[-1].replace(".", "_").replace("-", "_")
+    _write(layer3.coverage(con, a.model[0]), f"phase1_llm_coverage_{tag}")
+    _write(layer3.agreement(con, a.model[0]), f"phase1_llm_agreement_{tag}")
+    if len(a.model) > 1:
+        _write(layer3.model_shift(con, a.model[0], a.model[1]), "phase1_llm_model_shift")
+
+
 def _has_table(con, name: str) -> bool:
     return bool(con.execute("SELECT count(*) FROM duckdb_tables() WHERE table_name = ?",
                             [name]).fetchall()[0][0])
@@ -221,6 +252,21 @@ def main(argv=None):
 
     s = sub.add_parser("meddra-map", help="write taxonomy/v0/meddra_map.csv")
     s.set_defaults(func=cmd_meddra_map)
+    from .classify.llm import DEFAULT_MODEL
+
+    s = sub.add_parser("llm-label", help="layer 3 on a sample of week-1/six-week entries")
+    s.add_argument("--model", nargs="+", default=[DEFAULT_MODEL])
+    s.add_argument("--sample", type=int, default=1000, help="entries to sample")
+    s.add_argument("--seed", type=int, default=1)
+    s.add_argument("--residue", action="store_true", help="only entries layer 1 left unthemed")
+    s.add_argument("--batch", type=int, default=20, help="entries per request")
+    s.add_argument("--max-usd", type=float, default=5.0, help="stop when spend reaches this")
+    s.set_defaults(func=cmd_llm_label)
+
+    s = sub.add_parser("llm-report", help="layer-3 coverage, agreement, model shift (aggregates)")
+    s.add_argument("--model", nargs="+", default=[DEFAULT_MODEL])
+    s.set_defaults(func=cmd_llm_report)
+
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")
     s.set_defaults(func=cmd_qa)
 

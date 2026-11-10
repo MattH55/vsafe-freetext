@@ -18,7 +18,7 @@ dependencies = [
 
 [project.optional-dependencies]
 embed = ["sentence-transformers>=3", "scikit-learn>=1.4"]
-llm = ["anthropic>=0.40"]
+llm = []                     # layer 3 uses NanoGPT over the standard library
 dev = ["pytest>=8", "ruff>=0.5"]
 
 [project.scripts]
