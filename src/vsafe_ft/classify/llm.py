@@ -90,14 +90,22 @@ def parse_results(content: str, n: int, allowed: set[str]) -> list[dict | None]:
 
     Theme names outside the closed list are dropped.
     """
-    m = re.search(r"\{.*\}", content or "", re.DOTALL)
     out: list[dict | None] = [None] * n
-    if not m:
-        return out
-    try:
-        results = json.loads(m.group(0)).get("results", [])
-    except (json.JSONDecodeError, AttributeError):
-        return out
+    results = None
+    m = re.search(r"\{.*\}", content or "", re.DOTALL)
+    if m:
+        try:
+            results = json.loads(m.group(0)).get("results")
+        except (json.JSONDecodeError, AttributeError):
+            results = None
+    if not isinstance(results, list):
+        # truncated or malformed reply: keep every complete per-entry object
+        results = []
+        for obj in re.findall(r"\{[^{}]*\}", content or ""):
+            try:
+                results.append(json.loads(obj))
+            except json.JSONDecodeError:
+                continue
     for r in results if isinstance(results, list) else []:
         try:
             i = int(r.get("i")) - 1
@@ -139,7 +147,7 @@ class NanoGPT:
         if any(has_pii(t) for t in texts):
             raise ValueError("refusing to send entries with a detectable email or phone number")
         body = {
-            "model": self.model, "temperature": 0, "max_tokens": 120 + 60 * len(texts),
+            "model": self.model, "temperature": 0, "max_tokens": 1500 + 80 * len(texts),
             "provider": PROVIDER,
             "messages": [{"role": "user", "content": build_prompt(self.themes, texts)}],
         }

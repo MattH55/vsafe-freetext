@@ -55,6 +55,13 @@ def test_pii_never_sent():
     assert post.bodies == []
 
 
+def test_truncated_reply_keeps_complete_items():
+    content = ('```json\n{"results": [\n{"i": 1, "themes": ["pain"], "third_party": false},\n'
+               '{"i": 2, "themes": ["cognitive"], "third_pa')
+    got = llm.parse_results(content, 3, set(THEMES))
+    assert got[0]["themes"] == ["pain"] and got[1] is None and got[2] is None
+
+
 @pytest.mark.parametrize("content", ["not json", '{"results": "x"}', '{"results": [{"i": 9}]}'])
 def test_malformed_replies_are_none(content):
     assert llm.parse_results(content, 2, set(THEMES)) == [None, None]
