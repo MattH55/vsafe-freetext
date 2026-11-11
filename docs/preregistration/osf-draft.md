@@ -54,7 +54,7 @@ The nine candidate symptom domains are listed in `taxonomy/v1.0/themes.yaml` (`d
 
 Each file has its sha256 recorded at download. All files were downloaded between 2026-11-08 and
 2026-11-10. VAERS matching uses OpenVSafe's v-safe-to-VAERS matches (score ≥ 8 of 11 fields;
-decided 2026-11-10). The protocol owner requests the match table.
+decided 2026-11-10). OpenVSafe publishes no bulk file. The matches were read from its public person pages on 2026-11-10 and 2026-11-11, keeping only VAERS ID, confidence, score and runner-up: 27,234 of 44,954 VAERS-filed people have a match, 24,067 of them high-confidence. [DECIDE: Q3 handling of the 559 VAERS reports matched to more than one person, and whether high-confidence-only is a sensitivity analysis.]
 
 ## 5. Prior knowledge of the data (disclosure)
 
@@ -232,7 +232,7 @@ fails the gate.
 Done 2026-11-10: taxonomy frozen as v1.0 (the pipeline now reads it). Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
 above; OpenVSafe's VAERS matches; `pre_vaccine` entries dropped, third-party entries kept.
 
-1. Request OpenVSafe's v-safe-to-VAERS match table (protocol owner).
+1. Done 2026-11-11: OpenVSafe's matches read from its person pages (see Data).
 2. Add gold-set coders and other contributors as authors (section 2).
 3. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
 4. File on OSF, then set `osf_registration` in `config/analysis.yaml`.

@@ -300,6 +300,44 @@ also carry age at vaccination (`AGE_AT_VX`), but only for called registrants (ab
 cases), so it is not a usable age variable for the whole cohort; no output is stratified by
 age (protocol owner, 2026-11-10). Link time: 15 s.
 
+## OpenVSafe VAERS matches (crawl finished 2026-11-11)
+
+`vsafe-ft openvsafe` read OpenVSafe's person page for each of the 44,954 registrants whose
+call-center case says a VAERS report was filed. It sent at most one request per second,
+between 2026-11-10 13:50 and 2026-11-11 16:17 (about 27 h of fetching).
+
+Only VAERS ID, confidence, score and runner-up were kept, in
+`<DATA_DIR>/interim/openvsafe.duckdb`. Nothing else from the pages was stored.
+
+The run was resumed twice:
+- after an unhandled read timeout at 112 people (fixed in 68757e0);
+- when the session restarted at 44,000 people.
+
+OpenVSafe's site was slow at times (5–11 s per page), and at those times the site set the
+pace rather than our rate limit.
+
+| Fetch result | Best-match confidence | People |
+|---|---|---|
+| match | high | 24,067 |
+| match | medium | 1,711 |
+| match | low | 1,456 |
+| no match shown | | 17,720 |
+| error or not found | | 0 |
+
+- **Matched people.** 27,234 people have a match (61% of the VAERS-filed people).
+  - OpenVSafe states 27,736 matched people, so we have 502 fewer.
+  - A likely reason: OpenVSafe's rule may count more call-center cases as VAERS-filed than
+    ours, which does not count "prefers to complete online". This is unconfirmed.
+- **The protocol's score ≥ 8 rule keeps every match.** The pages only show matches scoring
+  ≥ 8, so all 27,234 are eligible for Q3, including the medium and low matches.
+  - "Low" and "medium" refer to the lead over the runner-up, not to the score.
+  - Medium and low are 11% of matches; Q3 can be repeated on high-confidence matches only.
+- **One candidate per page.** Every page showed exactly one candidate, so `ovs_matches` has one
+  row per person.
+- **Shared reports.** There are 26,472 distinct VAERS IDs, and 559 of them are the match for
+  more than one person.
+  - Q3 needs a rule for these: keep one person per report, or report the overlap.
+
 ## QA: original vs updated (task 3.7)
 
 Rows compared as a multiset over the shared columns (REGISTRANT_CODE and the three text
