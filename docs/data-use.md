@@ -67,7 +67,7 @@ zero-retention route; Anthropic receives only the comparison sample.
 - **Scope before OSF registration:** week-1 and six-week entries only (enforced in code).
 - **API keys:** `NANOGPT_API_KEY` and `ANTHROPIC_API_KEY` in `<VSAFE_DATA_DIR>/.env` or the
   environment, never in the repository. Both keys were shared in an assistant chat on
-  2026-11-10; rotate them before the full run.
+  2026-11-10; the protocol owner decided on 2026-11-11 to keep them.
 - **Spend:** each run has a dollar cap (`--max-usd`); runs are logged in the `llm_runs` table.
 
 ## OpenVSafe VAERS matches (read 2026-11-10)

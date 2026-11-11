@@ -239,5 +239,5 @@ above; OpenVSafe's VAERS matches; `pre_vaccine` entries dropped, third-party ent
 
 1. Done 2026-11-11: OpenVSafe's matches read from its person pages (see Data).
 2. Add gold-set coders and other contributors as authors (section 2).
-3. Rotate the NanoGPT and Anthropic API keys before any full-corpus labelling.
+3. Decided 2026-11-11: the current NanoGPT and Anthropic API keys are kept (no rotation).
 4. File on OSF, then set `osf_registration` in `config/analysis.yaml`.
