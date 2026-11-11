@@ -88,3 +88,18 @@ def test_network_timeout_is_retried_then_error(monkeypatch):
     openvsafe.crawl(con, ["A"], get=lambda u, t: (200, page([(9, "high", 9, 1)])),
                     sleep=lambda s: None, log=lambda *_: None)
     assert con.execute("SELECT status FROM ovs_fetch").fetchall() == [("match",)]
+
+
+def test_analysis_sets_drop_shared_reports():
+    con = duckdb.connect()
+    con.execute(openvsafe.DDL)
+    rows = [("p1", 1, 101, "high", 10, 5), ("p2", 1, 102, "medium", 9, 7),
+            ("p3", 1, 103, "high", 9, 2),      # shares 103 with p4: both dropped
+            ("p4", 1, 103, "low", 8, 8),
+            ("p5", 1, 105, "high", 7, 1)]       # below the score rule
+    con.executemany("INSERT INTO ovs_matches VALUES (?, ?, ?, ?, ?, ?)", rows)
+    assert openvsafe.analysis_set(con, "main")["registrant"].to_list() == ["p1", "p2"]
+    assert openvsafe.analysis_set(con, "high_confidence")["registrant"].to_list() == ["p1"]
+    assert dict(openvsafe.analysis_set_counts(con))["dropped_shared_report"] == 2
+    with pytest.raises(ValueError):
+        openvsafe.analysis_set(con, "all")

@@ -144,6 +144,38 @@ def crawl(con, registrants: list[str], *, rate: float = 1.0, get=_get, timeout: 
             "seconds": round(time.time() - t0)}
 
 
+# Q3 analysis sets (decided 2026-11-11). A VAERS report describes one person, so a report
+# matched to more than one person is ambiguous: everyone matched to it is dropped (the shared
+# check runs over all matches, before any confidence filter). Main: every remaining match with
+# score >= MIN_SCORE. Sensitivity: the same, high confidence only.
+MIN_SCORE = 8
+MATCH_SETS = {"main": "TRUE", "high_confidence": "confidence = 'high'"}
+
+
+def analysis_set(con, which: str = "main"):
+    """(registrant, vaers_id) pairs for the Q3 analysis set `which` ('main' or
+    'high_confidence'), one row per person and per report."""
+    if which not in MATCH_SETS:
+        raise ValueError(f"unknown match set {which!r}; expected one of {sorted(MATCH_SETS)}")
+    return con.sql(f"""
+        WITH best AS (SELECT * FROM ovs_matches WHERE rank = 1 AND vaers_id IS NOT NULL),
+             shared AS (SELECT vaers_id FROM best GROUP BY 1 HAVING count(*) > 1)
+        SELECT registrant, vaers_id FROM best
+        WHERE vaers_id NOT IN (SELECT vaers_id FROM shared)
+          AND score >= {MIN_SCORE} AND {MATCH_SETS[which]}
+        ORDER BY registrant""").pl()
+
+
+def analysis_set_counts(con) -> list[tuple]:
+    """People per analysis set, and people dropped as sharing a report (no identifiers)."""
+    out = [(w, analysis_set(con, w).height) for w in MATCH_SETS]
+    dropped = con.execute("""
+        WITH best AS (SELECT * FROM ovs_matches WHERE rank = 1 AND vaers_id IS NOT NULL)
+        SELECT count(*) FROM best WHERE vaers_id IN
+            (SELECT vaers_id FROM best GROUP BY 1 HAVING count(*) > 1)""").fetchone()[0]
+    return [*out, ("dropped_shared_report", dropped)]
+
+
 def summary(con) -> list[tuple]:
     """Counts by fetch status and by best-match confidence (no identifiers)."""
     return con.execute("""

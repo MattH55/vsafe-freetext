@@ -31,7 +31,7 @@ The decisive fact: ICAN's updated free-text files carry `SURVEY_STATIC_ID`, `RES
 2. Free text → `SURVEY_STATIC_ID` → check-ins: boxes ticked, severity, medical-care answer.
 3. Free text → (registrant, date, field) → MedDRA: CDC coding of the same entry.
 4. Registrant → call center → VAERS filing.
-5. OpenVSafe's VAERS matches (score ≥8 of 11): used for Q3 (decided 2026-11-10); read from OpenVSafe's person pages 2026-11-11: 27,234 of 44,954 VAERS-filed people matched (`docs/phase1-report.md`).
+5. OpenVSafe's VAERS matches (score ≥8 of 11): used for Q3 (decided 2026-11-10); read from OpenVSafe's person pages 2026-11-11: 27,234 of 44,954 VAERS-filed people matched (`docs/phase1-report.md`). Reports matched to more than one person are dropped; Q3 is repeated on high-confidence matches as a sensitivity analysis (decided 2026-11-11).
 
 ## Research questions
 

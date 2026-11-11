@@ -336,7 +336,14 @@ pace rather than our rate limit.
   row per person.
 - **Shared reports.** There are 26,472 distinct VAERS IDs, and 559 of them are the match for
   more than one person.
-  - Q3 needs a rule for these: keep one person per report, or report the overlap.
+  - Decided 2026-11-11: everyone matched to a shared report is dropped (1,321 people).
+
+Q3 analysis sets (`openvsafe.analysis_set`, decided 2026-11-11):
+
+| Set | Rule | People |
+|---|---|---|
+| main | score ≥ 8, shared reports dropped | 25,913 |
+| high_confidence (sensitivity) | as main, high confidence only | 23,925 |
 
 ## QA: original vs updated (task 3.7)
 

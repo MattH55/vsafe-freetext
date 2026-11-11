@@ -54,7 +54,7 @@ The nine candidate symptom domains are listed in `taxonomy/v1.0/themes.yaml` (`d
 
 Each file has its sha256 recorded at download. All files were downloaded between 2026-11-08 and
 2026-11-10. VAERS matching uses OpenVSafe's v-safe-to-VAERS matches (score ≥ 8 of 11 fields;
-decided 2026-11-10). OpenVSafe publishes no bulk file. The matches were read from its public person pages on 2026-11-10 and 2026-11-11, keeping only VAERS ID, confidence, score and runner-up: 27,234 of 44,954 VAERS-filed people have a match, 24,067 of them high-confidence. [DECIDE: Q3 handling of the 559 VAERS reports matched to more than one person, and whether high-confidence-only is a sensitivity analysis.]
+decided 2026-11-10). OpenVSafe publishes no bulk file. The matches were read from its public person pages on 2026-11-10 and 2026-11-11, keeping only VAERS ID, confidence, score and runner-up: 27,234 of 44,954 VAERS-filed people have a match, 24,067 of them high-confidence. A VAERS report describes one person, so the 559 reports matched to more than one person are ambiguous. Everyone matched to them (1,321 people) is dropped (decided 2026-11-11).
 
 ## 5. Prior knowledge of the data (disclosure)
 
@@ -199,6 +199,11 @@ column, so age is not a stratum (decided 2026-11-10).
 - **Dispersion.** On matched reports, we compare the Shannon entropy of the MedDRA PTs for
   cases with that for group (b), using a one-sided permutation test of the group labels with
   1,000 permutations (`stats.dispersion_test`).
+- **Match sets** (decided 2026-11-11; `openvsafe.analysis_set`). The main analysis uses every
+  OpenVSafe match scoring at least 8 of 11, after dropping people whose report is shared
+  (25,913 people). A sensitivity analysis repeats both Q3 tests on high-confidence matches
+  only, meaning those at least 3 points ahead of the runner-up (23,925 people). Inference
+  rests on the main analysis. Both are reported, and any difference in conclusion is stated.
 
 **Q4.** Rates per 1,000 people for health-impact answers, medical care, and call-center cases,
 for cases and each comparison group. Descriptive only.
@@ -229,7 +234,7 @@ fails the gate.
 
 ## 10. Open items before filing
 
-Done 2026-11-10: taxonomy frozen as v1.0 (the pipeline now reads it). Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
+Done 2026-11-10: taxonomy frozen as v1.0 (the pipeline now reads it). Decided 2026-11-11: Q3 drops VAERS reports matched to more than one person; high-confidence matches only as a sensitivity analysis. Decided 2026-11-10: gold-set split 1,000 / 1,000; LCA exploratory; the Q2 onset test as
 above; OpenVSafe's VAERS matches; `pre_vaccine` entries dropped, third-party entries kept.
 
 1. Done 2026-11-11: OpenVSafe's matches read from its person pages (see Data).
