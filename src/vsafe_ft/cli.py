@@ -125,7 +125,8 @@ def _write(df, name: str) -> None:
     from .suppress import assert_safe
 
     assert_safe(df.filter(~pl.col("suppressed")) if "suppressed" in df.columns else df)
-    out = config.DATA_DIR / "aggregates" / f"{name}.csv"
+    sub = "" if config.DB_NAME == "vsafe" else config.DB_NAME
+    out = config.DATA_DIR / "aggregates" / sub / f"{name}.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
     df.write_csv(out)
     with pl.Config(tbl_rows=-1, tbl_cols=-1, fmt_str_lengths=60, tbl_width_chars=200):
@@ -137,8 +138,10 @@ def cmd_classify(a):
     from . import link, themes
 
     con = link.connect()
-    n = themes.build_entry_themes(con)        # week-1 / six-week only until OSF registration
-    print(f"classified {n} entries (layer 1)")
+    # week-1 / six-week only until OSF registration; --long-term adds 3/6/12-month entries
+    # (refused by themes.build_entry_themes before registration)
+    n = themes.build_entry_themes(con, long_term=a.long_term)
+    print(f"classified {n} entries (layer 1{', incl. long-term' if a.long_term else ''})")
     _write(themes.lexicon_coverage(con), "phase1_lexicon_coverage")
     _write(themes.theme_counts(con), "phase1_theme_counts")
     _write(themes.flag_counts(con), "phase1_flag_counts")
@@ -311,6 +314,8 @@ def main(argv=None):
     s.set_defaults(func=cmd_gate)
 
     s = sub.add_parser("classify", help="layer-1 entry_themes (week-1/six-week only pre-registration)")
+    s.add_argument("--long-term", action="store_true",
+                   help="include 3-, 6- and 12-month entries (only after OSF registration)")
     s.set_defaults(func=cmd_classify)
 
     s = sub.add_parser("explore", help="aggregate-only n-grams of unlabelled entries")

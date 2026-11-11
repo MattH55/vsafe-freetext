@@ -23,3 +23,12 @@ week-1 and six-week entries of one updated release are used for the exploratory 
 | 2026-11-10 | r01 week-1 / six-week entries | Layer-3 re-run of the same 2,000-entry random sample with prompt v0.1 (sharpened `persistence` description), both models | Model-shift counts per theme only (phase1-report.md); no text read |
 | 2026-11-10 | r01 week-1 / six-week entries | Gold-set draw (1,000 entries, 6 strata) and blind coder sheets written to the data dir | Stratum counts and weights only; sheets not opened by the assistant |
 | 2026-11-10 | openvsafe.org /registrant/<code> pages for people with a VAERS-filed call-center case | OpenVSafe's v-safe-to-VAERS match table (no bulk file exists). One page fetched with every text node masked to learn the layout; then each page parsed in memory and discarded, keeping only VAERS ID, confidence, score and runner-up score (`vsafe_ft.openvsafe`). The pages also show the person's free text, which may include long-term entries: it is never stored, logged or shown | Match-table column headers (site labels); counts by match status and confidence only |
+
+## After registration
+
+Registered 2026-11-11 as https://osf.io/gnfpd (embargoed; project osf.io/7wpgy). Everything below
+happened after filing and follows the registered plan.
+
+| Date | What was opened or run | Data |
+|---|---|---|
+| 2026-11-11 | `vsafe-ft link` on all 12 updated releases and the under-3 file, into `interim/vsafe_full.duckdb` | all survey types, including 3-, 6- and 12-month |

@@ -31,7 +31,7 @@ FIELDS = ("SD", "SRO", "HCVO")
 
 
 def connect(db: Path | None = None) -> duckdb.DuckDBPyConnection:
-    db = db or config.DATA_DIR / "interim" / "vsafe.duckdb"
+    db = db or config.DATA_DIR / "interim" / f"{config.DB_NAME}.duckdb"
     db.parent.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect(str(db))
     register_udfs(con)
