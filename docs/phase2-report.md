@@ -204,8 +204,12 @@ Specified after the registered results were seen; `vsafe-ft analyse --steps expl
 `vsafe-ft submission`. Full tables are in `docs/submission/supplement.md`; the headline check is
 `docs/submission/headline-check.md`.
 
-- **B2 curveball null** (row and column margins fixed): [[pending: three runs of 1,000 samples,
-  about 40 min each]]. The total pair count is invariant under this null.
+- **B2 curveball null** (row and column margins fixed; 1,000 samples each, 30 burn-in rounds,
+  3 rounds between samples; 24 min per run): total pairs invariant (235,184 in every sample, so
+  the aggregate test is empty by construction). Core pairs, unstratified / within entries /
+  within text-length tertiles: cognitive–sleep 2.70 / 2.44 / 2.30; cognitive–fatigue 2.27 / 2.29
+  / 2.06; cognitive–dysautonomia 1.55 / 1.42 / 1.53; fatigue–sleep 1.60 / 1.62 / 1.47;
+  fatigue–pain 1.45 / 1.48 / 1.39. Pairs above null after Holm 15 / 13 / 15; below 18 / 19 / 17.
 - **B3 persistence** (69 s): 69,816 cases (80.0%) met criterion 2 at one survey, 17,413 only
   across surveys. Persistence 47.1% for same-survey cases vs 60.3% for all; group (d) (worse or
   impacted, < 2 domains) 10.5%; risk difference 58.9 → 36.6 points at the strictest.
