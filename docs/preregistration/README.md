@@ -1,7 +1,13 @@
 # Pre-registration (OSF Registries, Secondary Data Preregistration template)
 
 Filed after the one-release prototype and before any gold-set result is used for tuning.
-Public, no embargo. Amendments are filed as OSF updates, never edited in place.
+Registered 2026-11-11 (osf.io/gnfpd); amendments 1 and 2 filed as OSF updates. Currently
+embargoed; to be made public before the preprint is posted. Amendments are filed as OSF updates,
+never edited in place.
+
+The prior-knowledge log is `prior-knowledge.md`. It includes Levi & Lu (2026), which reports
+long-term-survey results and was read after registration; the log states what it does and does
+not reveal.
 
 Attach at registration:
 - `taxonomy/v1.0/` (frozen themes, lexicon, prototype sentences)

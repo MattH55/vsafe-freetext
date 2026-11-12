@@ -47,3 +47,41 @@ happened after filing and follows the registered plan.
 | 2026-11-12 | Registered model-sensitivity check: `llm-label --long-term --residue --sample 2000 --seed 1 --model claude-opus-5-5` (Anthropic API, 30-day retention, 1,687 texts) and `llm-report --long-term` | model-shift aggregates only |
 | 2026-11-12 | Exploratory (unregistered, specified after seeing the registered results): text-matched Q1 null; exclusion-criterion variants; `llm-label` (DeepSeek) on cases' week-1 / six-week residue (26,889 texts); week-1 structured symptom fields read from the raw check-in Parquet for cases and a 1-in-20 sample (checkbox values only) | aggregates `analysis_expl_*`; no text read |
 | 2026-11-12 | Manuscript drafted as a Claude Doc from the aggregate tables; figures drawn from aggregates | aggregates only |
+| 2026-11-12 | Levi & Lu cohorts rebuilt from structured check-in answers only (`vsafe_ft.cohorts`; no age field exists, so the adult check-in file stands in for "16 or older"); overlap with the text-defined case at person level | aggregates `sub_levilu_*`; no text read |
+
+## Published analyses read
+
+| Date | Item | What was learned |
+|---|---|---|
+| 2026-11-08 | OpenVSafe search and topic counts (suicide 420, pregnancy loss 4,705, vision loss 1,861, aneurysm/dissection 1,197; 1,762-person death floor) | Topic-level counts; no dates |
+| 2026-11-08 | *Cries for Help* (OpenVAERS) | Qualitative selection of entries |
+| 2026-11-08 | Independent LLM screens (e.g. Vaccine Data Science) | Single-condition screens over MedDRA-selected subsets |
+| 2026-11-12 | Levi R, Lu N, *Reporting on prolonged adverse health impact among V-SAFE enrollees*, Research Square, posted 25 Aug 2026, doi:10.21203/rs.3.rs-10768889/v1 (full text and appendices) | See below |
+
+### Levi & Lu (2026): what we now know about long-term-survey data
+
+Read on 2026-11-12, after registration (2026-11-11) and after the registered analyses had been
+run. It did not change the registered plan; no amendment was filed.
+
+This paper reports results from **3-, 6- and 12-month survey data**. We have read:
+
+- The size of the attribution-defined cohort (185,285; 1.87% of people aged 16+), its split by
+  sex, age, race, dose count and manufacturer, and the two comparison cohorts (9,529,657 and
+  189,982).
+- The CDC MedDRA PT and SOC rates in that cohort across all surveys and on the qualifying
+  survey. Leading PTs: fatigue, headache, arthralgia, dizziness, dyspnoea, nausea, myalgia,
+  diarrhoea, chest pain, rash, lymphadenopathy, palpitations, tinnitus.
+- Rates of disability, care and hospitalisation on the qualifying survey (~50% reporting at
+  least one of: unable to work, unable to do daily activities, hospitalised, severe event).
+- Median distinct symptoms per person (8, 11 and 13 for one, two and three or more doses).
+- Rechallenge rates from dose 1 to dose 2, and transitions from the qualifying survey to the
+  next monthly survey.
+
+What this does **not** reveal: whether symptom domains co-occur beyond chance (Q1); onset by
+survey (Q2); VAERS filing or coding (Q3); and the size or profile of a phenotype defined from the
+free text without attribution. All of these had been computed under the registered plan before
+the paper was read.
+
+The PACVS domain list was set from the PACVS, long-COVID and ME/CFS literature (protocol,
+8 Nov 2026) and frozen as taxonomy v1.0 on 2026-11-10, before this paper was read. It is not
+revised in light of the paper.
