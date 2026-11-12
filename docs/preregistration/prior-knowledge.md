@@ -40,3 +40,10 @@ happened after filing and follows the registered plan.
 | 2026-11-11 | Layer-1 validation vs CDC MedDRA coding computed (amendment 1) | aggregates in `docs/phase2-report.md` |
 | 2026-11-11 | DeepSeek V4.1 Flash pilot on the phase-1 sample (2,000 week-1 / six-week entries) and model-shift tables vs Claude and GLM | aggregates only |
 | 2026-11-11 | Amendment 2 drafted (layer-3 model change) | none |
+| 2026-11-11 to 12 | Amendment 2 filed; `llm-label --long-term --residue --all --model deepseek/deepseek-v4.1-flash --workers 8`: all 386,862 residue texts labelled (NanoGPT ZDR, reasoning off) | labels stored; no text read by the analyst |
+| 2026-11-12 | `validate --layer final`: final-classifier precision/recall vs CDC coding. Only fatigue_pem passes. Post-hoc counts of CDC PTs on exclusion-theme false positives (PT names and counts only) | aggregates (`docs/phase2-report.md`) |
+| 2026-11-12 | Protocol owner decided: report as registered, no amendment 3; run Q1–Q3 as the nine-domain sensitivity analysis | none |
+| 2026-11-12 | `vsafe-ft analyse`: final classifier, case definition on all check-ins, Q1 (all, strata, VAERS replication on 1,057,077 COVID-19 report texts, layer 1 only), Q2, Q3 (both OpenVSafe sets), Q4, attrition, Table 1 | aggregates `analysis_sens9_*`; no text read |
+| 2026-11-12 | Registered model-sensitivity check: `llm-label --long-term --residue --sample 2000 --seed 1 --model claude-opus-5-5` (Anthropic API, 30-day retention, 1,687 texts) and `llm-report --long-term` | model-shift aggregates only |
+| 2026-11-12 | Exploratory (unregistered, specified after seeing the registered results): text-matched Q1 null; exclusion-criterion variants; `llm-label` (DeepSeek) on cases' week-1 / six-week residue (26,889 texts); week-1 structured symptom fields read from the raw check-in Parquet for cases and a 1-in-20 sample (checkbox values only) | aggregates `analysis_expl_*`; no text read |
+| 2026-11-12 | Manuscript drafted as a Claude Doc from the aggregate tables; figures drawn from aggregates | aggregates only |

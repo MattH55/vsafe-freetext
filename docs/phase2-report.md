@@ -106,5 +106,102 @@ registered labels only the residue. Even a perfect layer 3 on the residue would 
 below the gate for cognitive, cardiorespiratory, sleep, menstrual and sensory_neuropathic. The
 other misses are in entries that have some other theme.
 
-**Status.** This is layer 1 only. The registered gate applies to the final classifier
-(layer 1 plus layer 3), and layer 3 has labelled 1,800 of 386,862 residue texts.
+**Status.** Layer 1 only. The final-classifier validation is below.
+
+## Layer 3 on the long-term residue (amendment 2, 2026-11-11 to 12)
+
+`vsafe-ft llm-label --long-term --residue --all --model deepseek/deepseek-v4.1-flash --workers 8`
+labelled every unique long-term residue text: 649,516 entries, 386,862 texts. About 10 h
+wall time over two runs (one dropped connection, resumed), 0 failed after retry, 0 refusals,
+about US$0.02. 83% of texts received at least one theme. The 1,800 GLM-5.3 labels are unused.
+
+## Validation of the final classifier (2026-11-12)
+
+`vsafe-ft validate --layer final --model deepseek/deepseek-v4.1-flash` took 23 s
+(`validate_meddra_final_deepseek-v4_1-flash.csv`). Layer 3 raised recall in every PACVS domain
+and lowered precision in every one.
+
+| Domain | Precision (lexicon → final) | Recall (lexicon → final) | Gate |
+|---|---|---|---|
+| fatigue_pem | 0.984 → 0.961 | 0.842 → 0.859 | **pass** |
+| dysautonomia | 0.978 → 0.774 | 0.872 → 0.946 | fail (precision) |
+| gastrointestinal | 0.989 → 0.747 | 0.821 → 0.901 | fail (precision) |
+| pain | 0.991 → 0.903 | 0.724 → 0.827 | fail (recall) |
+| cognitive | 0.889 → 0.762 | 0.692 → 0.741 | fail |
+| cardiorespiratory | 0.956 → 0.690 | 0.626 → 0.762 | fail |
+| sleep | 0.973 → 0.738 | 0.621 → 0.718 | fail |
+| menstrual | 0.927 → 0.849 | 0.575 → 0.659 | fail |
+| sensory_neuropathic | 0.966 → 0.661 | 0.206 → 0.246 | fail |
+
+Exclusion themes: unrelated_cause precision 0.144, acute_diagnosis 0.311. A post-hoc look at
+the CDC PTs on those entries (counts only) shows most are map gaps (COVID-19, SARS-CoV-2 test
+positive, nasopharyngitis, cerebrovascular accident, thrombosis are not in the frozen map) and
+two real errors: negative COVID tests tagged unrelated_cause, chronic conditions tagged
+acute_diagnosis.
+
+**Decision (protocol owner, 2026-11-12):** only one PACVS domain passes, so the registered
+primary analysis (Q1–Q3 on passing domains) is infeasible. Report as-is, no amendment. All
+results below are the registered nine-domain sensitivity analysis.
+
+## Confirmatory analysis, nine-domain sensitivity (2026-11-12)
+
+`vsafe-ft analyse` (`analysis_sens9_*`). Setup (final classifier, case definition on 145M
+check-ins) 63 min; helper tables 3 min; Q1–Q4 9 min after the permutation null was
+re-implemented (positives drawn per domain instead of permuting the matrix: same null, ~16×
+faster; `stats.cooccurrence_test`); VAERS replication 90 min.
+
+| Group | Person-doses | People |
+|---|---|---|
+| case | 87,229 (1.01% of 8.62M with a long-term survey) | 86,323 |
+| (a) no_symptoms | 5,877,624 | 4,760,357 |
+| (b) acute_event | 104,736 | 102,616 |
+| (c) severe_w1_recovered | 1,602,523 | 1,518,229 |
+| other | 2,267,821 | 2,036,216 |
+
+- **Q1:** 1,267,509 person-doses with long-term text; observed pairs 235,184 vs 188,776
+  (ratio 1.25, p = 0.001); rejects in every dose and manufacturer stratum (1.21–1.39);
+  23/36 pairs above null after Holm; strongest cognitive–sleep 4.1×, cognitive–fatigue 3.0×.
+  VAERS replication (1,057,077 COVID-19 reports, layer 1): ratio 1.85, same core.
+- **Q2 onset:** 27.9% early vs 71.3% expected (p = 1.0). H0 not rejected.
+  **Q2 persistence:** 60.3% of cases vs 1.5% of group (c); RD 58.9 points (58.4–59.3).
+- **Q3 capture:** rate ratio 0.94 (0.90–0.98), same on the high-confidence set; H0 rejected
+  but the rates are 4.6% vs 4.9%. **Q3 dispersion:** cases' PT entropy lower (8.31 vs 8.59),
+  p = 1.0.
+- **Q4 / attrition:** `analysis_sens9_q4.csv`, `analysis_sens9_attrition.csv`. 49.4% of
+  person-doses with a check-in completed a long-term survey (60.1% after a week-1 impact,
+  42.4% without).
+- **Table 1** (`analysis_sens9_table1.csv`): cases 77.5% women vs 58.1% in group (a); no age
+  field exists in the linked release.
+
+## Model sensitivity (registered check, 2026-11-12)
+
+`llm-label --long-term --residue --sample 2000 --seed 1 --model claude-opus-5-5`: 1,687 texts,
+0 failed, US$1.96, 593 s. `llm-report ... --long-term`
+(`phase1_llm_model_shift_deepseek_v4_1_flash_residue2000_s1_longterm.csv`). Model-sensitive
+(> 20%): fatigue_pem (20 vs 46 entries, 0.57), menstrual (0.44), cardiorespiratory (0.40),
+cognitive (0.23); unrelated_cause (0.31), persistence (0.49), care_sought (0.27). Stable:
+dysautonomia, gastrointestinal, pain, sensory_neuropathic. Sleep suppressed.
+
+## Exploratory checks (not registered, 2026-11-12; `analysis_expl_*`)
+
+Specified after the registered results were seen; `vsafe-ft analyse --steps exploratory`.
+
+1. **Text-matched Q1 null** (`stats.cooccurrence_test(strata=...)`, 484 s): ratio 1.25 →
+   1.06 (character deciles) → 1.04 (entries × deciles); pairs above null 23 → 19 → 16.
+   Core survives: cognitive–sleep 2.5×, cognitive–fatigue 2.3×, fatigue–sleep 1.6×,
+   cognitive–dysautonomia 1.6×. Mean domains per person-dose rise 0.26 → 1.07 across
+   character deciles.
+2. **Exclusion variants** (1,299 s): keyword-only exclusions → 89,198 cases, group (b)
+   64,629, Q3 RR 0.82 (0.79–0.86); no criterion 3 → 135,252 cases, RR 0.78 (0.75–0.81).
+   Q2 unchanged in direction.
+3. **Onset** (402 s): layer 3 on cases' early residue (26,889 texts, US$0.0005, 32 min)
+   raises the early share 27.9% → 32.7%; survey-type null expects 42.2%; p = 1.0.
+   Structured week-1 fields: 80.9% of cases with a week-1 check-in ticked a same-domain
+   symptom, vs 35–40% of group (a) and 89–92% of group (c) (1-in-20 sample of non-cases).
+
+## Decisions where the registration was silent
+
+Survey-type mapping (day 0–7 = w1, week 2–6 = 6w); impact = any non-'N/A' answer;
+pre-vaccine entries dropped if either layer flags them; layer 2 never built; layer 3 on
+long-term text only; persistence reference = first worse/impact long-term survey; Q3 at
+person level; model-sensitivity sample 2,000 (pilot size); permutation re-implemented.
