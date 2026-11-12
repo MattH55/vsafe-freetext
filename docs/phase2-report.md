@@ -66,3 +66,45 @@ and `sheet_B.csv`; I have not opened them.
 The confirmatory theme set is decided by this part of the gold set (precision and recall
 ≥ 0.85, OSF section 7). Q1–Q3 run only after both coders finish and disagreements are
 adjudicated.
+
+## Validation against CDC MedDRA coding, layer 1 (amendment 1, 2026-11-11)
+
+`vsafe-ft validate --layer lexicon` took 31 s. It covered 1,590,177 long-term entries with a
+2024-11 code, from 1,205,307 people. Redacted and pre-vaccine entries were excluded.
+
+An entry counts as having a theme in the reference if CDC coded it to a PT that the frozen
+v1.0 map lists for that theme. 95% Wilson intervals are in
+`aggregates/vsafe_full/validate_meddra_lexicon.csv`; every interval is narrower than ±0.01.
+
+| Theme | Domain | Lexicon entries | Reference entries | Precision | Recall | Gate (≥ 0.85 both) |
+|---|---|---|---|---|---|---|
+| dysautonomia | PACVS | 55,039 | 61,701 | 0.978 | 0.872 | pass |
+| fatigue_pem | PACVS | 169,299 | 197,809 | 0.984 | 0.842 | fail (recall) |
+| gastrointestinal | PACVS | 74,645 | 89,894 | 0.989 | 0.821 | fail (recall) |
+| pain | PACVS | 251,945 | 345,148 | 0.991 | 0.724 | fail (recall) |
+| cognitive | PACVS | 13,674 | 17,565 | 0.889 | 0.692 | fail (recall) |
+| cardiorespiratory | PACVS | 30,737 | 46,936 | 0.956 | 0.626 | fail (recall) |
+| sleep | PACVS | 5,786 | 9,067 | 0.973 | 0.621 | fail (recall) |
+| menstrual | PACVS | 24,707 | 39,807 | 0.927 | 0.575 | fail (recall) |
+| sensory_neuropathic | PACVS | 26,035 | 122,015 | 0.966 | 0.206 | fail (recall) |
+| fever_chills | acute | 120,443 | 122,347 | 0.970 | 0.955 | pass |
+| upper_respiratory | exclusion | 352,196 | 367,587 | 0.993 | 0.952 | pass |
+| skin | acute | 34,764 | 48,210 | 0.964 | 0.695 | fail |
+| taste_smell | acute | 19,638 | 29,463 | 0.932 | 0.622 | fail |
+| lymphadenopathy | acute | 14,073 | 19,250 | 0.866 | 0.633 | fail |
+| injection_site | acute | 17,751 | 78,113 | 0.927 | 0.211 | fail |
+| acute_diagnosis | exclusion | 36,429 | 28,139 | 0.660 | 0.854 | fail (precision) |
+| unrelated_cause | exclusion | 189,889 | 57,851 | 0.245 | 0.803 | fail |
+| pre_existing_worsened | lay | 6,209 | 11,667 | 0.210 | 0.112 | fail |
+
+**What the lexicon gets wrong.** Precision is high for every PACVS domain (0.89–0.99).
+Recall is what fails: the lexicon misses entries that CDC coded.
+
+**Where the misses are** (`validate_missed_lexicon.csv`). 18–77% of the missed entries, by
+theme, are in the residue, meaning entries the lexicon gave no theme at all. Layer 3 as
+registered labels only the residue. Even a perfect layer 3 on the residue would leave recall
+below the gate for cognitive, cardiorespiratory, sleep, menstrual and sensory_neuropathic. The
+other misses are in entries that have some other theme.
+
+**Status.** This is layer 1 only. The registered gate applies to the final classifier
+(layer 1 plus layer 3), and layer 3 has labelled 1,800 of 386,862 residue texts.
