@@ -6,7 +6,7 @@ for every task: do only what the task says; do not change any file in the reposi
 OSF registration or its amendments; do not send e-mail; copy the identifiers listed under "Report
 back" into `docs/submission/human-actions.md`, and nothing else.
 
-## Task A. Make the repository public and mint a Zenodo DOI
+## Task A. Make the repository public and mint a Zenodo DOI (done 2026-11-12: doi:10.5281/zenodo.24178319)
 
 Repository: https://github.com/MattH55/vsafe-freetext (private). The audit is in
 `docs/submission/repo-audit.md`: no data files, keys or registrant codes anywhere in the history.

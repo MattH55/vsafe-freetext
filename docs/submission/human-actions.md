@@ -34,9 +34,7 @@ are recorded here; what remains is in section B.
    and the result in `sub_b5_audit_scored.csv` (how often each side was right, by domain) replaces
    `[[HUMAN: pending coding]]` in Results, as an exploratory finding. If you would rather submit
    without it, delete that sentence and the audit paragraph; the manuscript stands without it.
-2. **Browser agent, Task A** (`agent-instructions.md`): make the repository public, publish the
-   `v1.0.1-submission` release, mint the Zenodo DOI. Then the DOI goes into Code Availability and
-   the cover letter.
+2. ~~Task A~~ Done 2026-11-12: Zenodo doi:10.5281/zenodo.24178319 is in Code Availability and the cover letter.
 3. **Browser agent, Task B**: lift the OSF embargo on osf.io/gnfpd and confirm the dates.
 4. **Browser agent, Task C**: post the preprint on OSF Preprints (CC BY 4.0); the DOI goes into the
    cover letter.
