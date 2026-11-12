@@ -346,6 +346,20 @@ def cmd_analyse(a):
         for k, df in analysis.q1_vaers(domains, a.permutations).items():
             _write(df, f"analysis_{tag}_q1_vaers_{k}")
         print(f"vaers replication done {time.time() - t0:.0f}s", flush=True)
+    if "exploratory" in steps:      # unregistered checks; every output is labelled expl_
+        for k, df in analysis.q1_text_matched(con, domains, a.permutations).items():
+            _write(df, f"analysis_expl_q1_textmatched_{k}")
+        print(f"text-matched Q1 done {time.time() - t0:.0f}s", flush=True)
+        ov = openvsafe.connect()
+        sets = {w: openvsafe.analysis_set(ov, w) for w in openvsafe.MATCH_SETS}
+        ov.close()
+        for k, df in analysis.exclusion_variants(con, a.permutations, sets).items():
+            _write(df, f"analysis_expl_excl_{k}")
+        print(f"exclusion variants done {time.time() - t0:.0f}s", flush=True)
+        for k, df in analysis.onset_structured(con).items():
+            _write(df, f"analysis_expl_onset_structured_{k}")
+        _write(analysis.onset_symmetric(con, a.model), "analysis_expl_onset_symmetric")
+        print(f"onset checks done {time.time() - t0:.0f}s", flush=True)
 
 
 def main(argv=None):

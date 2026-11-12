@@ -35,7 +35,7 @@ LONG_TERM = ("3m", "6m", "12m")
 WEEK1 = ("w1",)
 
 PHENOTYPE_SQL = """
-CREATE OR REPLACE TABLE phenotype_groups AS
+CREATE OR REPLACE TABLE {table} AS
 WITH lt AS (
     SELECT * FROM ph_surveys WHERE survey_type IN {long_term}
 ),
@@ -54,7 +54,7 @@ across AS (
     FROM pd_lt GROUP BY ALL
 ),
 excluded AS (
-    SELECT DISTINCT response_id FROM ph_entry_themes WHERE domain = 'exclusion'
+    SELECT DISTINCT response_id FROM ph_entry_themes WHERE domain = 'exclusion' AND ({excl})
 ),
 cases AS (
     SELECT DISTINCT s.registrant, s.dose_number
@@ -70,7 +70,8 @@ lt_unwell AS (
 ),
 lt_text AS (SELECT DISTINCT registrant, dose_number FROM pd_lt),
 acute AS (
-    SELECT DISTINCT registrant, dose_number FROM ph_entry_themes WHERE theme = 'acute_diagnosis'
+    SELECT DISTINCT registrant, dose_number FROM ph_entry_themes
+    WHERE theme = 'acute_diagnosis' AND ({acute})
 ),
 w1_severe AS (
     SELECT DISTINCT s.registrant, s.dose_number
@@ -109,9 +110,22 @@ def _tuple(vals) -> str:
     return "(" + ", ".join("'" + v + "'" for v in vals) + ")"
 
 
-def build(con) -> None:
-    """Create phenotype_groups(registrant, dose_number, grp, in_denominator)."""
-    con.execute(PHENOTYPE_SQL.format(long_term=_tuple(LONG_TERM), week1=_tuple(WEEK1)))
+EXCLUSION_VARIANTS = {
+    # (criterion 3: case exclusion, group (b) acute_diagnosis source)
+    "final": ("TRUE", "TRUE"),              # registered: any layer
+    "lexicon": ("layer = 1", "layer = 1"),  # exploratory: keyword tags only
+    "none": ("FALSE", "TRUE"),              # exploratory: no criterion 3; group (b) unchanged
+}
+
+
+def build(con, exclusion: str = "final", table: str = "phenotype_groups") -> None:
+    """Create {table}(registrant, dose_number, grp, in_denominator).
+
+    exclusion: how criterion 3 and group (b) read the exclusion themes (EXCLUSION_VARIANTS).
+    Anything but "final" is exploratory."""
+    excl, acute = EXCLUSION_VARIANTS[exclusion]
+    con.execute(PHENOTYPE_SQL.format(long_term=_tuple(LONG_TERM), week1=_tuple(WEEK1),
+                                     excl=excl, acute=acute, table=table))
 
 
 def group_sizes(con):
@@ -169,7 +183,7 @@ def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
         f"""
         CREATE OR REPLACE TABLE ph_entry_themes AS
         SELECT e.registrant, e.dose_number, e.response_id, t.theme,
-               CASE t.theme {dom} END AS domain
+               CASE t.theme {dom} END AS domain, t.layer
         FROM {themes} t JOIN entries_survey e USING (entry_id)
         WHERE TRUE {drop}
         """

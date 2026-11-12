@@ -92,11 +92,11 @@ def pacvs_domains() -> list[str]:
     return sorted(t for t, d in taxonomy_domains().items() if d == "pacvs")
 
 
-def group_table(con) -> pl.DataFrame:
-    return safe(frame(con, """
+def group_table(con, groups: str = "phenotype_groups") -> pl.DataFrame:
+    return safe(frame(con, f"""
         SELECT grp, count(*) AS person_doses, count(DISTINCT registrant) AS people,
                count(*) FILTER (WHERE in_denominator) AS in_denominator
-        FROM phenotype_groups GROUP BY grp ORDER BY grp"""))
+        FROM {groups} GROUP BY grp ORDER BY grp"""))
 
 
 # --- Q1 -----------------------------------------------------------------------------------------
@@ -124,11 +124,18 @@ def q1_matrix(con, domains: list[str]) -> pl.DataFrame:
                        WHERE g.in_denominator),
              d AS (SELECT registrant, dose_number, theme FROM ph_dom WHERE rnk >= 3),
              man AS (SELECT registrant, dose_number, any_value(manufacturer) AS manufacturer
-                     FROM vax GROUP BY ALL)
+                     FROM vax GROUP BY ALL),
+             amt AS (SELECT e.registrant, e.dose_number, count(*) AS n_entries,
+                            sum(length(e.text)) AS chars FROM entries_survey e
+                     SEMI JOIN ph_lt l ON l.response_id = e.response_id
+                     WHERE NOT coalesce(e.redacted, false)
+                       AND length(trim(coalesce(e.text, ''))) > 0 GROUP BY ALL)
         SELECT coalesce(m.manufacturer, 'unknown') AS manufacturer,
-               r.dose_number::VARCHAR AS dose, {cols}
+               r.dose_number::VARCHAR AS dose, any_value(a.n_entries) AS n_entries,
+               any_value(a.chars) AS chars, {cols}
         FROM rows_ r LEFT JOIN d USING (registrant, dose_number)
         LEFT JOIN man m USING (registrant, dose_number)
+        LEFT JOIN amt a USING (registrant, dose_number)
         GROUP BY r.registrant, r.dose_number, m.manufacturer""")
 
 
@@ -228,11 +235,71 @@ def q1_vaers(domains: list[str], permutations: int, zip_path: Path | None = None
     return {"summary": safe(summary), "pairs": _safe_pairs(pairs), "prevalence": safe(prevalence)}
 
 
+def q1_text_matched(con, domains: list[str], permutations: int) -> dict[str, pl.DataFrame]:
+    """Exploratory: the Q1 test under nulls that keep each domain's frequency within strata of
+    how much long-term text the person-dose wrote (deciles of characters; entries x deciles).
+    """
+    m = q1_matrix(con, domains)
+    X = m.select(domains).to_numpy().astype(bool)
+    chars = m["chars"].fill_null(0).to_numpy()
+    n_ent = m["n_entries"].fill_null(1).to_numpy()
+    dec = np.searchsorted(np.quantile(chars, np.linspace(0, 1, 11)[1:-1]), chars)
+    fine = np.minimum(n_ent, 4) * 10 + dec        # 1, 2, 3, 4+ entries x decile
+    rows, pair_tabs = [], []
+    k = len(domains)
+    iu = np.triu_indices(k, 1)
+    for name, st in [("unmatched (registered)", None), ("matched: character deciles", dec),
+                     ("matched: entries x character deciles", fine)]:
+        r = stats.cooccurrence_test(X, domains, permutations=permutations, seed=SEED, strata=st)
+        rows.append({"null": name, "people": X.shape[0],
+                     "strata": 1 if st is None else int(np.unique(st).size),
+                     "observed_pairs": r.observed_pairs,
+                     "null_mean_pairs": round(r.null_mean_pairs, 1),
+                     "ratio": round(r.observed_pairs / r.null_mean_pairs, 3),
+                     "p_pairs": round(r.p_pairs, 4),
+                     "pairs_above_null_holm": int((stats.holm(r.pair_p[iu]) < 0.05).sum())})
+        if st is not None:
+            exp = np.zeros((k, k))
+            for v in np.unique(st):
+                idx = st == v
+                mm = X[idx].sum(0).astype(float)
+                exp += np.outer(mm, mm) / idx.sum()
+            pair_tabs.append(pl.DataFrame({
+                "null": name, "domain_a": [domains[i] for i in iu[0]],
+                "domain_b": [domains[j] for j in iu[1]],
+                "both_people": r.pair_observed[iu].astype(np.int64),
+                "expected_people": exp[iu].round(1),
+                "ratio": (r.pair_observed[iu] / exp[iu]).round(3),
+                "p_holm": stats.holm(r.pair_p[iu]).round(4)}))
+    amount = safe(pl.DataFrame({"character_decile": np.arange(10),
+                                "people": np.bincount(dec, minlength=10),
+                                "mean_domains": [round(float(X[dec == d].sum(1).mean()), 3)
+                                                 for d in range(10)]}))
+    return {"summary": safe(pl.DataFrame(rows)),
+            "pairs": _safe_pairs(pl.concat(pair_tabs)), "by_amount": amount}
+
+
+def exclusion_variants(con, permutations: int, match_sets: dict | None = None) -> dict:
+    """Exploratory: group sizes, Q2 and Q3 under the two other exclusion readings."""
+    out = {}
+    for variant in ("lexicon", "none"):
+        table = f"phenotype_groups_excl_{variant}"
+        phenotype.build(con, exclusion=variant, table=table)
+        out[f"{variant}_groups"] = group_table(con, table)
+        for k, df in q2(con, groups=table).items():
+            out[f"{variant}_q2_{k}"] = df
+        if match_sets:
+            for k, df in q3(con, match_sets, permutations, groups=table).items():
+                if df is not None:
+                    out[f"{variant}_q3_{k}"] = df
+    return out
+
+
 # --- Q2 -----------------------------------------------------------------------------------------
 
-def q2(con) -> dict[str, pl.DataFrame]:
-    on = frame(con, """
-        WITH c AS (SELECT registrant, dose_number FROM phenotype_groups WHERE grp = 'case'),
+def q2(con, groups: str = "phenotype_groups") -> dict[str, pl.DataFrame]:
+    on = frame(con, f"""
+        WITH c AS (SELECT registrant, dose_number FROM {groups} WHERE grp = 'case'),
              cd AS (SELECT DISTINCT d.registrant, d.dose_number, d.theme FROM ph_dom d
                     JOIN c USING (registrant, dose_number) WHERE d.rnk >= 3),
              first_ AS (SELECT d.registrant, d.dose_number, min(d.rnk) AS onset FROM ph_dom d
@@ -251,8 +318,8 @@ def q2(con) -> dict[str, pl.DataFrame]:
                                "observed_share": [round(res.early / res.cases, 4)],
                                "expected_share": [round(res.expected / res.cases, 4)],
                                "p_one_sided": [res.p]}))
-    pers = frame(con, """
-        WITH g AS (SELECT registrant, dose_number, grp FROM phenotype_groups
+    pers = frame(con, f"""
+        WITH g AS (SELECT registrant, dose_number, grp FROM {groups}
                    WHERE grp IN ('case', 'severe_w1_recovered')),
              ref AS (SELECT l.registrant, l.dose_number, g.grp,
                             min(l.rnk) FILTER (WHERE g.grp = 'severe_w1_recovered'
@@ -284,12 +351,12 @@ def q2(con) -> dict[str, pl.DataFrame]:
 
 # --- Q3 -----------------------------------------------------------------------------------------
 
-def _person_groups(con) -> None:
-    con.execute("""CREATE OR REPLACE TEMP TABLE q3_people AS
+def _person_groups(con, groups: str = "phenotype_groups") -> None:
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE q3_people AS
         SELECT registrant,
                CASE WHEN bool_or(grp = 'case') THEN 'case'
                     WHEN bool_or(grp = 'acute_event') THEN 'acute_event' END AS grp
-        FROM phenotype_groups GROUP BY registrant
+        FROM {groups} GROUP BY registrant
         HAVING bool_or(grp IN ('case', 'acute_event'))""")
     con.execute("""CREATE OR REPLACE TEMP TABLE q3_cc AS
         SELECT DISTINCT e.registrant FROM entry_outcomes o JOIN entries_survey e USING (entry_id)
@@ -319,8 +386,9 @@ def vaers_symptoms(con, zip_path: Path | None = None, years=range(2020, 2027)) -
     return pts.height
 
 
-def q3(con, match_sets: dict[str, pl.DataFrame], permutations: int) -> dict[str, pl.DataFrame]:
-    _person_groups(con)
+def q3(con, match_sets: dict[str, pl.DataFrame], permutations: int,
+       groups: str = "phenotype_groups") -> dict[str, pl.DataFrame]:
+    _person_groups(con, groups)
     vaers_symptoms(con)
     cap_rows, disp_rows = [], []
     for name, ms in match_sets.items():
@@ -415,3 +483,116 @@ def attrition(con) -> pl.DataFrame:
     # suppress each part on its own people columns: in a diagonal concat the bounds-only
     # columns are null in the severity rows and would blank them
     return pl.concat([safe(sev), safe(bounds)], how="diagonal")
+
+
+# --- Exploratory onset checks (not registered) ---------------------------------------------
+
+# Week-1 check-in fields that map onto a PACVS domain. Only three domains have one.
+STRUCTURED_FIELDS = {
+    "fatigue_pem": (["FATIGUE"], ["Fatigue or tiredness"]),
+    "pain": (["HEADACHE", "JOINT_PAINS", "MUSCLE_OR_BODY_ACHES"],
+             ["Headache", "Joint pains", "Muscle or body aches"]),
+    "gastrointestinal": (["NAUSEA", "DIARRHEA", "VOMITING", "ABDOMINAL_PAIN"],
+                         ["Nausea", "Diarrhea", "Vomiting", "Abdominal pain"]),
+}
+
+
+def _week1_structured(con) -> None:
+    """w1_struct(registrant, dose_number, fatigue_pem, pain, gastrointestinal): whether any
+    week-1 check-in of the person-dose ticked a symptom in each domain (raw check-in files)."""
+    glob = str(config.DATA_DIR / "interim" / "health_checkins" / "*.parquet").replace("\\", "/")
+    parts = []
+    for dom, (cols, toks) in STRUCTURED_FIELDS.items():
+        c = " OR ".join(f"{x} IS NOT NULL" for x in cols)
+        t = " OR ".join(f"list_contains(string_split(coalesce(SYSTEMIC_REACTION, ''), ':'), '{x}')"
+                        for x in toks)
+        parts.append(f"({c} OR {t}) AS {dom}")
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE w1_struct AS
+        SELECT r.registrant, r.dose_number, bool_or(s.fatigue_pem) AS fatigue_pem,
+               bool_or(s.pain) AS pain, bool_or(s.gastrointestinal) AS gastrointestinal
+        FROM (SELECT RESPONSE_ID AS response_id, {", ".join(parts)}
+              FROM read_parquet('{glob}', union_by_name = true)) s
+        JOIN ph_rank r USING (response_id) WHERE r.rnk = 1 GROUP BY ALL""")
+
+
+def onset_structured(con, groups: str = "phenotype_groups") -> dict[str, pl.DataFrame]:
+    """Among cases whose long-term case domains include fatigue, pain or gastrointestinal
+    symptoms: share with a week-1 structured report of one of those same domains, against the
+    share whose week-1 free text named one. Plus the week-1 structured rate by group."""
+    _week1_structured(con)
+    cases = safe(frame(con, f"""
+        WITH c AS (SELECT registrant, dose_number FROM {groups} WHERE grp = 'case'),
+             cd AS (SELECT DISTINCT d.registrant, d.dose_number, d.theme FROM ph_dom d
+                    JOIN c USING (registrant, dose_number)
+                    WHERE d.rnk >= 3 AND d.theme IN ('fatigue_pem', 'pain', 'gastrointestinal')),
+             per AS (SELECT cd.registrant, cd.dose_number,
+                            bool_or(CASE cd.theme WHEN 'fatigue_pem' THEN w.fatigue_pem
+                                    WHEN 'pain' THEN w.pain ELSE w.gastrointestinal END)
+                                AS struct_early,
+                            bool_or(EXISTS (SELECT 1 FROM ph_dom d2
+                                    WHERE d2.registrant = cd.registrant
+                                      AND d2.dose_number = cd.dose_number
+                                      AND d2.theme = cd.theme AND d2.rnk <= 2)) AS text_early,
+                            bool_or(w.registrant IS NOT NULL) AS has_w1
+                     FROM cd LEFT JOIN w1_struct w USING (registrant, dose_number) GROUP BY ALL)
+        SELECT count(*) AS people, count(*) FILTER (WHERE has_w1) AS with_week1_checkin,
+               count(*) FILTER (WHERE struct_early) AS structured_early_people,
+               count(*) FILTER (WHERE text_early) AS text_early_people,
+               count(*) FILTER (WHERE struct_early OR text_early) AS either_early_people,
+               round(count(*) FILTER (WHERE struct_early) / count(*) FILTER (WHERE has_w1), 4)
+                   AS structured_early_share_of_week1_responders,
+               round(count(*) FILTER (WHERE text_early) / count(*), 4) AS text_early_share
+        FROM per"""))
+    by_group = safe(frame(con, f"""
+        SELECT g.grp, count(*) AS people,
+               round(avg(w.fatigue_pem::INT), 4) AS week1_fatigue,
+               round(avg(w.pain::INT), 4) AS week1_pain,
+               round(avg(w.gastrointestinal::INT), 4) AS week1_gastrointestinal
+        FROM {groups} g JOIN w1_struct w USING (registrant, dose_number)
+        WHERE g.in_denominator GROUP BY 1 ORDER BY 1"""))
+    return {"cases": cases, "by_group": by_group}
+
+
+def onset_symmetric(con, model: str, groups: str = "phenotype_groups") -> pl.DataFrame:
+    """Q2 onset again with layer 3 also applied to cases' week-1 / six-week residue text
+    (entries_cases_early), and under a second null: onset uniform over the survey TYPES the
+    case completed, not over check-ins."""
+    pacvs = ", ".join(repr(t) for t in pacvs_domains())
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE early_l3 AS
+        SELECT DISTINCT e.registrant, e.dose_number, unnest(l.themes) AS theme, r.rnk
+        FROM entries_cases_early e JOIN ph_rank r USING (response_id)
+        JOIN llm_labels l ON l.text_hash = md5(e.text) AND l.model = '{model}'
+             AND l.prompt_version = '{PROMPT_VERSION}' AND l.ok
+        WHERE NOT coalesce(e.redacted, false)
+          AND NOT EXISTS (SELECT 1 FROM final_flags f WHERE f.entry_id = e.entry_id
+                          AND f.pre_vaccine)""")
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE dom_sym AS
+        SELECT registrant, dose_number, theme, rnk FROM ph_dom
+        UNION SELECT registrant, dose_number, theme, rnk FROM early_l3 WHERE theme IN ({pacvs})""")
+    rows = []
+    for label, tbl in [("registered: layer 1 only on early text", "ph_dom"),
+                       ("symmetric: layer 3 also on cases' early residue", "dom_sym")]:
+        on = frame(con, f"""
+            WITH c AS (SELECT registrant, dose_number FROM {groups} WHERE grp = 'case'),
+                 cd AS (SELECT DISTINCT d.registrant, d.dose_number, d.theme FROM {tbl} d
+                        JOIN c USING (registrant, dose_number) WHERE d.rnk >= 3),
+                 first_ AS (SELECT d.registrant, d.dose_number, min(d.rnk) AS onset FROM {tbl} d
+                            JOIN cd USING (registrant, dose_number, theme) GROUP BY ALL),
+                 p0 AS (SELECT r.registrant, r.dose_number,
+                               avg((r.rnk <= 2)::INT) AS p0_checkins,
+                               count(DISTINCT r.rnk) FILTER (WHERE r.rnk <= 2)
+                                   / count(DISTINCT r.rnk)::DOUBLE AS p0_types
+                        FROM ph_rank r JOIN c USING (registrant, dose_number) GROUP BY ALL)
+            SELECT f.onset, p.p0_checkins, p.p0_types
+            FROM first_ f JOIN p0 p USING (registrant, dose_number)""")
+        early = (on["onset"] <= 2).to_numpy()
+        r1 = stats.onset_test(early, on["p0_checkins"].to_numpy())
+        r2 = stats.onset_test(early, on["p0_types"].to_numpy())
+        rows.append({"classifier": label, "people": r1.cases, "early_onset_people": r1.early,
+                     "observed_share": round(r1.early / r1.cases, 4),
+                     "expected_share_checkin_null": round(r1.expected / r1.cases, 4),
+                     "p_checkin_null": r1.p,
+                     "expected_share_survey_type_null": round(r2.expected / r2.cases, 4),
+                     "p_survey_type_null": r2.p,
+                     "labelled_early_entries": one(con, "SELECT count(*) FROM early_l3")[0]})
+    return safe(pl.DataFrame(rows))

@@ -44,7 +44,7 @@ def _pattern_stats(cnt: np.ndarray, bits: np.ndarray, multi: np.ndarray):
 
 
 def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1000,
-                      seed: int | None = None) -> CooccurrenceResult:
+                      seed: int | None = None, strata=None) -> CooccurrenceResult:
     """Permutation test of domain co-occurrence against a marginal-preserving null.
 
     X: people x domains boolean matrix (one row per person with any long-term data).
@@ -58,6 +58,10 @@ def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1
     random set of m_j rows, so each permutation draws those sets directly and counts rows by
     domain pattern (2^k patterns). Same null as permuting the full matrix, much faster at
     millions of rows (implementation changed 2026-11-12 for speed; the null is unchanged).
+
+    strata: optional per-row integer labels. Each domain's positives are then placed at random
+    within each stratum, keeping the domain's frequency per stratum (a null matched on, say,
+    how much text each person wrote). Exploratory, not registered.
     """
     X = np.asarray(X, dtype=bool)
     n, k = X.shape
@@ -72,7 +76,12 @@ def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1
     code = (X.astype(np.uint16) * weights).sum(1, dtype=np.uint16)
     obs_c, obs_multi = _pattern_stats(np.bincount(code, minlength=1 << k), bits, multi)
     obs_pairs = int(obs_c[iu].sum())
-    m = X.sum(0)
+    if strata is None:
+        groups = [(np.arange(n), X.sum(0))]
+    else:
+        st = np.asarray(strata)
+        groups = [(idx, X[idx].sum(0)) for idx in
+                  (np.flatnonzero(st == v) for v in np.unique(st))]
 
     rng = np.random.default_rng(seed)
     ge_pairs = ge_multi = 0
@@ -81,8 +90,9 @@ def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1
     buf = np.empty(n, dtype=np.uint16)
     for _ in range(permutations):
         buf[:] = 0
-        for j in range(k):
-            buf[rng.choice(n, size=int(m[j]), replace=False)] |= weights[j]
+        for idx, m in groups:
+            for j in range(k):
+                buf[idx[rng.choice(idx.size, size=int(m[j]), replace=False)]] |= weights[j]
         c, sm = _pattern_stats(np.bincount(buf, minlength=1 << k), bits, multi)
         sp = int(c[iu].sum())
         ge_pairs += sp >= obs_pairs

@@ -78,7 +78,7 @@ def test_prepare_drops_pre_vaccine_keeps_third_party():
         (1, 'p', '1', 'r1'), (2, 'p', '1', 'r1'), (3, 'p', '1', 'r1'))
         t(entry_id, registrant, dose_number, response_id)""")
     con.execute("""CREATE TABLE entry_themes AS SELECT * FROM (VALUES
-        (1, 'pain'), (2, 'sleep'), (3, 'cognitive')) t(entry_id, theme)""")
+        (1, 'pain', 1), (2, 'sleep', 1), (3, 'cognitive', 3)) t(entry_id, theme, layer)""")
     con.execute("""CREATE TABLE entry_flags AS SELECT * FROM (VALUES
         (1, false, false), (2, true, false), (3, false, true))
         t(entry_id, third_party, pre_vaccine)""")
@@ -86,3 +86,27 @@ def test_prepare_drops_pre_vaccine_keeps_third_party():
                                                           "cognitive": "pacvs"})
     kept = {r[0] for r in con.execute("SELECT theme FROM ph_entry_themes").fetchall()}
     assert kept == {"pain", "sleep"}
+
+
+def test_exclusion_variants():
+    """Exploratory readings of criterion 3: keyword tags only, or no exclusion at all."""
+    con = duckdb.connect()
+    con.execute("""CREATE TABLE ph_surveys (registrant VARCHAR, dose_number VARCHAR,
+                   response_id VARCHAR, survey_type VARCHAR, worse BOOLEAN, impact BOOLEAN)""")
+    con.executemany("INSERT INTO ph_surveys VALUES (?, ?, ?, ?, ?, ?)",
+                    [("C", "1", "C3", "3m", True, False), ("E", "1", "E1", "w1", False, False),
+                     ("E", "1", "E3", "3m", False, False)])
+    con.execute("""CREATE TABLE ph_entry_themes (registrant VARCHAR, dose_number VARCHAR,
+                   response_id VARCHAR, theme VARCHAR, domain VARCHAR, layer INTEGER)""")
+    con.executemany("INSERT INTO ph_entry_themes VALUES (?, ?, ?, ?, ?, ?)", [
+        ("C", "1", "C3", "fatigue_pem", P, 1), ("C", "1", "C3", "pain", P, 1),
+        ("C", "1", "C3", "unrelated_cause", X, 3),      # exclusion tagged by layer 3 only
+        ("E", "1", "E1", "acute_diagnosis", X, 3)])
+
+    def grp(variant):
+        phenotype.build(con, exclusion=variant, table="pg")
+        return dict(con.execute("SELECT registrant, grp FROM pg").fetchall())
+
+    assert grp("final") == {"C": "other", "E": "acute_event"}
+    assert grp("lexicon") == {"C": "case", "E": "no_symptoms"}
+    assert grp("none") == {"C": "case", "E": "acute_event"}

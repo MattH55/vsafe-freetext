@@ -44,6 +44,24 @@ def test_fast_null_matches_full_permutation_null():
     assert np.array_equal(r.pair_observed, Xi.T @ Xi)
 
 
+def test_stratified_null_absorbs_verbosity():
+    """Two strata with different rates, independent within each: the plain null calls it
+    clustering, the stratum-matched null does not, and its mean is the within-stratum sum."""
+    rng = np.random.default_rng(8)
+    n = 6000
+    verbose = np.arange(n) < n // 2
+    X = rng.random((n, 3)) < np.where(verbose, 0.4, 0.02)[:, None]
+    plain = cooccurrence_test(X, permutations=200, seed=1)
+    matched = cooccurrence_test(X, permutations=200, seed=1, strata=verbose.astype(int))
+    assert plain.p_pairs < 0.01
+    assert matched.p_pairs > 0.05
+    a, b = X[verbose].sum(0), X[~verbose].sum(0)
+    expected = sum(a[i] * a[j] / (n // 2) + b[i] * b[j] / (n - n // 2)
+                   for i in range(3) for j in range(i + 1, 3))
+    assert matched.null_mean_pairs == pytest.approx(expected, rel=0.02)
+    assert np.array_equal(np.diag(matched.pair_observed), X.sum(0))
+
+
 def test_attrition_bounds():
     b = attrition_bounds(cases=50, responders=1000, non_responders=500)
     assert b.observed == pytest.approx(0.05)
