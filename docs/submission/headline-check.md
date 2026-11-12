@@ -15,7 +15,7 @@ Updated 2026-11-12 as results arrive.
 | Q3 recorded VAERS filing | RR 0.94 (0.90–0.98) | Exclusion variants (exploratory) | 0.82 (0.79–0.86) keyword-only; 0.78 (0.75–0.81) no criterion 3 | same | same | no; the registered figure is the most conservative |
 | Q3 dispersion | cases less dispersed, one-sided p = 1.0 | B6 Miller–Madow, rarefaction, two-sided | 8.38 vs 8.67 corrected; 8.31 vs 8.59 rarefied; two-sided p = 0.001 | same | now tested two-sided: significant | no; "narrower" retained with corrections stated |
 | Prevalence | 1.01% of person-doses with a long-term survey | B12 units | unchanged | | | wording only |
-| Levi & Lu comparison | 1.87% of people (theirs) vs 1.01% of person-doses (ours) | Task 3.9 reproduction | [[pending]] | | | |
+| Levi & Lu comparison | 1.87% of people (theirs) vs 1.01% of person-doses (ours) | Task 3.9 reproduction and overlap | Dose-1 and dose-2 Prolonged-AE within 0.5%; totals 3–12% low, all in dose 3+ (file version); overlap: 34.3% of text cases in Prolonged-AE, 17.7% the other way, kappa 0.22 | n/a | n/a | no; adds a sentence to the Discussion comparison |
 
 No rerun so far changes the direction or the significance of a headline result. The one change to
 how the Abstract reads (onset) is a reframing required by addendum 2 (B4), not a changed result.

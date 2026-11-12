@@ -251,7 +251,10 @@ Specified after the registered results were seen; `vsafe-ft analyse --steps expl
   later surveys (file version or date window). The missing 16+ filter would raise our counts, not
   lower them. NoAttr dose 1 and 2 are higher than theirs (+9 to +10%), which may reflect how they
   treated an attribution answer of null (we treat null as not "Yes"); unexplained. The joins were
-  not adjusted. Overlap with the text-defined case and Cohen's kappa: [[pending: rerun]].
+  not adjusted. Overlap at person level, among 6,754,831 people in both denominators: both
+  29,593; text-defined only 56,730; Prolonged-AE only 137,742; neither 6,530,766. 34.3% of
+  text-defined cases are in Prolonged-AE; 17.7% of Prolonged-AE meet the text definition;
+  Cohen's kappa 0.22 (`sub_levilu_overlap.csv`).
 
 ## Decisions where the registration was silent
 

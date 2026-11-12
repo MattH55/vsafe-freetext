@@ -17,6 +17,7 @@ Status: done = in the manuscript; results pending = code written, run in progres
 | B11 | OpenVSafe | done | Methods, Data sources: how the person pages were read (dates, rate, robots.txt scope, fields kept) with `[[HUMAN: OpenVAERS permission]]`; Acknowledgements added |
 | B12 | Units | done | "About 1% of long-term responses" replaced by "1.01% of person-doses with a long-term survey" in Abstract, Key Points, Discussion and Conclusions |
 | B13 | AI use | done | "AI tools" statement under Declarations |
+| 3.9 / 5.4 | Levi & Lu cohorts and overlap (note of 12 Nov) | done | `vsafe_ft.cohorts` (`sub_levilu_counts`, `sub_levilu_overlap`): dose-1/2 Prolonged-AE within 0.5%; shortfalls in dose 3+ explained by the check-in file version; no age field (adult file stands in for 16+); overlap 29,593 both / 56,730 text only / 137,742 theirs only / 6,530,766 neither, kappa 0.22. Results Table 10 and text; Discussion; phase2-report; supplement S26–S27 |
 | A | Title page, ethics, code, Levi, OSF | done where possible | ORCID and e-mail on the title page; `[[HUMAN]]` for affiliation, address, funding, conflicts; ethics statement option (b) with jurisdiction placeholder and the option-(a) prompt; Code Availability names the repository and tag; OSF embargo instruction in human-actions.md |
 | C | Journal format | done, to be confirmed | See guidelines-checked.md; live page could not be fetched |
 | D | Package | in progress | manuscript.docx, supplement.docx, RECORD-checklist.docx, cover-letter.docx, changes-log.md, human-actions.md in docs/submission/ |
