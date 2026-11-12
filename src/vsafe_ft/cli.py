@@ -420,6 +420,13 @@ def cmd_submission(a):
         _write(df.with_columns(pl.lit(10**9).alias("people"), pl.lit(False).alias("suppressed")), "sub_b8_reconcile")
         _write(submission.llm_cost(con).with_columns(pl.lit(10**9).alias("people"), pl.lit(False).alias("suppressed")), "sub_b9_llm_cost")
         log("B8/B9 done")
+    if "levilu" in steps:           # addendum 1, tasks 3.9 and 5.4 (not pre-registered)
+        from . import cohorts
+        print(json.dumps(cohorts.prepare(con)), flush=True)
+        cohorts.build(con)
+        _write(cohorts.counts(con), "sub_levilu_counts")
+        _write(cohorts.overlap(con), "sub_levilu_overlap")
+        log("Levi & Lu cohorts done")
 
 
 def main(argv=None):
