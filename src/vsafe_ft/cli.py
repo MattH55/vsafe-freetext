@@ -199,8 +199,10 @@ def cmd_llm_report(a):
 
     con = link.connect()
     tag = a.model[0].split("/")[-1].replace(".", "_").replace("-", "_")
-    smp = {"sample": a.sample, "seed": a.seed, "residue_only": a.residue}
+    smp = {"sample": a.sample, "seed": a.seed, "residue_only": a.residue,
+           "long_term": a.long_term}
     tag += f"_{'residue' if a.residue else 'random'}{a.sample}_s{a.seed}"
+    tag += "_longterm" if a.long_term else ""
     _write(layer3.coverage(con, a.model[0], sample=smp), f"phase1_llm_coverage_{tag}")
     _write(layer3.agreement(con, a.model[0], sample=smp), f"phase1_llm_agreement_{tag}")
     if len(a.model) > 1:
@@ -346,16 +348,20 @@ def cmd_analyse(a):
         for k, df in analysis.q1_vaers(domains, a.permutations).items():
             _write(df, f"analysis_{tag}_q1_vaers_{k}")
         print(f"vaers replication done {time.time() - t0:.0f}s", flush=True)
-    if "exploratory" in steps:      # unregistered checks; every output is labelled expl_
+    # Unregistered checks; every output is labelled expl_. "exploratory" runs all three.
+    expl = {"textmatched", "exclusion", "onset"} if "exploratory" in steps else set(steps)
+    if "textmatched" in expl:
         for k, df in analysis.q1_text_matched(con, domains, a.permutations).items():
             _write(df, f"analysis_expl_q1_textmatched_{k}")
         print(f"text-matched Q1 done {time.time() - t0:.0f}s", flush=True)
+    if "exclusion" in expl:
         ov = openvsafe.connect()
         sets = {w: openvsafe.analysis_set(ov, w) for w in openvsafe.MATCH_SETS}
         ov.close()
         for k, df in analysis.exclusion_variants(con, a.permutations, sets).items():
             _write(df, f"analysis_expl_excl_{k}")
         print(f"exclusion variants done {time.time() - t0:.0f}s", flush=True)
+    if "onset" in expl:
         for k, df in analysis.onset_structured(con).items():
             _write(df, f"analysis_expl_onset_structured_{k}")
         _write(analysis.onset_symmetric(con, a.model), "analysis_expl_onset_symmetric")
@@ -424,6 +430,7 @@ def main(argv=None):
     s.add_argument("--sample", type=int, default=1000, help="the run's sample size")
     s.add_argument("--seed", type=int, default=1)
     s.add_argument("--residue", action="store_true")
+    s.add_argument("--long-term", action="store_true", help="the sample was a long-term one")
     s.set_defaults(func=cmd_llm_report)
 
     s = sub.add_parser("qa", help="duplicate, MedDRA-coverage and original-vs-updated reports")

@@ -116,14 +116,18 @@ def _labelled_entries(model: str, source: str, sample: dict | None = None) -> st
     the result towards frequent short texts.
     """
     in_sample = ""
+    where = exploratory_filter_sql("e")
     if sample:
         in_sample = f"AND e.entry_id IN (SELECT entry_id FROM ({candidate_sql(source=source, **sample)}))"
+        if sample.get("long_term"):     # a registered long-term sample (after registration)
+            where = (f"e.survey_matched AND regexp_matches(coalesce(e.survey_type, ''), "
+                     f"'{LONG_TERM_PATTERN}')")
     return f"""
         SELECT e.entry_id, e.registrant, e.field, l.themes AS llm_themes
         FROM {source} e
         JOIN llm_labels l ON l.text_hash = md5(e.text) AND l.model = '{model}'
              AND l.prompt_version = '{PROMPT_VERSION}' AND l.ok
-        WHERE {exploratory_filter_sql('e')} {in_sample}"""
+        WHERE {where} {in_sample}"""
 
 
 def agreement(con, model: str, source: str = "entries_survey",

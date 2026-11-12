@@ -125,8 +125,8 @@ def q1_matrix(con, domains: list[str]) -> pl.DataFrame:
              d AS (SELECT registrant, dose_number, theme FROM ph_dom WHERE rnk >= 3),
              man AS (SELECT registrant, dose_number, any_value(manufacturer) AS manufacturer
                      FROM vax GROUP BY ALL),
-             amt AS (SELECT e.registrant, e.dose_number, count(*) AS n_entries,
-                            sum(length(e.text)) AS chars FROM entries_survey e
+             amt AS (SELECT e.registrant, e.dose_number, count(*)::BIGINT AS n_entries,
+                            sum(length(e.text))::BIGINT AS chars FROM entries_survey e
                      SEMI JOIN ph_lt l ON l.response_id = e.response_id
                      WHERE NOT coalesce(e.redacted, false)
                        AND length(trim(coalesce(e.text, ''))) > 0 GROUP BY ALL)
