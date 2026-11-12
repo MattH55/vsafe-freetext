@@ -2,7 +2,7 @@
 
 **Registration:** https://osf.io/gnfpd (filed 2026-11-11)
 **Amendment drafted:** 2026-11-11
-**Status:** draft. To be filed on OSF before any result it governs is computed.
+**Status:** filed on OSF 2026-11-11 as an update to https://osf.io/gnfpd, before any result it governs was computed.
 **Replaces:** section 7 of the registration ("Classifier validation and the confirmatory theme
 set"), the parts about human coders.
 
