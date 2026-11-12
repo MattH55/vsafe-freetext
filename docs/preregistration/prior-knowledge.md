@@ -35,3 +35,5 @@ happened after filing and follows the registered plan.
 | 2026-11-11 | `vsafe-ft classify --long-term`: layer 1 (taxonomy v1.0) on all 7,819,251 entries | aggregates only (`docs/phase2-report.md`) |
 | 2026-11-11 | `vsafe-ft gold draw --period long_term --seed 1`, sheets A and B written | texts not opened |
 | 2026-11-11 | `vsafe-ft llm-label --long-term --residue --all` (layer 3, `z-ai/glm-5.3`, NanoGPT ZDR, prompt v0.1): every long-term entry layer 1 left unthemed, 649,516 entries, 386,870 unique texts | labels stored in `llm_labels`; no text read by the analyst |
+| 2026-11-11 | Layer-3 long-term run paused after 1,800 texts (NanoGPT quota) | labels stored; not analysed |
+| 2026-11-11 | Amendment 1 drafted (CDC MedDRA coding as the reference standard). No precision, recall or Q1–Q3 result computed on long-term entries | none |

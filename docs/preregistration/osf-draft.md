@@ -131,6 +131,9 @@ column, so age is not a stratum (decided 2026-11-10).
 
 ## 7. Classifier validation and the confirmatory theme set
 
+> **Amended (amendment 1, `amendment-1.md`):** CDC's MedDRA coding of every long-term entry
+> replaces the two-coder gold set as the reference standard. The 0.85 gate is unchanged.
+
 - **Gold set.** Entries are stratified by field × period × whether the lexicon labelled them.
   Half of the sample is allocated equally across strata and half in proportion to stratum
   size. Each entry carries an inverse-probability weight. Two coders code each entry blind to

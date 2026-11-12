@@ -284,6 +284,15 @@ def cmd_openvsafe(a):
     _write(safe(df), "openvsafe_match_summary")
 
 
+def cmd_validate(a):
+    """Precision / recall per theme against CDC MedDRA coding (amendment 1), long-term."""
+    from . import link, validate
+
+    con = link.connect()
+    tag = a.layer if a.layer == "lexicon" else "final_" + a.model.split("/")[-1].replace(".", "_")
+    _write(validate.meddra_reference(con, layer=a.layer, model=a.model), f"validate_meddra_{tag}")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
@@ -369,6 +378,11 @@ def main(argv=None):
     s.add_argument("--layer", choices=["lexicon", "llm"], default="lexicon")
     s.add_argument("--model", default=DEFAULT_MODEL)
     s.set_defaults(func=cmd_gold)
+
+    s = sub.add_parser("validate", help="precision/recall vs CDC MedDRA coding (amendment 1)")
+    s.add_argument("--layer", choices=["lexicon", "final"], default="lexicon")
+    s.add_argument("--model", default=DEFAULT_MODEL, help="layer-3 model for --layer final")
+    s.set_defaults(func=cmd_validate)
 
     a = p.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
