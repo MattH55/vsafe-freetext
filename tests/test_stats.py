@@ -31,6 +31,19 @@ def test_null_preserves_marginals_and_is_seedable():
     assert np.array_equal(np.diag(a.pair_observed), X.sum(0))      # marginals = diagonal
 
 
+def test_fast_null_matches_full_permutation_null():
+    """The position-sampling null equals shuffling each column: same expected pair counts
+    (m_j m_k / n) and the same observed matrix as X.T @ X."""
+    rng = np.random.default_rng(5)
+    X = rng.random((5000, 4)) < [0.1, 0.2, 0.3, 0.05]
+    r = cooccurrence_test(X, permutations=400, seed=9)
+    m, n = X.sum(0), X.shape[0]
+    expected = sum(m[i] * m[j] / n for i in range(4) for j in range(i + 1, 4))
+    assert r.null_mean_pairs == pytest.approx(expected, rel=0.01)
+    Xi = X.astype(np.int64)
+    assert np.array_equal(r.pair_observed, Xi.T @ Xi)
+
+
 def test_attrition_bounds():
     b = attrition_bounds(cases=50, responders=1000, non_responders=500)
     assert b.observed == pytest.approx(0.05)

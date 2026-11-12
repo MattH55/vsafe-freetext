@@ -127,12 +127,15 @@ def group_sizes(con):
 
 
 def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
-            impact_values: list[str], domains: dict[str, str]) -> None:
+            impact_values: list[str], domains: dict[str, str], *,
+            themes: str = "entry_themes", flags: str = "entry_flags") -> None:
     """Build ph_surveys / ph_entry_themes from checkins, vax and entry_themes.
 
     `survey_type_map` maps raw check-in survey types to w1/6w/3m/6m/12m; `worse_values` and
     `impact_values` are the raw answers that count as worse-than-baseline / health impact.
-    Refuses long-term survey types until the OSF registration exists (brief rule 5).
+    `themes` / `flags` name the classified-entry tables: layer 1 (`entry_themes`,
+    `entry_flags`) or the final classifier (`analysis.build_final` writes `final_themes`,
+    `final_flags`). Refuses long-term survey types until the OSF registration exists.
     """
     from .themes import registration_filed
 
@@ -159,15 +162,15 @@ def prepare(con, survey_type_map: dict[str, str], worse_values: list[str],
     # Entries about something before vaccination do not count (protocol owner, 2026-11-10);
     # entries about another person (third_party) do count.
     has_flags = con.execute("SELECT count(*) FROM duckdb_tables() "
-                            "WHERE table_name = 'entry_flags'").fetchone()[0]
-    drop = ("AND NOT EXISTS (SELECT 1 FROM entry_flags f WHERE f.entry_id = t.entry_id "
+                            f"WHERE table_name = '{flags}'").fetchone()[0]
+    drop = (f"AND NOT EXISTS (SELECT 1 FROM {flags} f WHERE f.entry_id = t.entry_id "
             "AND f.pre_vaccine)") if has_flags else ""
     con.execute(
         f"""
         CREATE OR REPLACE TABLE ph_entry_themes AS
         SELECT e.registrant, e.dose_number, e.response_id, t.theme,
                CASE t.theme {dom} END AS domain
-        FROM entry_themes t JOIN entries_survey e USING (entry_id)
+        FROM {themes} t JOIN entries_survey e USING (entry_id)
         WHERE TRUE {drop}
         """
     )

@@ -37,6 +37,12 @@ def _pairs(X: np.ndarray) -> np.ndarray:
     return Xi.T @ Xi
 
 
+def _pattern_stats(cnt: np.ndarray, bits: np.ndarray, multi: np.ndarray):
+    """Pair matrix and multi-domain count from counts of rows per domain pattern."""
+    w = bits * cnt[:, None]
+    return bits.T @ w, int(cnt[multi].sum())
+
+
 def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1000,
                       seed: int | None = None) -> CooccurrenceResult:
     """Permutation test of domain co-occurrence against a marginal-preserving null.
@@ -47,23 +53,38 @@ def cooccurrence_test(X, domains: list[str] | None = None, permutations: int = 1
     pair). `p_multi` (people with >= 2 domains) is descriptive only: when domains cluster in
     few people, those people carry many domains each, so the count of multi-domain people
     can fall below the null even though co-occurrence is far above it.
+
+    Shuffling a column independently is the same as placing its m_j positives at a uniformly
+    random set of m_j rows, so each permutation draws those sets directly and counts rows by
+    domain pattern (2^k patterns). Same null as permuting the full matrix, much faster at
+    millions of rows (implementation changed 2026-11-12 for speed; the null is unchanged).
     """
     X = np.asarray(X, dtype=bool)
-    k = X.shape[1]
+    n, k = X.shape
+    if k > 16:
+        raise ValueError("at most 16 domains")
     domains = domains or [f"d{j}" for j in range(k)]
     iu = np.triu_indices(k, 1)
-    obs_c = _pairs(X)
+    pats = np.arange(1 << k)
+    bits = ((pats[:, None] >> np.arange(k)) & 1).astype(np.int64)
+    multi = bits.sum(1) >= 2
+    weights = (1 << np.arange(k)).astype(np.uint16)
+    code = (X.astype(np.uint16) * weights).sum(1, dtype=np.uint16)
+    obs_c, obs_multi = _pattern_stats(np.bincount(code, minlength=1 << k), bits, multi)
     obs_pairs = int(obs_c[iu].sum())
-    obs_multi = int((X.sum(1) >= 2).sum())
+    m = X.sum(0)
 
     rng = np.random.default_rng(seed)
     ge_pairs = ge_multi = 0
     ge_pair = np.zeros((k, k), dtype=np.int64)
     sum_pairs = sum_multi = 0.0
+    buf = np.empty(n, dtype=np.uint16)
     for _ in range(permutations):
-        P = rng.permuted(X, axis=0)          # each column shuffled independently
-        c = _pairs(P)
-        sp, sm = int(c[iu].sum()), int((P.sum(1) >= 2).sum())
+        buf[:] = 0
+        for j in range(k):
+            buf[rng.choice(n, size=int(m[j]), replace=False)] |= weights[j]
+        c, sm = _pattern_stats(np.bincount(buf, minlength=1 << k), bits, multi)
+        sp = int(c[iu].sum())
         ge_pairs += sp >= obs_pairs
         ge_multi += sm >= obs_multi
         ge_pair += c >= obs_c

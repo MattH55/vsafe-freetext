@@ -294,6 +294,60 @@ def cmd_validate(a):
     _write(validate.meddra_reference(con, layer=a.layer, model=a.model), f"validate_meddra_{tag}")
 
 
+def cmd_analyse(a):
+    """Confirmatory Q1-Q3 (+ Q4, attrition) on the final classifier; aggregates only."""
+    import json
+    import time
+
+    import polars as pl
+
+    from . import analysis, link, openvsafe
+
+    con = link.connect()
+    con.execute(f"SET memory_limit = '{a.memory}'")     # stay below RAM: paging stalls joins
+    con.execute("SET preserve_insertion_order = false")
+    t0 = time.time()
+    tag = "sens9"
+    a.permutations = a.permutations or int(config.analysis()["permutations"])
+    if not a.skip_prepare:
+        print(json.dumps(analysis.prepare(con, a.model)), f"{time.time() - t0:.0f}s", flush=True)
+    if not a.skip_prepare or not a.skip_helpers:
+        analysis.helper_tables(con)
+        print(f"helper tables {time.time() - t0:.0f}s", flush=True)
+    _write(analysis.group_table(con), f"analysis_{tag}_groups")
+    domains = analysis.pacvs_domains()
+    sub = "" if config.DB_NAME == "vsafe" else config.DB_NAME
+    gate = config.DATA_DIR / "aggregates" / sub / (
+        "validate_meddra_final_" + a.model.split("/")[-1].replace(".", "_") + ".csv")
+    passing = sorted(set(pl.read_csv(gate).filter(pl.col("passes_gate").fill_null(False))["theme"])
+                     & set(domains))
+    print(f"primary (passing) domains: {passing}; feasible: {len(passing) >= 2}", flush=True)
+    steps = a.steps.split(",")
+    if "q1" in steps:
+        for k, df in analysis.q1(con, domains, a.permutations).items():
+            _write(df, f"analysis_{tag}_q1_{k}")
+        print(f"q1 done {time.time() - t0:.0f}s", flush=True)
+    if "q2" in steps:
+        for k, df in analysis.q2(con).items():
+            _write(df, f"analysis_{tag}_q2_{k}")
+        print(f"q2 done {time.time() - t0:.0f}s", flush=True)
+    if "q3" in steps:
+        ov = openvsafe.connect()
+        sets = {w: openvsafe.analysis_set(ov, w) for w in openvsafe.MATCH_SETS}
+        ov.close()
+        for k, df in analysis.q3(con, sets, a.permutations).items():
+            if df is not None:
+                _write(df, f"analysis_{tag}_q3_{k}")
+        print(f"q3 done {time.time() - t0:.0f}s", flush=True)
+    if "q4" in steps:
+        _write(analysis.q4(con), f"analysis_{tag}_q4")
+        _write(analysis.attrition(con), f"analysis_{tag}_attrition")
+    if "vaers" in steps:
+        for k, df in analysis.q1_vaers(domains, a.permutations).items():
+            _write(df, f"analysis_{tag}_q1_vaers_{k}")
+        print(f"vaers replication done {time.time() - t0:.0f}s", flush=True)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
@@ -385,6 +439,15 @@ def main(argv=None):
     s.add_argument("--layer", choices=["lexicon", "final"], default="lexicon")
     s.add_argument("--model", default=DEFAULT_MODEL, help="layer-3 model for --layer final")
     s.set_defaults(func=cmd_validate)
+
+    s = sub.add_parser("analyse", help="confirmatory Q1-Q3, Q4 and attrition (aggregates)")
+    s.add_argument("--model", default="deepseek/deepseek-v4.1-flash", help="layer-3 model")
+    s.add_argument("--steps", default="q1,q2,q3,q4,vaers")
+    s.add_argument("--permutations", type=int, default=None)
+    s.add_argument("--skip-prepare", action="store_true", help="reuse phenotype tables")
+    s.add_argument("--skip-helpers", action="store_true", help="reuse ph_lt / ph_dom tables")
+    s.add_argument("--memory", default="6GB", help="DuckDB memory limit")
+    s.set_defaults(func=cmd_analyse)
 
     a = p.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
