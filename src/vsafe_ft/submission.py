@@ -352,11 +352,11 @@ def audit_score() -> pl.DataFrame:
     df = coded.select("item", pl.col("present_0_1").cast(pl.Int64).alias("present")).join(key, on="item")
     # layer3_only: layer 3 said present (CDC did not): layer 3 right if present = 1
     # cdc_only: CDC said present (classifier did not): CDC right if present = 1
-    out = (df.group_by("side", "theme").agg(pl.len().alias("coded"), pl.col("present").sum().alias("present_1"))
+    out = (df.group_by("side", "domain").agg(pl.len().alias("coded"), pl.col("present").sum().alias("present_1"))
              .with_columns((pl.col("present_1") / pl.col("coded")).round(3).alias("share_side_right"))
-             .sort("side", "theme"))
+             .sort("side", "domain"))
     totals = (df.group_by("side").agg(pl.len().alias("coded"), pl.col("present").sum().alias("present_1"))
-                .with_columns(pl.lit("all domains").alias("theme"),
+                .with_columns(pl.lit("all domains").alias("domain"),
                               (pl.col("present_1") / pl.col("coded")).round(3).alias("share_side_right"))
                 .select(out.columns))
     res = pl.concat([out, totals]).with_columns(pl.col("coded").alias("people"))

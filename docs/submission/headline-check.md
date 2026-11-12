@@ -17,5 +17,7 @@ Updated 2026-11-12 as results arrive.
 | Prevalence | 1.01% of person-doses with a long-term survey | B12 units | unchanged | | | wording only |
 | Levi & Lu comparison | 1.87% of people (theirs) vs 1.01% of person-doses (ours) | Task 3.9 reproduction and overlap | Dose-1 and dose-2 Prolonged-AE within 0.5%; totals 3–12% low, all in dose 3+ (file version); overlap: 34.3% of text cases in Prolonged-AE, 17.7% the other way, kappa 0.22 | n/a | n/a | no; adds a sentence to the Discussion comparison |
 
+| Classifier gate | 1 of 9 domains pass; precision falls when layer 3 is added | B5 blind audit of 306 disagreements | classifier right in 85.6% of its unmatched positives, CDC in 60.1% of its unmatched codes | n/a | n/a | no; gate applied as registered, Limitations and abstract Conclusion note the audit |
+
 No rerun so far changes the direction or the significance of a headline result. The one change to
 how the Abstract reads (onset) is a reframing required by addendum 2 (B4), not a changed result.

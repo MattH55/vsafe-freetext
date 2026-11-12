@@ -20,7 +20,8 @@ are recorded here; what remains is in section B.
 
 ## B. Remaining
 
-1. **Code the 306-entry audit sheet** (`D:\vsafe-data\gold_set\vsafe_full\audit_layer3_vs_cdc_sheet.csv`).
+1. ~~Code the 306-entry audit sheet~~ Done 2026-11-12; scored and in the manuscript (Table 12). The original item:
+   **Code the 306-entry audit sheet** (`D:\vsafe-data\gold_set\vsafe_full\audit_layer3_vs_cdc_sheet.csv`).
    What it is: the final classifier and CDC's MedDRA coding disagree on whether a symptom domain is
    present in about 335,000 entry-domain pairs. Because CDC's coding is the reference standard,
    every disagreement counted against the classifier in the validation, but a disagreement can be

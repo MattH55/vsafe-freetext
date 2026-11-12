@@ -69,6 +69,10 @@ TABLES = [
      "Our download of the check-in file holds 6.7 million fewer rows than theirs. The joins were not adjusted to match.")),
     ("S27. Overlap of the text-defined case (any dose) with Levi and Lu's Prolonged-AE cohort, people", "sub_levilu_overlap.csv",
      ["cell", "people", "value"], None),
+    ("S28. Blind audit of classifier-versus-CDC disagreements: coder agreement with the side that called the domain present",
+     "sub_b5_audit_scored.csv", ["side", "domain", "coded", "present_1", "share_side_right"],
+     ("Single coder (the author), blind to side. 'layer3_only' = only the classifier called the domain; "
+     "'cdc_only' = only CDC's MedDRA coding did. present_1 = entries the coder judged to contain the domain.")),
 ]
 
 

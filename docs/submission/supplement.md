@@ -660,3 +660,30 @@ No age field exists in the released files, so the adult check-in file stands in 
 | share of text-defined cases also Levi & Lu | 6,754,831 | 0.3428 |
 | share of Levi & Lu cases also text-defined | 6,754,831 | 0.1768 |
 | Cohen's kappa | 6,754,831 | 0.2202 |
+
+## S28. Blind audit of classifier-versus-CDC disagreements: coder agreement with the side that called the domain present
+
+| side | domain | coded | present_1 | share_side_right |
+| --- | --- | --- | --- | --- |
+| cdc_only | cardiorespiratory | 17 | 14 | 0.824 |
+| cdc_only | cognitive | 17 | 9 | 0.529 |
+| cdc_only | dysautonomia | 17 | 10 | 0.588 |
+| cdc_only | fatigue_pem | 17 | 6 | 0.353 |
+| cdc_only | gastrointestinal | 17 | 14 | 0.824 |
+| cdc_only | menstrual | 17 | 2 | 0.118 |
+| cdc_only | pain | 17 | 11 | 0.647 |
+| cdc_only | sensory_neuropathic | 17 | 13 | 0.765 |
+| cdc_only | sleep | 17 | 13 | 0.765 |
+| layer3_only | cardiorespiratory | 17 | 16 | 0.941 |
+| layer3_only | cognitive | 17 | 15 | 0.882 |
+| layer3_only | dysautonomia | 17 | 17 | 1 |
+| layer3_only | fatigue_pem | 17 | 14 | 0.824 |
+| layer3_only | gastrointestinal | 17 | 16 | 0.941 |
+| layer3_only | menstrual | 17 | 6 | 0.353 |
+| layer3_only | pain | 17 | 15 | 0.882 |
+| layer3_only | sensory_neuropathic | 17 | 17 | 1 |
+| layer3_only | sleep | 17 | 15 | 0.882 |
+| layer3_only | all domains | 153 | 131 | 0.856 |
+| cdc_only | all domains | 153 | 92 | 0.601 |
+
+Single coder (the author), blind to side. 'layer3_only' = only the classifier called the domain; 'cdc_only' = only CDC's MedDRA coding did. present_1 = entries the coder judged to contain the domain.

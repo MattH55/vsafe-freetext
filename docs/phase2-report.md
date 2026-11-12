@@ -218,7 +218,10 @@ Specified after the registered results were seen; `vsafe-ft analyse --steps expl
   29.3 vs 10.2 / 2.7. Group (a) has no week-1 impact by construction.
 - **B5 audit sheet** (315 s): 306 disagreements (17 per domain per side) written to
   `gold_set/vsafe_full/audit_layer3_vs_cdc_{sheet,key}.csv`; pool 223,652 CDC-only and 111,523
-  layer-3-only entry-domain pairs. Coding by the protocol owner pending.
+  layer-3-only entry-domain pairs. Coded by the protocol owner on 2026-11-12, blind to side:
+  coder agreed with the classifier in 131/153 (85.6%) of its unmatched positives and with CDC in
+  92/153 (60.1%) of its unmatched codes (`sub_b5_audit_scored.csv`); dysautonomia and
+  sensory_neuropathic 17/17 for the classifier, menstrual 6/17 and 2/17.
 - **B6 dispersion** (448 s): Miller-Madow 8.38 vs 8.67; rarefied to 18,072 codes 8.31 vs 8.59;
   two-sided p = 0.001. Cases' coding is less dispersed on every measure.
 - **B7** (625 s): Q1 with redacted entries included 1.247 (p = 0.001; 1,269,337 person-doses);
