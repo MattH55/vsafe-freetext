@@ -63,6 +63,12 @@ TABLES = [
      ["theme", "person_doses", "pct"], None),
     ("S25. Sex, manufacturer and dose by group, % of person-doses", "analysis_sens9_table1.csv",
      ["variable", "category", "grp", "person_doses", "pct"], None),
+    ("S26. Levi and Lu's cohorts rebuilt from structured answers (not pre-registered)", "sub_levilu_counts.csv",
+     ["group", "ours", "levi_lu", "difference", "pct_difference"],
+     ("No age field exists in the released files, so the adult check-in file stands in for 'aged 16 or older'. "
+     "Our download of the check-in file holds 6.7 million fewer rows than theirs. The joins were not adjusted to match.")),
+    ("S27. Overlap of the text-defined case (any dose) with Levi and Lu's Prolonged-AE cohort, people", "sub_levilu_overlap.csv",
+     ["cell", "people", "value"], None),
 ]
 
 

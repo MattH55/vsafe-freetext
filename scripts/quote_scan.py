@@ -36,7 +36,7 @@ def main(paths: list[str]) -> int:
     con.executemany("INSERT INTO grams VALUES (?, hash(?))", [(x, x) for x in g])
     hits = con.execute(f"""
         WITH t AS (SELECT list_filter(string_split(regexp_replace(lower(text), '[^a-z0-9 ]+', ' ', 'g'), ' '),
-                                      x -> x <> '') AS w
+                                      lambda x: x <> '') AS w
                    FROM entries WHERE length(coalesce(text, '')) >= 20),
              x AS (SELECT w, unnest(generate_series(1, len(w) - {N - 1})) AS i FROM t WHERE len(w) >= {N}),
              eh AS (SELECT DISTINCT hash(array_to_string(w[i:i + {N - 1}], ' ')) AS h FROM x)

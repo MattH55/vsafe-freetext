@@ -199,6 +199,60 @@ Specified after the registered results were seen; `vsafe-ft analyse --steps expl
    Structured week-1 fields: 80.9% of cases with a week-1 check-in ticked a same-domain
    symptom, vs 35–40% of group (a) and 89–92% of group (c) (1-in-20 sample of non-cases).
 
+## Analyses not in the pre-registration, addendum 2 (2026-11-12; `sub_*`)
+
+`vsafe-ft submission`. Full tables are in `docs/submission/supplement.md`; the headline check is
+`docs/submission/headline-check.md`.
+
+- **B2 curveball null** (row and column margins fixed): [[pending: three runs of 1,000 samples,
+  about 40 min each]]. The total pair count is invariant under this null.
+- **B3 persistence** (69 s): 69,816 cases (80.0%) met criterion 2 at one survey, 17,413 only
+  across surveys. Persistence 47.1% for same-survey cases vs 60.3% for all; group (d) (worse or
+  impacted, < 2 domains) 10.5%; risk difference 58.9 → 36.6 points at the strictest.
+- **B4 structured week-1 answers** (286 s): cases with fatigue 78.9% ticked week-1 fatigue (64.4%
+  moderate or severe) vs 35.5% (14.6%) in group (a); pain 80.2 / 63.1 vs 40.0 / 16.0; GI 47.8 /
+  29.3 vs 10.2 / 2.7. Group (a) has no week-1 impact by construction.
+- **B5 audit sheet** (315 s): 306 disagreements (17 per domain per side) written to
+  `gold_set/vsafe_full/audit_layer3_vs_cdc_{sheet,key}.csv`; pool 223,652 CDC-only and 111,523
+  layer-3-only entry-domain pairs. Coding by the protocol owner pending.
+- **B6 dispersion** (448 s): Miller-Madow 8.38 vs 8.67; rarefied to 18,072 codes 8.31 vs 8.59;
+  two-sided p = 0.001. Cases' coding is less dispersed on every measure.
+- **B7** (625 s): Q1 with redacted entries included 1.247 (p = 0.001; 1,269,337 person-doses);
+  case count unchanged; criterion 3 off 135,252 cases.
+- **B8 reconciliation** (2,206 s, three raw-file scans): early entries 5,791,000 (the report's
+  the earlier 5,790,999 was an off-by-one; corrected throughout); check-ins 144,972,101 = 144,856,043 adult +
+  116,294 under-3 rows de-duplicated by response ID (Levi & Lu: 151,581,805 adult rows; file
+  version); 17,459,757 person-doses with a check-in, 8,623,658 with a long-term survey,
+  9,939,933 in a group; 7,554,929 (release description) vs 7,819,275 raw rows unexplained.
+- **B9 cost**: `llm_runs` holds the Claude sample (232,706 tokens, US$1.96) and two DeepSeek runs
+  (27,451 texts, 2,152,942 tokens, US$0.0005); the main DeepSeek run's row was lost with its
+  dropped connection, so its cost is the run log's per-request total (US$0.022) and its tokens
+  are unlogged. To be confirmed against the NanoGPT usage page.
+- **Task 3.9, Levi & Lu cohorts** (structured answers only; no age field exists, so the adult
+  check-in file stands in for "16+"):
+
+| Group | Ours | Levi & Lu | Difference | % |
+|---|---|---|---|---|
+| Enrollees | 9,552,127 | 9,904,924 | -352,797 | -3.56 |
+| Prolonged-AE | 167,335 | 185,285 | -17,950 | -9.69 |
+| Prolonged-AE, dose 1 | 32,732 | 32,838 | -106 | -0.32 |
+| Prolonged-AE, dose 2 | 101,064 | 100,564 | +500 | +0.50 |
+| Prolonged-AE, dose 3+ | 33,539 | 51,883 | -18,344 | -35.36 |
+| Prolonged-NoAttr | 167,930 | 189,982 | -22,052 | -11.61 |
+| Prolonged-NoAttr, dose 1 | 20,389 | 18,710 | +1,679 | +8.97 |
+| Prolonged-NoAttr, dose 2 | 89,862 | 81,462 | +8,400 | +10.31 |
+| Prolonged-NoAttr, dose 3+ | 57,679 | 89,810 | -32,131 | -35.78 |
+| Control | 9,216,862 | 9,529,657 | -312,795 | -3.28 |
+| Women in Prolonged-AE | 124,376 | 137,430 | -13,054 | -9.50 |
+| Women | 5,941,118 | 6,141,800 | -200,682 | -3.27 |
+
+  Explanation of differences over 0.5%: every shortfall concentrates in the dose-3+ sub-cohorts
+  (-35% in both), and our check-in file has 6.7 million fewer rows than theirs, so it holds fewer
+  later surveys (file version or date window). The missing 16+ filter would raise our counts, not
+  lower them. NoAttr dose 1 and 2 are higher than theirs (+9 to +10%), which may reflect how they
+  treated an attribution answer of null (we treat null as not "Yes"); unexplained. The joins were
+  not adjusted. Overlap with the text-defined case and Cohen's kappa: [[pending: rerun]].
+
 ## Decisions where the registration was silent
 
 Survey-type mapping (day 0–7 = w1, week 2–6 = 6w); impact = any non-'N/A' answer;

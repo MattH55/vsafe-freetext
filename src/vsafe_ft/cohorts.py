@@ -24,7 +24,7 @@ from __future__ import annotations
 import polars as pl
 
 from . import config
-from .db import frame
+from .db import frame, one
 from .suppress import safe
 
 TARGETS = {   # published in the preprint
@@ -53,8 +53,8 @@ def prepare(con) -> dict:
         SELECT a.registrant, any_value(g.sex) AS sex, any_value(md.max_dose) AS max_dose
         FROM adult a LEFT JOIN registrants g USING (registrant) LEFT JOIN md USING (registrant)
         GROUP BY a.registrant""")
-    return {"ll_checkins": con.execute("SELECT count(*) FROM ll_checkins").fetchone()[0],
-            "ll_people": con.execute("SELECT count(*) FROM ll_people").fetchone()[0]}
+    return {"ll_checkins": one(con, "SELECT count(*) FROM ll_checkins")[0],
+            "ll_people": one(con, "SELECT count(*) FROM ll_people")[0]}
 
 
 COHORT_SQL = """
@@ -81,7 +81,7 @@ def build(con, checkins: str = "ll_checkins", people: str = "ll_people", out: st
 
 def counts(con, table: str = "ll_cohorts") -> pl.DataFrame:
     """Our counts beside the published ones, with difference and % difference."""
-    q = lambda sql: con.execute(sql).fetchone()[0]
+    q = lambda sql: one(con, sql)[0]        # fully fetched: duckdb 2 refuses new work otherwise
     ours = {
         "enrollees": q(f"SELECT count(*) FROM {table}"),
         "prolonged_ae": q(f"SELECT count(*) FROM {table} WHERE cohort = 'prolonged_ae'"),
