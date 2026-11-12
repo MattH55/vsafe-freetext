@@ -25,7 +25,7 @@ Repository: https://github.com/MattH55/vsafe-freetext (private). The audit is in
    related identifier: the OSF registration https://osf.io/gnfpd ("is supplemented by"). Save.
 
 Report back: the version DOI (10.5281/zenodo.…) and the concept DOI. These go into the manuscript
-(Code Availability) and the cover letter where `[[Zenodo DOI, added once minted]]` stands.
+(Code Availability) and the cover letter. Done: doi:10.5281/zenodo.24178319.
 
 ## Task B. Lift the OSF registration embargo
 
@@ -63,14 +63,12 @@ PDF export of it (supplementary file). Licence: CC BY 4.0.
 
 Note: the manuscript's preprint statement names OSF Preprints; do not post to medRxiv as well.
 
-Report back: the preprint DOI and URL. These replace `[[preprint DOI, added once posted]]` in the
-cover letter.
+Report back: the preprint DOI and URL, for the submission form and the cover letter's preprint sentence.
 
 ## Task D (coding agent, after Tasks A and C): put the identifiers into the package
 
 1. In the Claude Doc manuscript and `docs/submission/cover-letter.md`, replace
-   `[[Zenodo DOI, added once minted]]` with the version DOI and `[[preprint DOI, added once posted]]`
-   with the preprint DOI.
+   the cover letter's preprint sentence with the preprint DOI (the Zenodo DOI is already in place).
 2. Rebuild with `scripts/docx_build/` (see its README), re-export the PDF, re-zip to
    `OpenSourceMed/PACVS-vsafe-DrugSafety-submission-2026-11-12.zip`, commit, tag
    `v1.0.2-submission`.

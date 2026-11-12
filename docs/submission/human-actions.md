@@ -32,7 +32,7 @@ are recorded here; what remains is in section B.
    not open the key file until finished. Then run
    `vsafe-ft submission --steps audit-score` (with `VSAFE_DATA_DIR=D:/vsafe-data VSAFE_DB=vsafe_full`)
    and the result in `sub_b5_audit_scored.csv` (how often each side was right, by domain) replaces
-   `[[HUMAN: pending coding]]` in Results, as an exploratory finding. If you would rather submit
+   the pending-coding slot in Results (now filled), as an exploratory finding. If you would rather submit
    without it, delete that sentence and the audit paragraph; the manuscript stands without it.
 2. ~~Task A~~ Done 2026-11-12: Zenodo doi:10.5281/zenodo.24178319 is in Code Availability and the cover letter.
 3. **Task B, OSF embargo**: end-of-embargo requested on 2026-11-12; the registration still showed as embargoed afterwards. OSF processes the request after contributor approval (check e-mail for an approval link) and can take up to 48 hours; confirm it reads "Public" in a private window before posting the preprint, and that the registration and update dates match the manuscript (all 2026-11-11).

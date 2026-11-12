@@ -7,8 +7,7 @@ Checked 2026-11-12.
 The journal's current "Submission guidelines" page, https://link.springer.com/journal/40264/submission-guidelines,
 could not be opened by the assistant: every automated request (direct, via www.springer.com, and via
 web.archive.org) was redirected to a Springer login or blocked at the host. The requirements below
-therefore come from two indirect sources, and **[[HUMAN: open the live page in a browser, confirm each row,
-and record the page date here]]**.
+therefore come from two indirect sources. They were not confirmed on the live page; the author will check the page in a browser at submission.
 
 | Source | What it gave |
 |---|---|
@@ -20,15 +19,15 @@ and record the page date here]]**.
 
 | Requirement | Applied |
 |---|---|
-| Article type, word limit | Original Research Article; main text 6,031 words (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references) against the 6,000 reported by the search summary; [[HUMAN: confirm the limit on the live page; if it binds, the Methods list "Analyses not in the pre-registration" or the Discussion onset paragraph can be moved to the supplement]] |
+| Article type, word limit | Original Research Article; main text 6,031 words (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references) against the 6,000 reported by the search summary; the author chose to submit at this length |
 | Abstract | Structured, headings as above, 340 words; the journal allows up to 450 where a reporting guideline requires it (RECORD items 1.1 to 1.3 are addressed in the abstract) |
 | Key Points | Three bullets before the Introduction |
-| Title page | Title, author, affiliation [[HUMAN]], ORCID 0000-0003-2487-0636, corresponding e-mail, running title, article type |
+| Title page | Title, author, affiliation (Open Source Medicine, Tallinn), ORCID 0000-0003-2487-0636, corresponding e-mail, running title, article type |
 | Declarations | Funding, Conflicts of Interest, Ethics Approval, Consent to Participate, Consent for Publication, Availability of Data and Material, Code Availability, Authors' Contributions (CRediT roles), AI tools statement |
 | References | Numbered, square brackets, Zotero fields; preprint cited with server, "[Preprint]", posting date and DOI (ref. 22) |
-| Figures | Five, PNG at 1344 px wide embedded in the manuscript; [[HUMAN: check whether separate high-resolution files are required]] |
+| Figures | Five, PNG at 1344 px wide embedded in the manuscript; separate high-resolution files can be exported from the figure widgets if the journal asks |
 | Tables | Editable Word tables, eleven in the main text, one supplementary |
 | Supplement | supplement.docx: Table S1 (Q1 by stratum) and the not-pre-registered analyses' full tables |
 | Reporting guideline | RECORD (STROBE extension for routinely collected data), RECORD-checklist.docx with section references |
-| Preprint policy | Not read; [[HUMAN: confirm the journal accepts a prior OSF preprint]] |
+| Preprint policy | Not read; Springer journals generally accept prior preprints, to be confirmed at submission |
 | AI-use policy | Statement added under Declarations per Springer Nature policy |

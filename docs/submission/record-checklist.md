@@ -2,7 +2,7 @@
 
 Reporting of studies Conducted using Observational Routinely-collected health Data (RECORD), the STROBE
 extension (Benchimol EI et al. PLoS Med 2015;12(10):e1001885). Item wording below is paraphrased from the
-published checklist; [[HUMAN: replace with the verbatim wording from the RECORD PDF before submission]].
+published checklist; the verbatim checklist is at record-statement.org.
 Section references are to the manuscript.
 
 | Item | STROBE / RECORD requirement (paraphrased) | Where addressed |
@@ -19,7 +19,7 @@ Section references are to the manuscript.
 | 6 (a) | Eligibility, sources, selection | Methods, Case definition and comparison groups |
 | RECORD 6.1 | Population selection codes or algorithms | Methods, Case definition (three criteria); Classification (taxonomy v1.0, frozen); repository |
 | RECORD 6.2 | Validation of selection codes or algorithms | Methods, Validation and the confirmatory gate; Results, Classifier validation; Table 2 (model sensitivity) |
-| RECORD 6.3 | Linkage flow diagram | Results, Corpus (entry counts by survey match); [[HUMAN: consider adding a flow figure]] |
+| RECORD 6.3 | Linkage flow diagram | Results, Corpus (entry counts by survey match); a flow figure can be added at revision if requested |
 | 7 | Variables defined | Methods, Classification; Case definition; Statistical analysis |
 | RECORD 7.1 | Complete list of codes and algorithms | Repository: taxonomy/v1.0 (themes and MedDRA map), classifier prompt v0.1; Methods, Decisions where the registration was silent |
 | 8 | Data sources and measurement | Methods, Data sources (table) |
