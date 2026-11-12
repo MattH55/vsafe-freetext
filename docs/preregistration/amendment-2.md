@@ -2,8 +2,8 @@
 
 **Registration:** https://osf.io/gnfpd (filed 2026-11-11; amendment 1 filed 2026-11-11)
 **Amendment drafted:** 2026-11-11
-**Status:** draft. To be filed on OSF before the final classifier is validated (amendment 1)
-and before any Q1–Q3 result is computed.
+**Status:** filed on OSF 2026-11-11 as update 2 to https://osf.io/gnfpd, before the final
+classifier was validated and before any Q1–Q3 result was computed.
 **Changes:** section 7 of the registration ("Model sensitivity", primary LLM).
 
 ## What changes and why

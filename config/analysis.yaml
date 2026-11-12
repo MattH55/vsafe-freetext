@@ -21,5 +21,5 @@ osf_registration: "https://osf.io/gnfpd"   # registered 2026-11-11 (embargoed); 
 amendment_1: "https://osf.io/gnfpd (update 1, filed 2026-11-11)"
 # Amendment 2 (docs/preregistration/amendment-2.md): primary layer-3 model is
 # deepseek/deepseek-v4.1-flash. Long-term layer-3 runs and final-classifier validation wait for it.
-amendment_2: null
+amendment_2: "https://osf.io/gnfpd (update 2, filed 2026-11-11)"
 exploratory_max_survey_day: 42
