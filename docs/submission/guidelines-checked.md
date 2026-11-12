@@ -19,15 +19,15 @@ therefore come from two indirect sources. They were not confirmed on the live pa
 
 | Requirement | Applied |
 |---|---|
-| Article type, word limit | Original Research Article; main text 6,031 words (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references) against the 6,000 reported by the search summary; the author chose to submit at this length |
-| Abstract | Structured, headings as above, 340 words; the journal allows up to 450 where a reporting guideline requires it (RECORD items 1.1 to 1.3 are addressed in the abstract) |
+| Article type, word limit | Original Research Article; main text 6,156 words (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references) against the 6,000 reported by the search summary; the author chose to submit at this length |
+| Abstract | Structured, headings as above, about 350 words; the journal allows up to 450 where a reporting guideline requires it (RECORD items 1.1 to 1.3 are addressed in the abstract) |
 | Key Points | Three bullets before the Introduction |
 | Title page | Title, author, affiliation (Open Source Medicine, Tallinn), ORCID 0000-0003-2487-0636, corresponding e-mail, running title, article type |
 | Declarations | Funding, Conflicts of Interest, Ethics Approval, Consent to Participate, Consent for Publication, Availability of Data and Material, Code Availability, Authors' Contributions (CRediT roles), AI tools statement |
 | References | Numbered, square brackets, Zotero fields; preprint cited with server, "[Preprint]", posting date and DOI (ref. 22) |
 | Figures | Five, PNG at 1344 px wide embedded in the manuscript; separate high-resolution files can be exported from the figure widgets if the journal asks |
-| Tables | Editable Word tables, eleven in the main text, one supplementary |
-| Supplement | supplement.docx: Table S1 (Q1 by stratum) and the not-pre-registered analyses' full tables |
+| Tables | Editable Word tables, sixteen in the main text, 28 in the supplement |
+| Supplement | supplement.docx: 28 tables (S1 to S28), including every not-pre-registered analysis in full |
 | Reporting guideline | RECORD (STROBE extension for routinely collected data), RECORD-checklist.docx with section references |
 | Preprint policy | Not read; Springer journals generally accept prior preprints, to be confirmed at submission |
 | AI-use policy | Statement added under Declarations per Springer Nature policy |
