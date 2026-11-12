@@ -71,6 +71,19 @@ zero-retention route; Anthropic receives only the comparison sample.
   2026-11-10; the protocol owner decided on 2026-11-11 to keep them.
 - **Spend:** each run has a dollar cap (`--max-usd`); runs are logged in the `llm_runs` table.
 
+### Runs after registration (what was sent where, for the manuscript's Data protection statement)
+
+| Date | Run | Provider and route | Texts | Retention terms at time of use |
+|---|---|---|---|---|
+| 2026-11-11 | Layer 3, long-term residue (amendment 2) | NanoGPT pay-per-token endpoint `https://nano-gpt.com/api/v1/chat/completions`, model `deepseek/deepseek-v4.1-flash`, `reasoning.effort = none`, `provider: {zdr: true, data_collection: deny}` | 386,862 unique texts, batches of 20 | NanoGPT terms and privacy policy "Last Updated: November 9, 2026" as summarised above: no prompt or response content stored by default; ZDR routing best-effort |
+| 2026-11-11 to 12 | Same run, resumed after a dropped connection | as above | remaining texts | as above |
+| 2026-11-12 | Model-sensitivity sample (registered second LLM) | Anthropic Messages API, `claude-opus-5-5` | 1,687 unique long-term residue texts (2,000 entries, seed 1) | Anthropic API: inputs and outputs deleted within 30 days (retention article updated 2026-07-01); no training on API data by default |
+| 2026-11-12 | Layer 3 on cases' week-1 / six-week residue (not pre-registered, onset re-test) | NanoGPT, as in row 1 | 26,889 unique texts | as row 1 |
+
+What is stripped before sending is listed under "Both providers". Each request carries the entry
+texts only, numbered 1..20 within the request. The manuscript's Declarations ("Data protection")
+point to this section.
+
 ## OpenVSafe VAERS matches (read 2026-11-10)
 
 OpenVSafe (openvsafe.org, a project of OpenVAERS) publishes its v-safe-to-VAERS matches only

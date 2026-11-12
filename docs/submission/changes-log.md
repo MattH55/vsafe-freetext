@@ -1,0 +1,23 @@
+# Changes log: addendum 2 (Drug Safety submission), 2026-11-12
+
+Status: done = in the manuscript; results pending = code written, run in progress, text slot ready; human = waits on Matthew.
+
+| # | Change | Status | What changed and where |
+|---|---|---|---|
+| B1 | Levi & Lu | done | "not analysed" removed from Abstract (Introduction) and Introduction. New Introduction paragraph describing their study (9,904,924 enrollees; 185,285, 1.87%; 2.24% of women; 1.92% not attributed), how this study differs (text-defined phenotype, no reliance on attribution, null model, onset, recorded VAERS filing), independence and the 12 Nov reading date. Discussion "Relation to earlier work" compares 1.01% of person-doses with 1.87% of people and explains unit and definition. Reference 22 with DOI and posting date |
+| B2 | Curveball null | results pending | `stats.curveball_test`, `submission.q1_curveball`; unstratified, within entries 1/2/3+, within text-length tertiles; outputs `sub_b2_curveball_summary/pairs`. Note: the total pair count is fixed by construction under this null (sum of C(r,2) over rows), so only the 36 pairs are tested; the manuscript will say so |
+| B3 | Persistence | results pending | `submission.persistence_variants`: cases by route (same survey vs across surveys only); persistence for same-survey cases; group (d) = long-term responders worse/impacted with < 2 domains; outputs `sub_b3_routes`, `sub_b3_persistence` |
+| B4 | Onset wording and structured analysis | wording done; results pending | Abstract, Key Points, Results heading, Discussion now say the registered test was uninformative about onset, not evidence of late onset. `submission.structured_onset_vs_a`: week-1 check-box symptoms (any; moderate or severe) and week-1 impact, cases with the domain vs group (a); output `sub_b4_structured_vs_a` |
+| B5 | Validation audit | sheet pending (run in progress); coding human | `submission.audit_sample`: 300 long-term entries where layer 3 and CDC disagree (150 layer-3-only, 150 CDC-only), stratified by domain, seed 20261112; blind sheet and key written to `gold_set/vsafe_full/` (never committed). Manuscript slot `[[HUMAN: pending coding]]` in Results, Validation |
+| B6 | Q3 framing and dispersion | framing done; results pending | Measure renamed "recorded VAERS filing" in Methods and Results heading; `stats.dispersion_extended` (Miller–Madow, rarefaction to equal code counts, two-sided p); output `sub_b6_dispersion`. Discussion Detection paragraph to be softened once the two-sided result is in |
+| B7 | Exclusions and redaction | results pending | `submission.q1_variants`: case count with criterion 3 off; Q1 with redacted entries included; output `sub_b7_q1_variants` |
+| B8 | Reconcile numbers | partly done; results pending | Group-table note added (9,939,933 person-doses in groups of 17.46 million). `submission.reconcile` writes `sub_b8_reconcile` with every count in question (corpus off-by-one, 7,554,929 vs 7,819,251, check-in rows, group (b) 102,616 vs 101,690). `scripts/manuscript_numbers.py` traces every number |
+| B9 | Language-model cost | results pending | `submission.llm_cost` from `llm_runs` (tokens, logged cost per run); output `sub_b9_llm_cost`; manuscript and Amendment 2 text to be updated to the logged figure |
+| B10 | Data protection wording | done | Declarations "Data protection" names the provider, route, model and options, what was stripped, the Anthropic comparison sample, and points to docs/data-use.md; "processed on the analyst's machine" removed. docs/data-use.md updated with retention terms at time of use |
+| B11 | OpenVSafe | done | Methods, Data sources: how the person pages were read (dates, rate, robots.txt scope, fields kept) with `[[HUMAN: OpenVAERS permission]]`; Acknowledgements added |
+| B12 | Units | done | "About 1% of long-term responses" replaced by "1.01% of person-doses with a long-term survey" in Abstract, Key Points, Discussion and Conclusions |
+| B13 | AI use | done | "AI tools" statement under Declarations |
+| A | Title page, ethics, code, Levi, OSF | done where possible | ORCID and e-mail on the title page; `[[HUMAN]]` for affiliation, address, funding, conflicts; ethics statement option (b) with jurisdiction placeholder and the option-(a) prompt; Code Availability names the repository and tag; OSF embargo instruction in human-actions.md |
+| C | Journal format | done, to be confirmed | See guidelines-checked.md; live page could not be fetched |
+| D | Package | in progress | manuscript.docx, supplement.docx, RECORD-checklist.docx, cover-letter.docx, changes-log.md, human-actions.md in docs/submission/ |
+| E | Checks | in progress | numbers.csv, assert_safe pass, quoted-text scan, repo-audit.md, tests, tag v1.0-submission |

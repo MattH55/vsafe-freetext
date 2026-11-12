@@ -153,7 +153,7 @@ def structured_onset_vs_a(con, groups: str = "phenotype_groups") -> pl.DataFrame
     glob = str(config.DATA_DIR / "interim" / "health_checkins" / "*.parquet").replace("\\", "/")
     parts = []
     for d, (cols, _) in STRUCTURED_FIELDS.items():
-        test = " OR ".join(c + " IN ('Moderate', 'Severe')" for c in cols)
+        test = " OR ".join("coalesce(" + c + " IN ('Moderate', 'Severe'), false)" for c in cols)
         parts.append(f"({test}) AS {d}_modsev")
     sev = ", ".join(parts)
     cols = sorted({c for cs, _ in STRUCTURED_FIELDS.values() for c in cs})
