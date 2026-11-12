@@ -497,7 +497,7 @@ STRUCTURED_FIELDS = {
 }
 
 
-def _week1_structured(con) -> None:
+def _week1_structured(con, groups: str = "phenotype_groups") -> None:
     """w1_struct(registrant, dose_number, fatigue_pem, pain, gastrointestinal): whether any
     week-1 check-in of the person-dose ticked a symptom in each domain (raw check-in files)."""
     glob = str(config.DATA_DIR / "interim" / "health_checkins" / "*.parquet").replace("\\", "/")
@@ -507,19 +507,30 @@ def _week1_structured(con) -> None:
         t = " OR ".join(f"list_contains(string_split(coalesce(SYSTEMIC_REACTION, ''), ':'), '{x}')"
                         for x in toks)
         parts.append(f"({c} OR {t}) AS {dom}")
+    # Only cases' week-1 check-ins plus a 1-in-20 sample of the other denominator person-doses
+    # (for the by-group rates): joining all 60M week-1 check-ins thrashes the external drive.
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE w1_ids AS
+        SELECT r.response_id, r.registrant, r.dose_number, g.grp
+        FROM ph_rank r JOIN {groups} g USING (registrant, dose_number)
+        WHERE r.rnk = 1 AND (g.grp = 'case'
+              OR (g.in_denominator AND hash(r.registrant || '|' || r.dose_number) % 20 = 0))""")
+    cols = sorted({c for cs, _ in STRUCTURED_FIELDS.values() for c in cs})
     con.execute(f"""CREATE OR REPLACE TEMP TABLE w1_struct AS
-        SELECT r.registrant, r.dose_number, bool_or(s.fatigue_pem) AS fatigue_pem,
-               bool_or(s.pain) AS pain, bool_or(s.gastrointestinal) AS gastrointestinal
-        FROM (SELECT RESPONSE_ID AS response_id, {", ".join(parts)}
-              FROM read_parquet('{glob}', union_by_name = true)) s
-        JOIN ph_rank r USING (response_id) WHERE r.rnk = 1 GROUP BY ALL""")
+        SELECT i.registrant, i.dose_number, any_value(i.grp) AS grp,
+               bool_or(s.fatigue_pem) AS fatigue_pem, bool_or(s.pain) AS pain,
+               bool_or(s.gastrointestinal) AS gastrointestinal
+        FROM (SELECT response_id, {", ".join(parts)} FROM
+              (SELECT RESPONSE_ID AS response_id, SYSTEMIC_REACTION, {", ".join(cols)}
+               FROM read_parquet('{glob}', union_by_name = true)
+               WHERE RESPONSE_ID IN (SELECT response_id FROM w1_ids))) s
+        JOIN w1_ids i USING (response_id) GROUP BY i.registrant, i.dose_number""")
 
 
 def onset_structured(con, groups: str = "phenotype_groups") -> dict[str, pl.DataFrame]:
     """Among cases whose long-term case domains include fatigue, pain or gastrointestinal
     symptoms: share with a week-1 structured report of one of those same domains, against the
     share whose week-1 free text named one. Plus the week-1 structured rate by group."""
-    _week1_structured(con)
+    _week1_structured(con, groups)
     cases = safe(frame(con, f"""
         WITH c AS (SELECT registrant, dose_number FROM {groups} WHERE grp = 'case'),
              cd AS (SELECT DISTINCT d.registrant, d.dose_number, d.theme FROM ph_dom d
