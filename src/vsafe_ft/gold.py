@@ -39,7 +39,10 @@ CODES_DDL = """CREATE TABLE IF NOT EXISTS gold_codes (
 
 
 def gold_dir() -> Path:
-    return config.DATA_DIR / "gold_set"
+    """<DATA_DIR>/gold_set for the release-1 database; <DATA_DIR>/gold_set/<DB_NAME> for any
+    other (e.g. the long-term draw in vsafe_full), so its sheets never overwrite the early ones."""
+    base = config.DATA_DIR / "gold_set"
+    return base if config.DB_NAME == "vsafe" else base / config.DB_NAME
 
 
 def labels(themes: list[str]) -> list[str]:
