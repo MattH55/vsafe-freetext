@@ -11,3 +11,15 @@ ci_level: 0.95
 permutations: 1000             # Q1 co-occurrence null, preserving domain marginals
 gold_set_size: 2000
 long_term_surveys: [3m, 6m, 12m]
+
+# Pre-registration guard (brief rule 5). Until osf_registration is set, classification and the
+# case definition run only on entries whose matched check-in is a week-1 or six-week survey
+# (survey_day <= exploratory_max_survey_day and survey_type not long-term).
+osf_registration: "https://osf.io/gnfpd"   # registered 2026-11-11 (embargoed); project osf.io/7wpgy
+# Amendment 1 (docs/preregistration/amendment-1.md): CDC MedDRA coding replaces the two-coder
+# gold set. validate.meddra_reference refuses to run until this is set to the filed amendment.
+amendment_1: "https://osf.io/gnfpd (update 1, filed 2026-11-11)"
+# Amendment 2 (docs/preregistration/amendment-2.md): primary layer-3 model is
+# deepseek/deepseek-v4.1-flash. Long-term layer-3 runs and final-classifier validation wait for it.
+amendment_2: "https://osf.io/gnfpd (update 2, filed 2026-11-11)"
+exploratory_max_survey_day: 42

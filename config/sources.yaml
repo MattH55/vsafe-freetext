@@ -112,9 +112,9 @@ call_center:               # FOIA 23-00925, 23-00926
   dir: raw/call_center
   format: csv
   files:
-    - {name: vsafe_call_center_data_12142020_05212023_foia_23_00926.csv,
+    - {name: vsafe_call_center_data_12142020_05212023_foia_23_00926.csv, release: cc_cdc,
        url: "https://ican-public.s3.amazonaws.com/productions/vsafe_call_center_data_12142020_05212023_foia_23_00926.csv"}
-    - {name: vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv,
+    - {name: vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv, release: cc_gdit,
        url: "https://ican-public.s3.amazonaws.com/productions/vsafe_gdit_call_center_data_12142020_06182023_foia_23_00925.csv"}
 
 pregnancy_registry:
@@ -124,10 +124,12 @@ pregnancy_registry:
     - {name: vsafe_pregnancy_registry_survey_20210413-20210607.xlsx,
        url: "https://filedev0128.s3.us-east-1.amazonaws.com/22-0128-foia/vsafe_pregnancy_registry_survey_20210413-20210607.xlsx"}
 
-vaers:                     # yearly files, manual download
+vaers:                     # manual download (CAPTCHA); copied from a hand download dated 2026-06-03
   dir: raw/vaers
   format: zip
-  files: []
+  files:
+    - {name: AllVAERSDataCSVS.zip, manual: true,
+       url: "https://vaers.hhs.gov/eSubDownload/index?fn=AllVAERSDataCSVS.zip"}
 
 openvsafe_vaers_match:     # OpenVSafe match table (score >= 8 of 11), if shared
   dir: raw/openvsafe

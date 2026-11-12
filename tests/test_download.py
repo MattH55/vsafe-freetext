@@ -48,3 +48,31 @@ def test_manifest_one_row_per_file(tmp_path, server, monkeypatch):
     lines = (tmp_path / "raw" / "MANIFEST.tsv").read_text().splitlines()
     assert len(lines) == 2 and lines[0].startswith("part\tfile\turl\tsha256")
     assert lines[1].split("\t")[3] == download.sha256(tmp_path / "raw" / "p" / "f.bin")
+
+
+class TruncatingHandler(RangeHandler):
+    calls = 0
+
+    def do_GET(self):
+        TruncatingHandler.calls += 1
+        if TruncatingHandler.calls == 1:          # declare the full size, send half, hang up
+            self.send_response(200)
+            self.send_header("Content-Length", str(len(PAYLOAD)))
+            self.end_headers()
+            self.wfile.write(PAYLOAD[: len(PAYLOAD) // 2])
+            self.close_connection = True
+            return
+        super().do_GET()
+
+
+def test_truncated_stream_is_resumed_not_accepted(tmp_path, monkeypatch):
+    monkeypatch.setattr(download.time, "sleep", lambda s: None)
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), TruncatingHandler)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        dest = tmp_path / "f.bin"
+        download.fetch(f"http://127.0.0.1:{srv.server_address[1]}/f.bin", dest)
+        assert dest.read_bytes() == PAYLOAD
+        assert TruncatingHandler.calls >= 2
+    finally:
+        srv.shutdown()

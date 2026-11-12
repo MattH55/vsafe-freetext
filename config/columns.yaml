@@ -6,48 +6,90 @@
 # There is no redaction-flag column: `redacted` is derived from the (b)(6) pattern (normalise.py).
 freetext:
   registrant: REGISTRANT_CODE
-  survey_static_id: SURVEY_STATIC_ID
+  survey_static_id: SURVEY_STATIC_ID   # survey form id; entries join check-ins on RESPONSE_ID
   response_id: RESPONSE_ID
   started_on: STARTED_ON
   text_sd: SYMPTOMS_DESCRIPTION        # symptom-description field (SD)
   text_sro: SYSTEMIC_REACTION_OTHER    # systemic-reaction-other field (SRO)
   text_hcvo: HEALTHCARE_VISITS_OTHER   # health-care-visit-other field (HCVO)
 
+# Confirmed 2026-11-08 (consolidated_registrants[1].csv header): REGISTRANT_CODE, ZIP_CODE, SEX,
+# REGISTERED_DATE, TIME_ZONE, RELATIONSHIP, GUARDIAN_REGISTRANT_CODE. No age column here either.
 registrants:
-  registrant: TODO
-  sex: TODO
-  zip3: TODO                 # never reported (CDC user agreement bars sub-national analysis)
-  registration_date: TODO
-  relationship: TODO
-  guardian: TODO
+  registrant: REGISTRANT_CODE
+  sex: SEX
+  zip3: ZIP_CODE             # never read or reported (CDC user agreement bars sub-national analysis)
+  registration_date: REGISTERED_DATE
+  relationship: RELATIONSHIP
+  guardian: GUARDIAN_REGISTRANT_CODE   # another person's code: only has_guardian (bool) is kept
 
+# Confirmed 2026-11-08 (consolidated_vaccinations[1].csv header): REGISTRANT_CODE, MANUFACTURER,
+# DOSE_NUMBER, VACCINATION_DATE, COADMINISTERED, COADMINISTERED_VAX. No age column here.
 vaccinations:
-  registrant: TODO
-  manufacturer: TODO
-  dose_number: TODO
-  vaccination_date: TODO
-  age_band: TODO
+  registrant: REGISTRANT_CODE
+  manufacturer: MANUFACTURER
+  dose_number: DOSE_NUMBER
+  vaccination_date: VACCINATION_DATE
+  age_band: null             # not in this file; taken from registrants if present
 
+# Confirmed 2026-11-08 from the header of consolidated_health_checkin.csv (read from the first
+# bytes of the Deflate64 zip) and Consolidated_health_checkin_u3[1].csv. Keys shared by both:
+#   SURVEY_STATIC_ID, REGISTRANT_CODE, RESPONSE_ID, STARTED_ON, STARTED_ON_TIME, DAYS_SINCE,
+#   FEELING_TODAY, HAD_SYMPTOMS, HEALTH_IMPACT, HEALTH_NOW, HEALTH_NOW_COMPARISON,
+#   VACCINE_CAUSED_HEALTH_ISSUES, HEALTHCARE_VISITS, TESTED_POSITIVE, TESTED_POSITIVE_DATE, ...
+# Adult file adds PREGNANT, PREGNANCY_TEST and adult symptom boxes. There is NO survey-type
+# column: survey_type is derived from DAYS_SINCE (link.SURVEY_TYPE_FROM_DAYS, provisional until
+# the DAYS_SINCE distribution is checked). No age column in any file seen so far.
 health_checkins:
-  registrant: TODO
-  survey_static_id: TODO
-  survey_type: TODO
-  survey_day: TODO
-  medical_care: TODO
-  health_impact: TODO
+  registrant: REGISTRANT_CODE
+  response_id: RESPONSE_ID           # the check-in key (unique but for 236 of 145M)
+  survey_static_id: SURVEY_STATIC_ID  # survey FORM id (146 values), not a check-in key
+  survey_type: null          # derived from survey_day
+  survey_day: DAYS_SINCE
+  medical_care: HEALTHCARE_VISITS
+  health_impact: HEALTH_IMPACT
+  health_now: HEALTH_NOW_COMPARISON   # compared with before vaccination (case criterion 1)
+  started_on: STARTED_ON
+  tested_positive: TESTED_POSITIVE    # criterion-3 check-box exclusion (infection)
+  pregnant: PREGNANT                  # criterion-3 check-box exclusion (adult file only)
 
+# Confirmed 2026-11-09 from the headers of covid_meddra_{sd,sro,hcvo}.csv in
+# vsafe-MedDRA-110124.zip (identical in all three): SURVEY_STATIC_ID, REGISTRANT_CODE,
+# RESPONSE_ID, STARTED_ON, PT_NAME, LLT_NAME, MEDDRA_VERSION, ACTIVE, NEWCODE, DATEUPDATED,
+# DATECODED. There is no field column: the field is the file name suffix (link.link_meddra).
+# The 2023 releases are not downloaded yet; add meddra_by_release overrides once seen.
 meddra:
-  registrant: TODO
-  date: TODO
-  survey_static_id: TODO
-  field: TODO
-  pt: TODO
-  llt: TODO
-  active: TODO
+  registrant: REGISTRANT_CODE
+  response_id: RESPONSE_ID
+  date: STARTED_ON
+  survey_static_id: SURVEY_STATIC_ID
+  field: null
+  pt: PT_NAME
+  llt: LLT_NAME
+  active: ACTIVE
+  meddra_version: MEDDRA_VERSION
 
-call_center:
-  registrant: TODO
-  report_date: TODO
-  trigger: TODO
-  outcome: TODO
-  vaers_filed: TODO
+# Confirmed 2026-11-10 from the headers. The two FOIA files describe the same call-center cases
+# (1,598,307 (registrant, survey, reported date) keys in both): 23-00926 (CDC) carries the trigger
+# and care answers, 23-00925 (GDIT) the call and VAERS outcomes. Dates are MM/DD/YYYY.
+# ZIP_CODE (00926) is never read: no sub-national output. AGE_AT_VX exists only for called people.
+call_center:                     # release cc_cdc (23-00926)
+  registrant: REGISTRANT_CODE
+  report_date: REPORTED_DATE
+  survey_static_id: SURVEY_STATIC_ID
+  trigger: HEALTH_IMPACT         # picklist, ':'-joined multi-select
+  care: HEALTHCARE_VISITS        # picklist, ':'-joined multi-select
+  outcome: null
+  vaers_filed: null
+call_center_by_release:
+  cc_gdit:                       # 23-00925
+    registrant: RegistrantCode
+    report_date: ReportedDate
+    survey_static_id: SurveyStaticID
+    trigger: null
+    care: null
+    outcome: FinalOutcome        # Successful / Unsuccessful / priority 2/3
+    vaers_filed: AllReportOutcomes
+# A case counts as VAERS-filed when vaers_filed matches this (filed by phone, or already filed).
+# "Prefers to complete VAERS report online" is intent, not a filing, and does not count.
+call_center_vaers_filed_pattern: "(?i)completed over the phone|reported to vaers"

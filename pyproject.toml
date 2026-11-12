@@ -13,11 +13,12 @@ dependencies = [
   "pyarrow>=15",
   "openpyxl>=3.1",
   "pyyaml>=6",
+  "zipfile-deflate64>=0.2",
 ]
 
 [project.optional-dependencies]
 embed = ["sentence-transformers>=3", "scikit-learn>=1.4"]
-llm = ["anthropic>=0.40"]
+llm = ["anthropic>=2.7"]     # second LLM; NanoGPT uses the standard library
 dev = ["pytest>=8", "ruff>=0.5"]
 
 [project.scripts]

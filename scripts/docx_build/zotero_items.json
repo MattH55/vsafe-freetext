@@ -1,0 +1,1087 @@
+{
+ "order": [
+  "http://zotero.org/users/local/Oz67iTD5/items/GKJQA2IF",
+  "http://zotero.org/users/local/Oz67iTD5/items/4RXFGMK5",
+  "http://zotero.org/users/local/Oz67iTD5/items/AEI94D4Z",
+  "http://zotero.org/users/local/Oz67iTD5/items/ZAMAJ438",
+  "http://zotero.org/users/local/Oz67iTD5/items/5FFN3DQW",
+  "http://zotero.org/users/local/Oz67iTD5/items/69UTHJC4",
+  "http://zotero.org/users/local/Oz67iTD5/items/9DMLVB86",
+  "http://zotero.org/users/local/Oz67iTD5/items/LFIHN5AU",
+  "http://zotero.org/users/local/Oz67iTD5/items/8HHLL6ZY",
+  "http://zotero.org/users/local/Oz67iTD5/items/GVAMGGSZ",
+  "http://zotero.org/users/local/Oz67iTD5/items/H6QJA9YN",
+  "http://zotero.org/users/local/Oz67iTD5/items/IWYUPWHS",
+  "http://zotero.org/users/local/Oz67iTD5/items/DMEBXWU8",
+  "http://zotero.org/users/local/Oz67iTD5/items/W8QU7WUI",
+  "http://zotero.org/users/local/Oz67iTD5/items/3ZR6CB8A",
+  "http://zotero.org/users/local/Oz67iTD5/items/282BWANI",
+  "http://zotero.org/users/local/Oz67iTD5/items/MVGQZLNX"
+ ],
+ "items": {
+  "http://zotero.org/users/local/Oz67iTD5/items/GKJQA2IF": {
+   "id": 454,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/GKJQA2IF"
+   ],
+   "itemData": {
+    "id": 454,
+    "type": "article-journal",
+    "abstract": "Clarifying and differentiating the causes of diseases is an essential step in any clinical activity, but it takes on particular relevance and complexity in the case that arise following vaccinations. The WHO has proposed a protocol that uses a list of specific questions about vaccine-related adverse events and an algorithm for making a judgement. Here, we analyze and discuss the important limitations of this protocol when applied to the new genetic-based anti-COVID-19 vaccines, particularly once dealing with rare and unexpected pathological events. The main controversial aspects concern: (a) the prevailing consideration of other possible causes; (b) the biological plausibility and the choice of an appropriate time window to consider adverse effects possibly caused by vaccines; (c) the reference to scientific literature, which may be very limited and often controversial in early stages of introducing new vaccines because of the short period of observation; (d) the final classification of the algorithm into only three classes, which leaves ample space for the \u201cindeterminate\u201d category. Failure to address these issues may lead to distorted pharmacovigilance reports with significant consequences on the benefit/harm assessment. In anticipation of possible future pandemics managed with new vaccines, the WHO algorithm needs to be revised with appropriate protocols for monitoring and evaluation of adverse effects that take into account the novel mechanism of action and real-world epidemiological data.",
+    "container-title": "Journal of Clinical Medicine",
+    "DOI": "10.3390/jcm13237291",
+    "ISSN": "2077-0383",
+    "issue": "23",
+    "journalAbbreviation": "J Clin Med",
+    "page": "7291",
+    "PMID": "39685749",
+    "PMCID": "PMC11642405",
+    "source": "PubMed Central",
+    "title": "The WHO Algorithm for Causality Assessment of Adverse Effects Following Immunization with Genetic-Based Anti-COVID-19 Vaccines: Pitfalls and Suggestions for Improvement",
+    "title-short": "The WHO Algorithm for Causality Assessment of Adverse Effects Following Immunization with Genetic-Based Anti-COVID-19 Vaccines",
+    "volume": "13",
+    "author": [
+     {
+      "family": "Bellavite",
+      "given": "Paolo"
+     },
+     {
+      "family": "Donzelli",
+      "given": "Alberto"
+     },
+     {
+      "family": "Isidoro",
+      "given": "Ciro"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2024",
+       11,
+       30
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/4RXFGMK5": {
+   "id": 459,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/4RXFGMK5"
+   ],
+   "itemData": {
+    "id": 459,
+    "type": "article-journal",
+    "abstract": "Background/Objectives: Clinical studies show that SARS-CoV-2 vaccination sometimes entails a severe and disabling chronic syndrome termed post-acute-COVID-19-vaccination syndrome (PACVS). PACVS shares similarities with long COVID. Today, PACVS is still not officially recognised as a disease. In contrast, long COVID was registered by health authorities in December 2021. Here, we address possible reasons for that discrepancy. Methods: We analyse whether common symptoms of PACVS have been registered by European pharmacovigilance as adverse vaccination reactions and which consequences have been drawn thereof. Results: (i) PACVS is distinguished from normal vaccination reactions solely by prolonged duration. (ii) Symptom duration is poorly monitored by post-authorisation pharmacovigilance. (iii) PACVS-specific signals were faithfully recorded by pharmacovigilance systems but have not prompted appropriate reactions of health authorities. (iv) The most widely applied SARS-CoV-2 mRNA-vaccine has been modified after roll-out without renewed phase III evaluation; the modification has increased DNA contaminations suspected to extend the spectrum of adverse events. (v) Crossing of pharmacovigilance data with corresponding estimates of applied vaccine doses suggest a PACVS prevalence of 0.003% in the general population. In contrast, occupational surveillance studies suggest a PACVS prevalence of 0.9% in young and middle-aged persons. Conclusions: (a) Denial of official recognition of PACVS is unjustified. (b) PACVS seems to target preferentially young and middle-aged persons. (c) Without official disease recognition, access to public healthcare and welfare services is made difficult for PACVS-affected persons, which creates considerable socio-economic problems. (d) Without official disease recognition, development and evaluation of PACVS therapies is impaired.",
+    "container-title": "Vaccines",
+    "DOI": "10.3390/vaccines12121378",
+    "ISSN": "2076-393X",
+    "issue": "12",
+    "language": "en",
+    "license": "https://creativecommons.org/licenses/by/3.0/",
+    "page": "1378",
+    "publisher": "Multidisciplinary Digital Publishing Institute",
+    "source": "www.mdpi.com",
+    "title": "The Post-Acute COVID-19-Vaccination Syndrome in the Light of Pharmacovigilance",
+    "volume": "12",
+    "author": [
+     {
+      "family": "Platschek",
+      "given": "Barbara"
+     },
+     {
+      "family": "Boege",
+      "given": "Fritz"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2024",
+       12
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/AEI94D4Z": {
+   "id": 457,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/AEI94D4Z"
+   ],
+   "itemData": {
+    "id": 457,
+    "type": "article-journal",
+    "abstract": "The National Academies of Science, Engineering, and Medicine (NASEM) has defined Long COVID as \u201can infection-associated chronic condition (IACC) that occurs after SARS-CoV-2 infection and is present for at least 3 months as a continuous, relapsing and remitting, or progressive disease state that affects one or more organ systems.\u201d This definition puts the experience of the patient primary, where the decisive factor for diagnosis is a persistent health problem after COVID-19 infection. Ongoing work aims to characterize the biological signature of both Long COVID and Post-Acute COVID-19 Vaccination Syndrome (PACVS), clinicians and researchers are faced with heterogeneous diseases that are not easily captured by a single biomarker. Candidate biomarkers establish spike protein persistence, either through detection of full length spike, the S1 subunit of spike protein, or anti-spike protein antibody positivity. Additionally, to rule out viral reservoirs or active infection as an explanation, anti-nucleocapsid antibody, a hallmark of COVID-19 infection not present in the vaccine, should be negative. Other candidate biomarkers include detection of vaccine sequence mRNA, or sequence differentiation of viral from vaccinal spike through mass spectrometry. Despite candidate biomarkers, medicine is far from a definitive diagnostic test. Lack of diagnosis has created negative experiences for patients and strengthened vaccine hesitancy. An open acknowledgement of vaccine risks is vital to restoring trust in science and medicine and ensuring those injured have access to the care they need.",
+    "container-title": "Frontiers in Medicine",
+    "DOI": "10.3389/fmed.2025.1688170",
+    "ISSN": "2296-858X",
+    "journalAbbreviation": "Front. Med.",
+    "language": "English",
+    "publisher": "Frontiers",
+    "source": "Frontiers",
+    "title": "Restoring trust in vaccination: listening to patients and acknowledging Post-Acute COVID Vaccine Syndrome",
+    "title-short": "Restoring trust in vaccination",
+    "URL": "https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2025.1688170/full",
+    "volume": "12",
+    "author": [
+     {
+      "family": "Halma",
+      "given": "Matthew"
+     },
+     {
+      "family": "Varon",
+      "given": "Joseph"
+     }
+    ],
+    "accessed": {
+     "date-parts": [
+      [
+       "2026",
+       11,
+       12
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       "2025",
+       11,
+       28
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/ZAMAJ438": {
+   "id": 477,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/ZAMAJ438"
+   ],
+   "itemData": {
+    "id": 477,
+    "type": "article",
+    "abstract": "Background Post-acute COVID-19 syndrome (PACS) can cause persistent disability involving fatigue, post-exertional malaise, neurocognitive symptoms, and autonomic manifestations. A clinically overlapping condition has been reported following COVID-19 vaccination and termed post-acute COVID-19 vaccination syndrome (PACVS), but its underlying mechanisms remain poorly understood. We investigated whether immune dysregulation, autoreactivity, antigen persistence, and viral reactivation\u2014mechanisms implicated in PACS\u2014are also present in PACVS.\nMethods This cross-sectional study included 28 PACS patients, 29 PACVS patients, and 16 convalescent controls (CCG). Clinical manifestations were assessed using ME/CFS-related symptom questionnaires and the Bell Score. T-cell phenotypes and T cells reactive to SARS-CoV-2 Spike, \u03b21/\u03b22-adrenergic receptor, and M3/M4 muscarinic receptor antigens were analyzed by multicolor flow cytometry. Circulating Spike protein and GPCR autoantibodies were quantified by ELISA, and EBV load by qPCR.\nResults PACS and PACVS showed substantial clinical overlap, although several symptoms were more severe in PACS. GPCR autoantibody profiles were comparable between patient groups, while \u03b22-adrenergic receptor autoantibodies were increased compared with CCG. Only three of 57 conventional immunophenotyping parameters differed between PACS and PACVS in unadjusted analyses, whereas both groups showed multiple alterations compared with CCG. Circulating Spike protein was detected in both patient groups, with the highest prevalence in PACVS. \u03b21/\u03b22- and M3/M4-reactive CD4+ T cells were increased, whereas Spike-specific CD4+ T cells were reduced compared with CCG. EBV reactivation was rare.\nConclusions PACS and PACVS exhibit substantial clinical and immunological overlap, including GPCR-directed autoreactivity and altered receptor-reactive T-cell responses. These shared immune-mediated features suggest overlapping pathophysiological mechanisms and warrant investigation of whether therapeutic strategies currently explored for PACS may also be relevant to PACVS.",
+    "DOI": "10.64898/2026.09.18.26363380",
+    "language": "en",
+    "license": "\u00a9 2026, Posted by openRxiv. This pre-print is available under a Creative Commons License (Attribution-NonCommercial-NoDerivs 4.0 International), CC BY-NC-ND 4.0, as described at http://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "note": "ISSN: 3067-2007\npage: 2026.09.18.26363380",
+    "publisher": "medRxiv",
+    "source": "medRxiv",
+    "title": "Shared Clinical and Immunological Features of Post-Acute COVID-19 and Post-Acute COVID-19 Vaccination Syndromes",
+    "URL": "https://www.medrxiv.org/content/10.64898/2026.09.18.26363380v1",
+    "author": [
+     {
+      "family": "Dinser",
+      "given": "Johannes"
+     },
+     {
+      "family": "Anft",
+      "given": "Moritz"
+     },
+     {
+      "family": "Wiemers",
+      "given": "Lea"
+     },
+     {
+      "family": "Skrzypczyk",
+      "given": "Sarah"
+     },
+     {
+      "family": "Kohut",
+      "given": "Eva"
+     },
+     {
+      "family": "Kurek",
+      "given": "Julia"
+     },
+     {
+      "family": "Stervbo",
+      "given": "Ulrik"
+     },
+     {
+      "family": "Seibert",
+      "given": "Felix"
+     },
+     {
+      "family": "Westhoff",
+      "given": "Timm H."
+     },
+     {
+      "family": "Rosiewicz",
+      "given": "Kamil"
+     },
+     {
+      "family": "Babel",
+      "given": "Nina"
+     }
+    ],
+    "accessed": {
+     "date-parts": [
+      [
+       "2026",
+       11,
+       12
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       "2026",
+       9,
+       23
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/5FFN3DQW": {
+   "id": 473,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/5FFN3DQW"
+   ],
+   "itemData": {
+    "id": 473,
+    "type": "article-journal",
+    "abstract": "Post-acute COVID-19 vaccination syndrome (PACVS) is a chronic disease triggered by SARS-CoV-2 vaccination (estimated prevalence 0.02%). PACVS is discriminated from the normal post-vaccination state by altered receptor antibodies, most notably angiotensin II type 1 and alpha-2B adrenergic receptor antibodies. Here, we investigate the clinical phenotype using a study registry encompassing 191 PACVS-affected persons (159 females/32 males; median ages: 39/42 years). Unbiased clustering (modified Jaccard index) of reported symptoms revealed a prevalent cross-cohort symptomatology of malaise and chronic fatigue (>80% of cases). Overlapping clusters of (i) peripheral nerve dysfunction, dysesthesia, motor weakness, pain, and vasomotor dysfunction; (ii) cardiovascular impairment; and (iii) cognitive impairment, headache, and visual and acoustic dysfunctions were also frequently represented. Notable abnormalities of standard serum markers encompassing increased interleukins 6 and 8 (>80%), low free tri-iodine thyroxine (>80%), IgG subclass imbalances (>50%), impaired iron storage (>50%), and increased soluble neurofilament light chains (>30%) were not associated with specific symptoms. Based on these data, 131/191 participants fit myalgic encephalomyelitis/chronic fatigue syndrome (ME/CFS) and simultaneously also several other established dysautonomia syndromes. Furthermore, 31/191 participants fit none of these syndromes. In conclusion, PACVS could either be an outlier of ME/CFS or a dysautonomia syndrome sui generis.",
+    "container-title": "Vaccines",
+    "DOI": "10.3390/vaccines12070790",
+    "ISSN": "2076-393X",
+    "issue": "7",
+    "journalAbbreviation": "Vaccines (Basel)",
+    "language": "eng",
+    "page": "790",
+    "PMID": "39066428",
+    "PMCID": "PMC11281408",
+    "source": "PubMed",
+    "title": "Clinical and Diagnostic Features of Post-Acute COVID-19 Vaccination Syndrome (PACVS)",
+    "volume": "12",
+    "author": [
+     {
+      "family": "Mundorf",
+      "given": "Anna Katharina"
+     },
+     {
+      "family": "Semmler",
+      "given": "Amelie"
+     },
+     {
+      "family": "Heidecke",
+      "given": "Harald"
+     },
+     {
+      "family": "Schott",
+      "given": "Matthias"
+     },
+     {
+      "family": "Steffen",
+      "given": "Falk"
+     },
+     {
+      "family": "Bittner",
+      "given": "Stefan"
+     },
+     {
+      "family": "Lackner",
+      "given": "Karl J."
+     },
+     {
+      "family": "Schulze-Bosse",
+      "given": "Karin"
+     },
+     {
+      "family": "Pawlitzki",
+      "given": "Marc"
+     },
+     {
+      "family": "Meuth",
+      "given": "Sven Guenther"
+     },
+     {
+      "family": "Klawonn",
+      "given": "Frank"
+     },
+     {
+      "family": "Ruhrl\u00e4nder",
+      "given": "Jana"
+     },
+     {
+      "family": "Boege",
+      "given": "Fritz"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2024",
+       7,
+       18
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/69UTHJC4": {
+   "id": 472,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/69UTHJC4"
+   ],
+   "itemData": {
+    "id": 472,
+    "type": "article",
+    "abstract": "INTRODUCTION: A chronic post-vaccination syndrome (PVS) after covid-19 vaccination has been reported but has yet to be well characterized.\nMETHODS: We included 241 individuals aged 18 and older who self-reported PVS after covid-19 vaccination and who joined the online Yale Listen to Immune, Symptom and Treatment Experiences Now (LISTEN) Study from May 2022 to July 2023. We summarized their demographics, health status, symptoms, treatments tried, and overall experience.\nRESULTS: The median age of participants was 46 years (interquartile range [IQR]: 38 to 56), with 192 (80%) identifying as female, 209 (87%) as non-Hispanic White, and 211 (88%) from the United States. Among these participants with PVS, 127 (55%) had received the BNT162b2 [Pfizer-BioNTech] vaccine, and 86 (37%) received the mRNA-1273 [Moderna] vaccine. The median time from the day of index vaccination to symptom onset was three days (IQR: 1 day to 8 days). The time from vaccination to symptom survey completion was 595 days (IQR: 417 to 661 days). The median Euro-QoL visual analogue scale score was 50 (IQR: 39 to 70). The five most common symptoms were exercise intolerance (71%), excessive fatigue (69%), numbness (63%), brain fog (63%), and neuropathy (63%). In the week before survey completion, participants reported feeling unease (93%), fearfulness (82%), and overwhelmed by worries (81%), as well as feelings of helplessness (80%), anxiety (76%), depression (76%), hopelessness (72%), and worthlessness (49%) at least once. Participants reported a median of 20 (IQR: 13 to 30) interventions to treat their condition.\nCONCLUSIONS: In this study, individuals who reported PVS after covid-19 vaccination had low health status, high symptom burden, and high psychosocial stress despite trying many treatments. There is a need for continued investigation to understand and treat this condition.",
+    "DOI": "10.1101/2023.11.09.23298266",
+    "language": "eng",
+    "note": "PMCID: PMC10659483\nPMID: 37986769",
+    "number": "2023.11.09.23298266",
+    "publisher": "medRxiv: The Preprint Server for Health Sciences",
+    "source": "PubMed",
+    "title": "Post-Vaccination Syndrome: A Descriptive Analysis of Reported Symptoms and Patient Experiences After Covid-19 Immunization",
+    "title-short": "Post-Vaccination Syndrome",
+    "author": [
+     {
+      "family": "Krumholz",
+      "given": "Harlan M."
+     },
+     {
+      "family": "Wu",
+      "given": "Yilun"
+     },
+     {
+      "family": "Sawano",
+      "given": "Mitsuaki"
+     },
+     {
+      "family": "Shah",
+      "given": "Rishi"
+     },
+     {
+      "family": "Zhou",
+      "given": "Tianna"
+     },
+     {
+      "family": "Arun",
+      "given": "Adith S."
+     },
+     {
+      "family": "Khosla",
+      "given": "Pavan"
+     },
+     {
+      "family": "Kaleem",
+      "given": "Shayaan"
+     },
+     {
+      "family": "Vashist",
+      "given": "Anushree"
+     },
+     {
+      "family": "Bhattacharjee",
+      "given": "Bornali"
+     },
+     {
+      "family": "Ding",
+      "given": "Qinglan"
+     },
+     {
+      "family": "Lu",
+      "given": "Yuan"
+     },
+     {
+      "family": "Caraballo",
+      "given": "C\u00e9sar"
+     },
+     {
+      "family": "Warner",
+      "given": "Frederick"
+     },
+     {
+      "family": "Huang",
+      "given": "Chenxi"
+     },
+     {
+      "family": "Herrin",
+      "given": "Jeph"
+     },
+     {
+      "family": "Putrino",
+      "given": "David"
+     },
+     {
+      "family": "Hertz",
+      "given": "Danice"
+     },
+     {
+      "family": "Dressen",
+      "given": "Brianne"
+     },
+     {
+      "family": "Iwasaki",
+      "given": "Akiko"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2023",
+       11,
+       10
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/9DMLVB86": {
+   "id": 471,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/9DMLVB86"
+   ],
+   "itemData": {
+    "id": 471,
+    "type": "article-journal",
+    "abstract": "Cases of tinnitus have been reported following administration of COVID-19 vaccines. The aim of this study was to characterize COVID-19 vaccination-related tinnitus to assess whether there is a causal relationship, and to examine potential risk factors for COVID-19 vaccination-related tinnitus. We analyzed a survey on 398 cases of COVID-19 vaccination-related tinnitus, and 699,839 COVID-19 vaccine-related reports in the Vaccine Adverse Effect Reporting System (VAERS) database that was retrieved on 4 December 2021. We found that following COVID-19 vaccination, 1) tinnitus report frequencies for Pfizer, Moderna and Janssen vaccines in VAERS are 47, 51 and 70 cases per million full vaccination; 2) the symptom onset was often rapid; 3) more women than men reported tinnitus and the sex difference increased with age; 4) for 2-dose vaccines, the frequency of tinnitus was higher following the first dose than the second dose; 5) for 2-dose vaccines, the chance of worsening tinnitus symptoms after second dose was approximately 50%; 6) tinnitus was correlated with other neurological and psychiatric symptoms; 7) pre-existing metabolic syndromes were correlated with the severity of the reported tinnitus. These findings suggest that COVID-19 vaccination increases the risk of tinnitus, and metabolic disorders is a risk factor for COVID-19 vaccination-related tinnitus.",
+    "container-title": "Frontiers in Pharmacology",
+    "DOI": "10.3389/fphar.2024.1374320",
+    "ISSN": "1663-9812",
+    "journalAbbreviation": "Front Pharmacol",
+    "language": "eng",
+    "page": "1374320",
+    "PMID": "38841369",
+    "PMCID": "PMC11150672",
+    "source": "PubMed",
+    "title": "COVID-19 vaccination-related tinnitus is associated with pre-vaccination metabolic disorders",
+    "volume": "15",
+    "author": [
+     {
+      "family": "Wang",
+      "given": "Weihua"
+     },
+     {
+      "family": "Yellamsetty",
+      "given": "Anusha"
+     },
+     {
+      "family": "Edmonds",
+      "given": "Robert M."
+     },
+     {
+      "family": "Barcavage",
+      "given": "Shaun R."
+     },
+     {
+      "family": "Bao",
+      "given": "Shaowen"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2024"
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/LFIHN5AU": {
+   "id": 470,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/LFIHN5AU"
+   ],
+   "itemData": {
+    "id": 470,
+    "type": "article-journal",
+    "abstract": "INTRODUCTION: In Canada, anesthesia/paresthesia were the most frequently reported adverse events following immunization (AEFI) against SARS-CoV-2. This study aims to describe the frequency and characteristics of anesthesia/paresthesia cases temporally associated with a first or second dose of COVID-19 vaccines administered in Quebec, Canada.\nMETHODS: Cases were extracted among AEFI reports submitted to the passive surveillance system. Sociodemographic, vaccination and AEFI information were obtained from the immunization registry. Signs, symptoms and anatomical location were manually extracted from clinical narratives.\nRESULTS: From December 13, 2020 to December 31, 2022, 15.2 million doses of vaccines were administered in Quebec. By July 1, 2022, 1024 cases of anesthesia/paresthesia following COVID-19 vaccination had been reported. The global reporting rate was 7.7 per 100,000 doses administered. Rates were higher with the first than the second dose (11.4 vs. 3.8 per 100,000 doses), and higher with ChAdOx1 than with mRNA vaccines Comirnaty\u2122 (BNT-162b2, Pfizer BioNTech) or Spikevax\u2122 (mRNA-1273, Moderna) (28.7 vs. 6.1 and 7.9, respectively). Rates were 3- to 4-times higher in women, with the highest rate ratios among those 18-49\u00a0years of age. Median time to onset was 24\u00a0h (IQR: 3-96). Paresthesia, hypoesthesia/anesthesia (83\u00a0%) were more common than dysesthesias (13\u00a0%). Symptoms were reported mostly in upper limbs (62\u00a0%), but also frequently in lower limbs (47\u00a0%) or the face (42\u00a0%). Most reported mild (41\u00a0%) or moderate (48\u00a0%) symptoms, with a median duration of 5\u00a0days (IQR: 2-15), although symptoms lasting 1-5\u00a0months (12\u00a0%) or over 6\u00a0months (1\u00a0%) were also reported.\nCONCLUSION: Symptoms of anesthesia/paresthesia are commonly reported following the administration of several vaccines, including those against COVID-19. In most instances, symptoms occur shortly after vaccination, have a limited impact on daily activities, and resolve spontaneously within a month of onset. A small proportion of cases report sensory and/or motor symptom of longer duration, which remain undiagnosed following neurological investigations. Despite being a common occurrence, post-vaccination sensory disturbances remain a poorly understood phenomenon that warrants further study.",
+    "container-title": "Vaccine",
+    "DOI": "10.1016/j.vaccine.2025.127217",
+    "ISSN": "1873-2518",
+    "journalAbbreviation": "Vaccine",
+    "language": "eng",
+    "page": "127217",
+    "PMID": "40344810",
+    "source": "PubMed",
+    "title": "New-onset anesthesia/paresthesia following the administration of COVID-19 vaccines in Quebec, Canada",
+    "volume": "57",
+    "author": [
+     {
+      "family": "Rouleau",
+      "given": "Isabelle"
+     },
+     {
+      "family": "Issa Kana",
+      "given": "Kode Djogo Nyazy"
+     },
+     {
+      "family": "Zafack",
+      "given": "Joseline Guetsop"
+     },
+     {
+      "family": "Viger",
+      "given": "Yv Bonnier"
+     },
+     {
+      "family": "De Serres",
+      "given": "Gaston"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2025",
+       5,
+       31
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/8HHLL6ZY": {
+   "id": 469,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/8HHLL6ZY"
+   ],
+   "itemData": {
+    "id": 469,
+    "type": "article",
+    "abstract": "BACKGROUND AND OBJECTIVES: Various peripheral neuropathies, particularly those with sensory and autonomic dysfunction may occur during or shortly after acute COVID-19 illnesses. These appear most likely to reflect immune dysregulation. If similar manifestations can occur with the vaccination remains unknown.\nRESULTS: In an observational study, we studied 23 patients (92% female; median age 40years) reporting new neuropathic symptoms beginning within 1 month after SARS-CoV-2 vaccination. 100% reported sensory symptoms comprising severe face and/or limb paresthesias, and 61% had orthostasis, heat intolerance and palpitations. Autonomic testing in 12 identified seven with reduced distal sweat production and six with positional orthostatic tachycardia syndrome. Among 16 with lower-leg skin biopsies, 31% had diagnostic/subthreshold epidermal neurite densities (\u22645%), 13% were borderline (5.01-10%) and 19% showed abnormal axonal swelling. Biopsies from randomly selected five patients that were evaluated for immune complexes showed deposition of complement C4d in endothelial cells. Electrodiagnostic test results were normal in 94% (16/17). Together, 52% (12/23) of patients had objective evidence of small-fiber peripheral neuropathy. 58% patients (7/12) treated with oral corticosteroids had complete or near-complete improvement after two weeks as compared to 9% (1/11) of patients who did not receive immunotherapy having full recovery at 12 weeks. At 5-9 months post-symptom onset, 3 non-recovering patients received intravenous immunoglobulin with symptom resolution within two weeks.\nCONCLUSIONS: This observational study suggests that a variety of neuropathic symptoms may manifest after SARS-CoV-2 vaccinations and in some patients might be an immune-mediated process.",
+    "DOI": "10.1101/2022.05.16.22274439",
+    "language": "eng",
+    "note": "PMCID: PMC9128783\nPMID: 35611338",
+    "number": "2022.05.16.22274439",
+    "publisher": "medRxiv: The Preprint Server for Health Sciences",
+    "source": "PubMed",
+    "title": "Neuropathic symptoms with SARS-CoV-2 vaccination",
+    "author": [
+     {
+      "family": "Safavi",
+      "given": "Farinaz"
+     },
+     {
+      "family": "Gustafson",
+      "given": "Lindsey"
+     },
+     {
+      "family": "Walitt",
+      "given": "Brian"
+     },
+     {
+      "family": "Lehky",
+      "given": "Tanya"
+     },
+     {
+      "family": "Dehbashi",
+      "given": "Sara"
+     },
+     {
+      "family": "Wiebold",
+      "given": "Amanda"
+     },
+     {
+      "family": "Mina",
+      "given": "Yair"
+     },
+     {
+      "family": "Shin",
+      "given": "Susan"
+     },
+     {
+      "family": "Pan",
+      "given": "Baohan"
+     },
+     {
+      "family": "Polydefkis",
+      "given": "Michael"
+     },
+     {
+      "family": "Oaklander",
+      "given": "Anne Louise"
+     },
+     {
+      "family": "Nath",
+      "given": "Avindra"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2022",
+       5,
+       17
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/GVAMGGSZ": {
+   "id": 467,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/GVAMGGSZ"
+   ],
+   "itemData": {
+    "id": 467,
+    "type": "article-journal",
+    "abstract": "Background: Although many adverse reactions after SARS-CoV-2 vaccination have been reported, there have been few comprehensive studies on persistent symptoms after SARS-CoV-2 vaccination. The aim of this study was to determine the clinical characteristics of patients with various persistent symptoms after SARS-CoV-2 vaccination. Methods: A retrospective descriptive study was performed for patients who visited a specialized clinic established at Okayama University Hospital to evaluate adverse events after SARS-CoV-2 vaccination during the period from April 2021 to March 2023. Results: Descriptive analysis was performed for 121 of 127 patients who visited the clinic during the study period, and separate analysis was performed for the other 6 patients who had serious complications, who required treatment with prednisolone, and who had persistent symptoms. The median [interquartile range] age of the patients was 48 years [31-64 years], and the patients included 44 males (36.4%) and 77 females (63.6%). The most frequent symptoms were sensory impairment (34 patients, 28.1%), general fatigue (30 patients, 24.8%), fever/low-grade fever (21 patients, 17.4%), and headache (21 patients, 17.4%). Serious complications included myalgic encephalomyelitis/chronic fatigue syndrome (ME/CFS), sarcoidosis, aseptic meningitis, neuromyelitis optica spectrum disorders (NMOSDs), tendon adhesions, and idiopathic thrombocytopenia. Conclusions: Although causal relationships were not determined, 15 persistent symptoms after SARS-CoV-2 vaccination were characterized. All of the symptoms had onset from 12 hours to one week after vaccination, with 10 symptoms persisting for 6 months or longer. The most frequent symptom was sensory impairment.",
+    "container-title": "Vaccines",
+    "DOI": "10.3390/vaccines11111661",
+    "ISSN": "2076-393X",
+    "issue": "11",
+    "journalAbbreviation": "Vaccines (Basel)",
+    "language": "eng",
+    "page": "1661",
+    "PMID": "38005993",
+    "PMCID": "PMC10674662",
+    "source": "PubMed",
+    "title": "Characteristics of Persistent Symptoms Manifested after SARS-CoV-2 Vaccination: An Observational Retrospective Study in a Specialized Clinic for Vaccination-Related Adverse Events",
+    "title-short": "Characteristics of Persistent Symptoms Manifested after SARS-CoV-2 Vaccination",
+    "volume": "11",
+    "author": [
+     {
+      "family": "Tokumasu",
+      "given": "Kazuki"
+     },
+     {
+      "family": "Fujita-Yamashita",
+      "given": "Manami"
+     },
+     {
+      "family": "Sunada",
+      "given": "Naruhiko"
+     },
+     {
+      "family": "Sakurada",
+      "given": "Yasue"
+     },
+     {
+      "family": "Yamamoto",
+      "given": "Koichiro"
+     },
+     {
+      "family": "Nakano",
+      "given": "Yasuhiro"
+     },
+     {
+      "family": "Matsuda",
+      "given": "Yui"
+     },
+     {
+      "family": "Otsuka",
+      "given": "Yuki"
+     },
+     {
+      "family": "Hasegawa",
+      "given": "Toru"
+     },
+     {
+      "family": "Hagiya",
+      "given": "Hideharu"
+     },
+     {
+      "family": "Honda",
+      "given": "Hiroyuki"
+     },
+     {
+      "family": "Otsuka",
+      "given": "Fumio"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2023",
+       10,
+       30
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/H6QJA9YN": {
+   "id": 465,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/H6QJA9YN"
+   ],
+   "itemData": {
+    "id": 465,
+    "type": "article-journal",
+    "abstract": "BACKGROUND: COVID-19 vaccinations are intended to help produce neutralizing antibodies which target surface spike protein to combat the SARS-Cov-2 virus. Similarly, COVID-19 recovered patients exhibit high levels of SARS-CoV-2 neutralizing antibodies, which predominantly target the surface spike protein and are associated with the occurrence of health consequences in survivors.\nOBJECTIVE: The aim of the study is to explore the long-term health consequences of the COVID-19 vaccines.\nMETHODOLOGY: A prospective, exploratory observational study conducted both online and offline using various questionnaires with all immunized individuals who had been inoculated for at least a month following their last COVID-19 vaccine either AZD1222\u00ae or BBV152\u00ae vaccines.\nRESULTS: We evaluated 258 individuals who had taken the COVID vaccine and found that females made up the majority (54.3%) and that the mean age was 24\u202fyears. Post-vaccination long-term health issues were reported by 36.05% (93) of the participants, with 37.86% (53) of females and 33.9% (40) of males (p\u202f=\u202f0.292). Myalgia was reported by 20.15% (52), fatigue was 13.95% (36), paresthesia was 1.16% (3), ageusia was 0.77% (2), sadness/irritability was 2.31% (6), and lack of concentration/excessive worry was 3.1% (8).\nCONCLUSIONS: Myalgia, fatigue, paresthesia, ageusia, coughs and colds, dyspnea, sadness/irritability, and lack of concentration/excessive worry are health consequences related to the COVID-19 vaccination which follow a similar pattern of post-COVID syndrome.",
+    "container-title": "Vacunas",
+    "DOI": "10.1016/j.vacun.2022.03.002",
+    "ISSN": "1576-9887",
+    "journalAbbreviation": "Vacunas",
+    "language": "eng",
+    "page": "S67-S76",
+    "PMID": "35345826",
+    "PMCID": "PMC8942717",
+    "source": "PubMed",
+    "title": "The prevalence of inverse health consequences of COVID-19 vaccines: A post-vaccination study",
+    "title-short": "The prevalence of inverse health consequences of COVID-19 vaccines",
+    "volume": "23",
+    "author": [
+     {
+      "family": "Shrestha",
+      "given": "Yogendra"
+     },
+     {
+      "family": "Venkataraman",
+      "given": "Rajesh"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2022"
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/IWYUPWHS": {
+   "id": 464,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/IWYUPWHS"
+   ],
+   "itemData": {
+    "id": 464,
+    "type": "article-journal",
+    "abstract": "OBJECTIVES: Neurological symptoms associated with Severe Acute Respiratory Syndrome Coronavirus-2 (SARS-CoV-2) vaccination were discovered in the context of billions of administered vaccine doses. The clinical manifestations often resemble post Coronavirus Disease 2019 (post-COVID-19) syndrome (PCS) features and may be considered as post-COVID-19 vaccine syndrome (PVS). Data regarding frequency, severity and pathophysiological mechanisms are scarce.\nMETHODS: We assessed routine clinical examinations in 50 patients reporting new-onset neurological symptoms after SARS-CoV-2 vaccination, including neurological examination, laboratory and electrophysiology tests, as well as self-report questionnaires measuring fatigue, depressive symptoms, anxiety, risk of somatic symptom disorder, and health-related quality of life. Patients were included when symptoms occurred after confirmed COVID-19 vaccination and without prior SARS-CoV-2 infection, and if no alternative diagnosis was found to explain the symptoms.\nRESULTS: The most frequently reported symptoms were paraesthesia (56%), fatigue (46%) and cognitive impairment (36%). Neurological, routine laboratory, and electrophysiological examinations did not yield distinct pathological findings. Neuropsychological testing of a subgroup revealed deficits in attention, executive function and memory.\nDISCUSSION: The spectrum of clinical manifestations post-vaccination poses a substantial overlap with PCS symptoms. As no pathological findings were obtained in routine diagnostics, uncertainty remains about the underlying pathophysiological mechanisms and requires further investigation beyond routine work-up.",
+    "container-title": "Journal of Neurology",
+    "DOI": "10.1007/s00415-023-11895-9",
+    "ISSN": "1432-1459",
+    "issue": "10",
+    "journalAbbreviation": "J Neurol",
+    "language": "eng",
+    "page": "4673-4677",
+    "PMID": "37515731",
+    "PMCID": "PMC10511371",
+    "source": "PubMed",
+    "title": "Neurological symptoms after COVID-19 vaccination: a report on the clinical presentation of the first 50 patients",
+    "title-short": "Neurological symptoms after COVID-19 vaccination",
+    "volume": "270",
+    "author": [
+     {
+      "family": "Gerhard",
+      "given": "Ameli"
+     },
+     {
+      "family": "Raeder",
+      "given": "Vanessa"
+     },
+     {
+      "family": "Pernice",
+      "given": "Helena Franziska"
+     },
+     {
+      "family": "Boesl",
+      "given": "Fabian"
+     },
+     {
+      "family": "Schroeder",
+      "given": "Maria"
+     },
+     {
+      "family": "Richter",
+      "given": "Jonathan"
+     },
+     {
+      "family": "Endres",
+      "given": "Matthias"
+     },
+     {
+      "family": "Pr\u00fc\u00df",
+      "given": "Harald"
+     },
+     {
+      "family": "Hahn",
+      "given": "Katrin"
+     },
+     {
+      "family": "Audebert",
+      "given": "Heinrich J."
+     },
+     {
+      "family": "Franke",
+      "given": "Christiana"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2023",
+       10
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/DMEBXWU8": {
+   "id": 463,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/DMEBXWU8"
+   ],
+   "itemData": {
+    "id": 463,
+    "type": "article-journal",
+    "abstract": "BACKGROUND AND AIM: Long post-COVID vaccination syndrome (LPCVS) is an increasingly recognized disease that occurs after SARS-CoV-2 vaccinations and lasts >4 weeks. However, little is known about the clinical presentation, underlying pathophysiology, treatment, and outcome of LPCVS. This study aims to present a series of patients with LPCVS, their treatment, and outcomes.\nMETHODS: This was a retrospective analysis of three patients with LPCVS.\nRESULTS: In an observation period of 2 months (January and February 2022), three patients were collected in whom side effects after vaccination against COVID-19 lasted >4 weeks and in whom instrumental examinations were largely unremarkable. All three patients received only symptomatic therapy and only partially recovered within 6-8 months after vaccination. LPCVS significantly impaired the quality of life of the included patients.\nCONCLUSIONS: SARS-CoV-2 vaccinations may cause not only short-term but also long-term side effects that include not only known diseases but also non-specific symptoms with normal or slightly abnormal clinical and instrumental findings. Although LPCVS leads to long-term disability, it is not widely recognized and not always accepted by manufacturers, health authorities, and even scientists. LPCVS should not be dismissed as a functional disorder and patients with LPCVS should be taken seriously.\nRELEVANCE FOR PATIENTS: The possible causal relation between some long side effects and SARS-CoV-2 vaccines cannot be ignored. The pathophysiology of LPCVS should be further studied to lay a foundation for further improvement of the vaccines.",
+    "container-title": "Journal of Clinical and Translational Research",
+    "ISSN": "2424-810X",
+    "issue": "6",
+    "journalAbbreviation": "J Clin Transl Res",
+    "language": "eng",
+    "page": "506-508",
+    "PMID": "36452006",
+    "PMCID": "PMC9706319",
+    "source": "PubMed",
+    "title": "A retrospective analysis of clinically confirmed long post-COVID vaccination syndrome",
+    "volume": "8",
+    "author": [
+     {
+      "family": "Finterer",
+      "given": "Josef"
+     },
+     {
+      "family": "Scorza",
+      "given": "Fulvio A."
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2022",
+       12,
+       29
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/W8QU7WUI": {
+   "id": 462,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/W8QU7WUI"
+   ],
+   "itemData": {
+    "id": 462,
+    "type": "article-journal",
+    "abstract": "BACKGROUND: The available safety data on the use of the messenger RNA-based COVID-19 vaccine BNT162b2 in persons under age 18 are limited to observation periods of up to six months.\nMETHODS: In a retrospective, cross-sectional study, we evaluated self-reported vaccine tolerability (SRVT) in eleven symptom categories among persons who were under 18 years old when they received at least one dose of the BNT162b2 vaccine in Germany on or after 1 October 2021. Data were collected online from the parents or legal guardians of the vaccinated persons. Individual participation codes enabled authenticated and pseudonymous participation in the survey. In a subgroup, the SRVT of BNT162b2 was compared with that of vaccines against other illnesses than SARS-CoV-2 (e.g., influenza).\nRESULTS: Tolerability data were obtained from 3228 persons with a median age of 5.7 years; 49.6% were male. The median period of observation was 524 days. The more commonly reported undesired effects of the vaccine, mainly in older subjects, were local reactions- pain (49.7%), redness (23%)-with less common systemic symptoms including fatigue (20.1%), fever (11.4%), general feeling of illness (8.0%), and headache (6.5%). Compared to vaccines against other illnesses, BNT162b2 was more commonly associated with local and systemic symptoms (gastrointestinal, musculo - skeletal, dermatological, neurological, psychological). 41 (1.3%) of the subjects reported that their SRVT persisted for \u226590 days after vaccination with BNT162b2: these symptoms were mainly psychological (15 subjects), neurological (9 subjects), and dermatological (8 subjects). There were 45 serious adverse events; these were associated with female sex (OR = 4.70, 95% confidence interval [2.17; 10.20]) and with long-term medication use (OR = 4.06 [1.53; 10.79]).\nCONCLUSION: Vaccination with BNT162b2 was reportedly well tolerated by more than 98% of the children and adolescents who received it, although symptoms were more common than after vaccination against other illnesses than SARS-CoV-2. The participants in our study may have had a more positive attitude toward vaccination. On the other hand, a selection bias might exist for participants who experienced vaccination side effects.",
+    "container-title": "Deutsches Arzteblatt International",
+    "DOI": "10.3238/arztebl.m2025.0032",
+    "ISSN": "1866-0452",
+    "issue": "10",
+    "journalAbbreviation": "Dtsch Arztebl Int",
+    "language": "eng",
+    "page": "257-263",
+    "PMID": "40101263",
+    "PMCID": "PMC13234850",
+    "source": "PubMed",
+    "title": "The Long-Term Tolerability of BNT162b2 in Children and Adolescents (the CoVacU18 Study)",
+    "volume": "122",
+    "author": [
+     {
+      "family": "Grieshaber",
+      "given": "Vivien"
+     },
+     {
+      "family": "Strumann",
+      "given": "Christoph"
+     },
+     {
+      "family": "Holzwarth",
+      "given": "Sarah"
+     },
+     {
+      "family": "Toepfner",
+      "given": "Nicole"
+     },
+     {
+      "family": "Mei\u00dfner",
+      "given": "Wolfgang Carl Gustav",
+      "non-dropping-particle": "von"
+     },
+     {
+      "family": "Konstantopoulos",
+      "given": "Nikos"
+     },
+     {
+      "family": "Poblotzki",
+      "given": "Martina",
+      "non-dropping-particle": "von"
+     },
+     {
+      "family": "Hensel",
+      "given": "Kai O."
+     },
+     {
+      "family": "Moor",
+      "given": "Matthias B."
+     },
+     {
+      "family": "Chao",
+      "given": "Cho-Ming"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2025",
+       5,
+       16
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/3ZR6CB8A": {
+   "id": 461,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/3ZR6CB8A"
+   ],
+   "itemData": {
+    "id": 461,
+    "type": "article-journal",
+    "abstract": "BACKGROUND: COVID-19 vaccine side effects have a fundamental role in public confidence in the vaccine and its uptake process. Thus far, the evidence on vaccine safety has exclusively been obtained from the manufacturer-sponsored studies; therefore, this study was designed to provide independent evidence on Pfizer-BioNTech COVID-19 vaccine side effects.\nMETHODS: A cross-sectional survey-based study was carried out between January and February 2021 to collect data on the side effects following the COVID-19 vaccine among healthcare workers in the Czech Republic. The study used a validated questionnaire with twenty-eight multiple-choice items covering the participants' demographic data, medical anamneses, COVID-19-related anamneses, general, oral, and skin-related side effects.\nRESULTS: Injection site pain (89.8%), fatigue (62.2%), headache (45.6%), muscle pain (37.1%), and chills (33.9%) were the most commonly reported side effects. All the general side effects were more prevalent among the \u226443-year-old group, and their duration was mainly one day (45.1%) or three days (35.8%) following the vaccine. Antihistamines were the most common drugs associated with side effects, thus requiring further investigation. The people with two doses were generally associated with a higher frequency of side effects.\nCONCLUSIONS: The distribution of side effects among Czech healthcare workers was highly consistent with the manufacturer's data, especially in terms of their association with the younger age group and the second dose. The overall prevalence of some local and systemic side effects was higher than the manufacturer's report. Further independent studies on vaccine safety are strongly required to strengthen public confidence in the vaccine.",
+    "container-title": "Journal of Clinical Medicine",
+    "DOI": "10.3390/jcm10071428",
+    "ISSN": "2077-0383",
+    "issue": "7",
+    "journalAbbreviation": "J Clin Med",
+    "language": "eng",
+    "page": "1428",
+    "PMID": "33916020",
+    "PMCID": "PMC8037149",
+    "source": "PubMed",
+    "title": "Prevalence of COVID-19 Vaccine Side Effects among Healthcare Workers in the Czech Republic",
+    "volume": "10",
+    "author": [
+     {
+      "family": "Riad",
+      "given": "Abanoub"
+     },
+     {
+      "family": "Pokorn\u00e1",
+      "given": "Andrea"
+     },
+     {
+      "family": "Attia",
+      "given": "Sameh"
+     },
+     {
+      "family": "Klugarov\u00e1",
+      "given": "Jitka"
+     },
+     {
+      "family": "Ko\u0161\u010d\u00edk",
+      "given": "Michal"
+     },
+     {
+      "family": "Klugar",
+      "given": "Miloslav"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2021",
+       4,
+       1
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/282BWANI": {
+   "id": 483,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/282BWANI"
+   ],
+   "itemData": {
+    "id": 483,
+    "type": "article-journal",
+    "abstract": "Background/Objectives: Controversy exists over the use of passive reporting systems, especially the Vaccine Adverse Event Reporting System, in risk assessment. One limitation of these systems is that adverse event (AE) reporting rates cannot be calculated without knowing the number of shots administered or prescriptions in the case of pharmaceuticals. Adverse event reporting rates can be a factor in a risk assessment, though they should not be solely relied on; they can be used to compare the relative safety profiles of different vaccine products or pharmaceuticals. This study introduces the Denominator-Adjusted Rate Estimates of Substance Adverse Events Frequency Evaluation (DARE-SAFE) method to analyze pharmacovigilance reporting rates for vaccines and common pharmaceuticals. Methods: We calculated reporting rates for the top 250 most prescribed drugs in the US Food and Drug Association (FDA) Adverse Event Reporting System and common vaccines in the Vaccine Adverse Events Reporting System. For vaccines, we used USA Centers for Disease Control (CDC) dose data and OpenVAERS reports. For pharmaceuticals, we utilized prescription data from ClinCalc and FAERS reports for 2022. Results: VAERS reporting rates varied significantly across vaccine types. COVID-19 vaccines showed a 63.0 \u00b1 0.6 times higher rate of VAERS deaths per dose and an 18.95 \u00b1 0.02 times higher rate of total adverse event reports per dose compared to influenza vaccines. The ratio of total VAERS reports to deaths for vaccines was 73 \u00b1 4 to 1 (R2 = 0.94). For pharmaceuticals, the ratio of total adverse event reports to deaths was 26 \u00b1 2 (R2 = 0.46), with a strong correlation between serious adverse events and deaths (ratio 9.1 \u00b1 0.3, R2 = 0.79). Conclusions: DARE-SAFE provides a standardized method for comparing reporting rates across different medical products. The observed differences between vaccines and pharmaceuticals, as well as among different vaccine types, warrant further investigation into reporting practices, actual safety profiles, and potential biases in surveillance systems.",
+    "container-title": "Pharmacoepidemiology",
+    "DOI": "10.3390/pharma4020007",
+    "ISSN": "2813-0618",
+    "issue": "2",
+    "language": "en",
+    "license": "https://creativecommons.org/licenses/by/3.0/",
+    "page": "7",
+    "publisher": "Multidisciplinary Digital Publishing Institute",
+    "source": "www.mdpi.com",
+    "title": "DARE-SAFE: Denominator-Adjusted Rate Estimates of Substance Adverse Events Frequency Evaluation in Pharmaceuticals and Vaccines",
+    "title-short": "DARE-SAFE",
+    "volume": "4",
+    "author": [
+     {
+      "family": "Halma",
+      "given": "Matthew"
+     },
+     {
+      "family": "Varon",
+      "given": "Joseph"
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2025",
+       6
+      ]
+     ]
+    }
+   }
+  },
+  "http://zotero.org/users/local/Oz67iTD5/items/MVGQZLNX": {
+   "id": 485,
+   "uris": [
+    "http://zotero.org/users/local/Oz67iTD5/items/MVGQZLNX"
+   ],
+   "itemData": {
+    "id": 485,
+    "type": "article-journal",
+    "abstract": "Immunization is an effective public health tool to protect children from hospitalization and death from vaccine-preventable diseases. Vaccine safety monitoring is essential to understand risks of vaccination. The Centers for Disease Control and Prevention closely monitors vaccine safety through multiple surveillance systems, including V-safe, the Vaccine Adverse Event Reporting System, the Vaccine Safety Datalink, and the Clinical Immunization Safety Assessment Network. This article briefly discusses each surveillance system and available evidence that healthcare providers can use to respond to common vaccine concerns. As trusted sources of information about vaccines, pediatric nurses and nurse practitioners need to understand how vaccine safety is monitored, where to access reliable resources about vaccines, and when and where to report adverse events noted after vaccination.",
+    "container-title": "Journal of Pediatric Health Care",
+    "DOI": "10.1016/j.pedhc.2025.07.016",
+    "ISSN": "0891-5245",
+    "issue": "1",
+    "journalAbbreviation": "Journal of Pediatric Health Care",
+    "page": "174-186",
+    "source": "ScienceDirect",
+    "title": "Monitoring Vaccine Safety: United States Vaccine Safety Surveillance Systems",
+    "title-short": "Monitoring Vaccine Safety",
+    "volume": "40",
+    "author": [
+     {
+      "family": "Zauche",
+      "given": "Lauren Head"
+     },
+     {
+      "family": "Miller",
+      "given": "Elaine R."
+     },
+     {
+      "family": "Kim",
+      "given": "Sehwa S."
+     },
+     {
+      "family": "Jazwa",
+      "given": "Amelia"
+     },
+     {
+      "family": "Shay",
+      "given": "David K."
+     }
+    ],
+    "issued": {
+     "date-parts": [
+      [
+       "2026",
+       1,
+       1
+      ]
+     ]
+    }
+   }
+  }
+ }
+}

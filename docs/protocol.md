@@ -7,9 +7,55 @@ Nov 8, 2026 · Matthew Halma
 Turn the 7.55 million v-safe free-text entries into a dated, person-linked, systematically
 classified corpus, and report what people wrote that the check-box survey could not capture.
 Existing work stops at keyword search with four hand-curated topics (OpenVSafe), qualitative
-reading (*Cries for Help*), undated MedDRA codes without aggregation (CDC), or single-condition
-LLM screens. The APPC/Penn position that the free text is not suited to systematic analysis is
-the claim the manuscript tests directly.
+reading (*Cries for Help*), undated MedDRA codes without aggregation (CDC), single-condition
+LLM screens, or a cohort defined by check-box answers alone (Levi & Lu 2026, below). The
+APPC/Penn position that the free text is not suited to systematic analysis is the claim the
+manuscript tests directly.
+
+## Closest prior work: Levi & Lu (2026)
+
+*Added 2026-11-12, after OSF registration (2026-11-11). This section is context for the
+manuscript; it does not alter the registered analysis.*
+
+Levi R, Lu N. *Reporting on Prolonged Adverse Health Impact Among V-SAFE Enrollees.* Research
+Square preprint, posted 25 Aug 2026. doi:10.21203/rs.3.rs-10768889/v1. Not peer reviewed.
+
+**What they did.** Prolonged-AE cohort: enrollees aged 16 or older who, at any 3-, 6- or
+12-month survey, answered health "Worse" than before vaccination **and** "Yes" to attributing it
+to vaccination (185,285 of 9,904,924; 1.87%; 2.24% of women). Comparisons: everyone else,
+including people who never completed a monthly survey (Control, 9,529,657), and people who
+answered "Worse" without attribution (Prolonged-NoAttr, 189,982). Free text was used only
+through (a) the CDC MedDRA PTs as released, counted at the PT and SOC level, and (b) a single
+gpt-4o-mini call per enrollee that rated all of their text "mild" or "severe", with no reported
+validation. They report the structured answers by survey window (daily, weekly, monthly) after
+dose 1 and dose 2, a dose-1 to dose-2 rechallenge analysis, and the transition from the
+qualifying survey to the next monthly survey (36.8–41.8% of the cohort filled one).
+
+**What they found.** Leading PTs in the cohort: fatigue 27%, headache 23%, arthralgia 15%,
+dizziness 13%, dyspnoea 9.8%, nausea 7.3%, myalgia 7.1%, diarrhoea 6.1%, chest pain 5.5%,
+rash ~5.5%, lymphadenopathy 5.3%, palpitations 4.6%, tinnitus 3.7%. On the qualifying survey,
+about 50% reported inability to work or do daily activities, hospitalisation, or a severe
+event as rated by the LLM. Median distinct symptoms per person: 8, 11 and 13 for one, two
+and three or more doses.
+
+**What this project adds:**
+
+| | Levi & Lu | This project |
+|---|---|---|
+| Case definition | Check-box "Worse" plus self-attribution | Text-defined multi-system phenotype; attribution **not** required (criteria below) |
+| Free text | CDC PTs as released; unvalidated two-level LLM severity rating | Own taxonomy, validated against CDC's MedDRA coding (amendment 1) |
+| Multi-system coherence | Symptom counts per person, with no null model | Co-occurrence against a permutation null; latent class analysis; subgroup stability (Q1) |
+| Timing | Rates by survey window | Onset by survey; persistence (Q2) |
+| VAERS | Not analysed | Recorded VAERS filing and PT dispersion through the v-safe–VAERS match (Q3) |
+| Attrition | Non-responders counted in Control | Prevalence bounded under the two extreme assumptions |
+| Pre-registration | None | OSF, before tuning |
+
+Their cohort is reproduced from the structured answers as a check on our linkage (target:
+185,285 / 189,982 / 9,529,657 with their inclusion rules; `vsafe_ft.cohorts`), and the Levi & Lu
+definition is compared with the text-defined phenotype, in both directions, as an analysis not
+in the pre-registration. Self-attribution is an obvious target for recall and attribution bias;
+a phenotype that does not depend on it, and that agrees or disagrees with theirs in a
+measurable way, is part of what the manuscript contributes.
 
 The decisive fact: ICAN's updated free-text files carry `SURVEY_STATIC_ID`, `RESPONSE_ID` and
 `STARTED_ON`, so each entry can be dated and tied to a check-in. The temporal dimension is unexplored.
@@ -31,7 +77,17 @@ The decisive fact: ICAN's updated free-text files carry `SURVEY_STATIC_ID`, `RES
 2. Free text → `SURVEY_STATIC_ID` → check-ins: boxes ticked, severity, medical-care answer.
 3. Free text → (registrant, date, field) → MedDRA: CDC coding of the same entry.
 4. Registrant → call center → VAERS filing.
-5. OpenVSafe's VAERS matches (score ≥8 of 11): request or rebuild.
+5. OpenVSafe's VAERS matches (score ≥8 of 11): used for Q3 (decided 2026-11-10); read from OpenVSafe's person pages 2026-11-11: 27,234 of 44,954 VAERS-filed people matched (`docs/phase1-report.md`). Reports matched to more than one person are dropped; Q3 is repeated on high-confidence matches as a sensitivity analysis (decided 2026-11-11).
+
+File notes from Levi & Lu's Supplementary Appendix 1 (added 2026-11-12; our own counts are in
+`docs/phase2-report.md`):
+- MedDRA codes come as `Covid_meddra_sd.csv` (weekly and monthly "new or worsening
+  symptoms"), `Covid_meddra_sro.csv` (daily "Other" systemic reaction) and
+  `Covid_meddra_hcvo.csv` ("Other" healthcare visit).
+- Adult check-ins: `Consolidated_health_checkin.csv`, 151,581,805 rows. Under-3:
+  `consolidated_health_checkin_u3.csv`, 265,347 rows. Together they make the 151,847,152 total.
+- Vaccinations: 21.1M rows. Race/ethnicity: 8.9M rows (not among the files we hold).
+- They linked free text by registrant code and response ID; `STARTED_ON` was not used.
 
 ## Research questions
 
@@ -48,6 +104,12 @@ no greater than expected from domain marginals; no onset-time or persistence pat
 | Q3 Detection failure | Did VAERS see these people, and as what? | Capture rate vs acute-event controls; MedDRA PT dispersion on matched reports | Similar capture; concentrated coding |
 | Q4 Burden | What did it cost them? | Health-impact, medical-care, call-center cases vs comparisons | Impact ≈ comparison groups |
 
+**Priority after Levi & Lu** (added 2026-11-12, after registration). Q3 (detection failure) is
+the lead finding, because no published work links these people to VAERS. Q1 (coherence against a
+null) and Q2 (onset by survey) are confirmatory and new. Q4 (burden) is largely reported by Levi
+& Lu for an attribution-defined cohort, so here it is secondary: it is reported for the
+text-defined phenotype and compared with their figures, not presented as a new finding.
+
 ## Case definition (PACVS-like phenotype)
 
 All of:
@@ -57,8 +119,18 @@ All of:
 3. No free text or check-box at the same survey attributing symptoms to a named acute diagnosis
    or an unrelated cause (injury, pregnancy, infection).
 
+Entries about something before vaccination do not count; entries about another person (a
+dependant) do (decided 2026-11-10).
+
 **Domains:** fatigue/PEM; cognitive; dysautonomia; sensory/neuropathic; sleep; pain;
-gastrointestinal; menstrual change. Implemented as themes in `taxonomy/`.
+gastrointestinal; menstrual change; cardiorespiratory (dyspnoea, chest tightness; added
+2026-11-10). Implemented as themes in `taxonomy/`. Altered taste/smell is labelled but is not a
+domain. Upper-respiratory symptoms (sore throat, congestion, cough) count as a criterion-3
+exclusion (likely intercurrent infection).
+
+The vaccine-attribution answer is **not** part of the case definition. It is recorded as a
+covariate. The Levi & Lu definition (health "Worse" plus attribution "Yes" at any monthly survey)
+is compared as an analysis not in the pre-registration (added 2026-11-12).
 
 | Element | Choice |
 |---|---|

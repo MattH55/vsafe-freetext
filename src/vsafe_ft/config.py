@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -13,6 +14,12 @@ CONFIG_DIR = REPO_ROOT / "config"
 # Participant data must not live in a cloud-synced folder (OneDrive, Dropbox, iCloud):
 # set VSAFE_DATA_DIR to a local path outside any synced tree. Defaults to ./data.
 DATA_DIR = Path(os.environ.get("VSAFE_DATA_DIR") or REPO_ROOT / "data").resolve()
+# Which working database under <DATA_DIR>/interim: "vsafe" (release 1, phase 1) by default;
+# "vsafe_full" for the all-release corpus after registration. Aggregates of a non-default
+# database go to <DATA_DIR>/aggregates/<DB_NAME>/ so phase-1 tables are not overwritten.
+DB_NAME = os.environ.get("VSAFE_DB", "vsafe")
+if not re.fullmatch(r"[a-z0-9_]{1,40}", DB_NAME):
+    raise ValueError(f"VSAFE_DB must be a short lower-case name, got {DB_NAME!r}")
 
 
 def source_dir(spec: dict) -> Path:
