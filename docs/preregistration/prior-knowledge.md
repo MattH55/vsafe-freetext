@@ -37,3 +37,6 @@ happened after filing and follows the registered plan.
 | 2026-11-11 | `vsafe-ft llm-label --long-term --residue --all` (layer 3, `z-ai/glm-5.3`, NanoGPT ZDR, prompt v0.1): every long-term entry layer 1 left unthemed, 649,516 entries, 386,870 unique texts | labels stored in `llm_labels`; no text read by the analyst |
 | 2026-11-11 | Layer-3 long-term run paused after 1,800 texts (NanoGPT quota) | labels stored; not analysed |
 | 2026-11-11 | Amendment 1 drafted (CDC MedDRA coding as the reference standard). No precision, recall or Q1–Q3 result computed on long-term entries | none |
+| 2026-11-11 | Layer-1 validation vs CDC MedDRA coding computed (amendment 1) | aggregates in `docs/phase2-report.md` |
+| 2026-11-11 | DeepSeek V4.1 Flash pilot on the phase-1 sample (2,000 week-1 / six-week entries) and model-shift tables vs Claude and GLM | aggregates only |
+| 2026-11-11 | Amendment 2 drafted (layer-3 model change) | none |

@@ -18,7 +18,8 @@ Two LLMs label the same closed theme list with the same fixed prompt (`classify/
 
 | Role | Provider | Model | Retention |
 |---|---|---|---|
-| Primary: labels all in-scope text | NanoGPT subscription | `z-ai/glm-5.3` | Zero-data-retention routes only |
+| Primary until amendment 2 (pilot + 1,800 long-term texts) | NanoGPT subscription | `z-ai/glm-5.3` | Zero-data-retention routes only |
+| Primary from amendment 2: labels the long-term residue | NanoGPT pay-per-token | `deepseek/deepseek-v4.1-flash`, reasoning off | Zero-data-retention routes only (`provider.zdr`, `data_collection: deny`); confirmed with synthetic text 2026-11-11 |
 | Second: model-sensitivity sample only | Anthropic API | `claude-opus-5-5` | 30 days (Anthropic default) |
 
 Order chosen by the protocol owner (2026-11-10): the bulk of the text goes to the

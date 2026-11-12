@@ -248,3 +248,26 @@ def test_model_shift_flag_nulled_when_suppressed(con):
     sh = layer3.model_shift(con, "test/model", "test/second",
                             sample={"sample": 3, "seed": 1, "residue_only": False})
     assert sh.filter(sh["suppressed"])["model_sensitive"].is_null().all()
+
+
+def test_parallel_workers_same_result(con):
+    post = FakePost()
+    run = layer3.label_entries(con, labeller(post), sample=100, batch=1, workers=4,
+                               log=lambda *_: None)
+    assert sorted(_sent_texts(post)) == ["brain fog", "weird zebra glow"]
+    assert run["texts_sent"] == 2 and run["requests"] == 2 and run["failed"] == 0
+
+
+def test_deepseek_settings_reasoning_off(monkeypatch):
+    monkeypatch.setattr(llm, "api_key", lambda: "test-key")
+    lab = llm.make_labeller({"pain": "pain"}, "deepseek/deepseek-v4.1-flash")
+    assert lab.url == llm.API_URL and lab.extra == {"reasoning": {"effort": "none"}}
+
+
+def test_deepseek_long_term_waits_for_amendment_2(con, monkeypatch):
+    real = config.analysis()
+    monkeypatch.setattr(config, "analysis", lambda: {**real, "osf_registration": "osf.io/x",
+                                                     "amendment_2": None})
+    with pytest.raises(PermissionError, match="amendment 2"):
+        layer3.label_entries(con, labeller(model="deepseek/deepseek-v4.1-flash"), sample=None,
+                             long_term=True, log=lambda *_: None)

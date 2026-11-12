@@ -9,6 +9,7 @@ or returns text; outputs are counts, and every aggregate goes through suppress.s
 from __future__ import annotations
 
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import polars as pl
 
@@ -21,6 +22,7 @@ from .themes import LONG_TERM_PATTERN, exploratory_filter_sql, registration_file
 LABELS_DDL = """CREATE TABLE IF NOT EXISTS llm_labels (
     text_hash VARCHAR, model VARCHAR, prompt_version VARCHAR, themes VARCHAR[],
     third_party BOOLEAN, pre_vaccine BOOLEAN, ok BOOLEAN, labelled_at TIMESTAMP)"""
+AMENDMENT_2_MODELS = {"deepseek/deepseek-v4.1-flash"}
 RUNS_DDL = """CREATE TABLE IF NOT EXISTS llm_runs (
     started_at TIMESTAMP, model VARCHAR, prompt_version VARCHAR, texts INTEGER,
     skipped_pii INTEGER, failed INTEGER, requests INTEGER, tokens BIGINT, cost_usd DOUBLE,
@@ -48,11 +50,14 @@ def candidate_sql(*, sample: int | None, seed: int, residue_only: bool, long_ter
 
 def label_entries(con, labeller, *, sample: int | None, seed: int = 1, residue_only: bool = False,
                   batch: int = 20, max_usd: float = 5.0, long_term: bool = False,
-                  source: str = "entries_survey", log=print) -> dict:
+                  source: str = "entries_survey", log=print, workers: int = 1) -> dict:
     """Label the unique texts of a sample of entries; returns run counts (no text)."""
     if long_term and not registration_filed():
         raise PermissionError("Long-term free text may not be labelled before the OSF "
                               "registration exists (osf_registration in config/analysis.yaml).")
+    if long_term and labeller.model in AMENDMENT_2_MODELS and not config.analysis().get("amendment_2"):
+        raise PermissionError(f"{labeller.model} labels long-term text only after amendment 2 is "
+                              "filed (amendment_2 in config/analysis.yaml).")
     con.execute(LABELS_DDL)
     con.execute(RUNS_DDL)
     model = labeller.model
@@ -70,20 +75,26 @@ def label_entries(con, labeller, *, sample: int | None, seed: int = 1, residue_o
     send = [(h, t) for h, t, p in zip(hashes, texts, pii) if not p]
     t0, failed, done = time.time(), 0, 0
     started = time.strftime("%Y-%m-%d %H:%M:%S")
-    for k in range(0, len(send), batch):
-        if labeller.cost_usd >= max_usd:
-            log(f"stopping: cost cap ${max_usd:.2f} reached")
-            break
-        chunk = send[k:k + batch]
-        res = labeller.label([t for _, t in chunk])
-        rows = [(h, model, PROMPT_VERSION, r["themes"] if r else [],
-                 bool(r and r["third_party"]), bool(r and r["pre_vaccine"]), r is not None)
-                for (h, _), r in zip(chunk, res)]
-        failed += sum(1 for r in res if r is None)
-        con.executemany("INSERT INTO llm_labels VALUES (?, ?, ?, ?, ?, ?, ?, now())", rows)
-        done += len(chunk)
-        if (k // batch) % 25 == 0:
-            log(f"{done}/{len(send)} texts, ${labeller.cost_usd:.3f}, {time.time() - t0:.0f}s")
+    chunks = [send[k:k + batch] for k in range(0, len(send), batch)]
+    pool = ThreadPoolExecutor(max_workers=max(1, workers))
+    try:
+        for w in range(0, len(chunks), max(1, workers)):   # one wave of parallel requests
+            if labeller.cost_usd >= max_usd:
+                log(f"stopping: cost cap ${max_usd:.2f} reached")
+                break
+            wave = chunks[w:w + max(1, workers)]
+            results = list(pool.map(lambda c: labeller.label([t for _, t in c]), wave))
+            for chunk, res in zip(wave, results):
+                rows = [(h, model, PROMPT_VERSION, r["themes"] if r else [],
+                         bool(r and r["third_party"]), bool(r and r["pre_vaccine"]), r is not None)
+                        for (h, _), r in zip(chunk, res)]
+                failed += sum(1 for r in res if r is None)
+                con.executemany("INSERT INTO llm_labels VALUES (?, ?, ?, ?, ?, ?, ?, now())", rows)
+                done += len(chunk)
+                if (done // batch) % 25 == 0:
+                    log(f"{done}/{len(send)} texts, ${labeller.cost_usd:.3f}, {time.time() - t0:.0f}s")
+    finally:
+        pool.shutdown(wait=True)
     run = {"model": model, "prompt_version": PROMPT_VERSION,
            "sample_entries": one(con, "SELECT count(*) FROM llm_sample")[0],
            "unique_texts_to_label": len(hashes), "texts_sent": done,

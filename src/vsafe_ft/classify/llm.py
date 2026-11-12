@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -37,6 +38,12 @@ DEFAULT_MODEL = "z-ai/glm-5.3"              # NanoGPT subscription model, ZDR ro
 SECOND_MODEL = "claude-opus-5-5"            # Anthropic API: second LLM for model sensitivity
 PROMPT_VERSION = "v0.1-2026-11-10"
 PROVIDER = {"zdr": True, "data_collection": "deny"}
+# Per-model request settings. DeepSeek V4.1 Flash runs with reasoning off on the pay-per-token
+# endpoint (amendment 2): no hidden reasoning tokens, about 1.4k tokens per 20-entry request.
+MODEL_SETTINGS = {
+    "deepseek/deepseek-v4.1-flash": {"body": {"reasoning": {"effort": "none"}},
+                                     "subscription": False},
+}
 
 
 def has_pii(text: str) -> bool:
@@ -144,9 +151,11 @@ class NanoGPT:
         self.key = key if key is not None else api_key()
         self.post = post or _http_post
         self.timeout, self.retries = timeout, retries
+        self.extra = dict(MODEL_SETTINGS.get(model, {}).get("body", {}))
         self.cost_usd = 0.0
         self.tokens = 0
         self.requests = 0
+        self._lock = threading.Lock()     # counters are shared when requests run in parallel
 
     def label(self, texts: list[str]) -> list[dict | None]:
         if any(has_pii(t) for t in texts):
@@ -155,12 +164,14 @@ class NanoGPT:
             "model": self.model, "temperature": 0, "max_tokens": 1500 + 80 * len(texts),
             "provider": PROVIDER,
             "messages": [{"role": "user", "content": build_prompt(self.themes, texts)}],
+            **self.extra,
         }
         d = self._post_with_retry(body)
-        self.requests += 1
         price = d.get("x_nanogpt_pricing") or {}
-        self.cost_usd += float(price.get("cost") or 0)
-        self.tokens += int((d.get("usage") or {}).get("total_tokens") or 0)
+        with self._lock:
+            self.requests += 1
+            self.cost_usd += float(price.get("cost") or 0)
+            self.tokens += int((d.get("usage") or {}).get("total_tokens") or 0)
         content = (d.get("choices") or [{}])[0].get("message", {}).get("content", "")
         return parse_results(content, len(texts), set(self.themes))
 
@@ -255,4 +266,5 @@ def make_labeller(themes: dict[str, str], model: str):
     """Claude models go to the Anthropic API; everything else to the NanoGPT subscription."""
     if model.startswith("claude-"):
         return ClaudeAPI(themes, model=model)
-    return NanoGPT(themes, model=model)
+    sub = MODEL_SETTINGS.get(model, {}).get("subscription", True)
+    return NanoGPT(themes, model=model, subscription=sub)
