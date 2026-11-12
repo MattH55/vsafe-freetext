@@ -1,5 +1,6 @@
 Matthew Halma
-[[HUMAN: affiliation]]
+Director, Open Source Medicine
+Pärnu mnt. 139c, 11317 Tallinn, Estonia
 mhalma@opensourcemed.info
 ORCID 0000-0003-2487-0636
 

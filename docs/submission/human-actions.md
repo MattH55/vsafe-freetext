@@ -21,8 +21,7 @@ as written in the brief; the manuscript and cover letter use the former with a f
 
 | Where | Placeholder | Decision needed |
 |---|---|---|
-| Title page | `[[HUMAN: affiliation, city, country]]` | Institutional affiliation as it should appear |
-| Title page | `[[HUMAN: postal address]]` | Corresponding address (e-mail already given) |
+| Title page | affiliation and address | Done 2026-11-12: Open Source Medicine, Pärnu mnt. 139c, 11317 Tallinn, Estonia |
 | Declarations, Funding | `[[HUMAN: funding source …]]` | Source, or "No funding was received for this study" |
 | Declarations, Conflicts of Interest | `[[HUMAN: conflicts of interest …]]` | Consider: any role with or payment from OpenVAERS, ICAN, Vaccine Data Navigator or another advocacy or litigation body; expert-witness work; language-model provider credits used for layer 3 |
 | Declarations, Ethics Approval | `[[HUMAN: applicable rule or jurisdiction]]` and the committee-determination option | (a) a written determination that review was not required, with committee and date, is stronger; (b) the statement as drafted otherwise. Levi & Lu obtained an MIT COUHES determination; reviewers may ask |
