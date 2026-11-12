@@ -276,3 +276,127 @@ def dispersion_test(pts_cases, pts_comparison, permutations: int = 1000,
         ge += entropy(s[: a.size]) - entropy(s[a.size:]) >= obs
     return DispersionResult(entropy(a), entropy(b), obs, (1 + ge) / (1 + permutations),
                             permutations)
+
+
+# --- Curveball null: row and column margins both fixed (not pre-registered) ------------------
+
+@dataclass
+class CurveballResult:
+    domains: list[str]
+    observed_pairs: int
+    null_mean_pairs: float            # equals observed_pairs: fixed by the row sums
+    pair_observed: np.ndarray = field(repr=False)
+    pair_null_mean: np.ndarray = field(repr=False)
+    pair_p_upper: np.ndarray = field(repr=False)
+    pair_p_lower: np.ndarray = field(repr=False)
+    permutations: int = 0
+    seed: int | None = None
+
+
+def _curveball_round(rows: np.ndarray, k: int, weights: np.ndarray, rng) -> None:
+    """One round of curveball trades in place: rows are paired at random; each pair keeps its
+    shared domains and redistributes the rest at random, each row keeping its count."""
+    n = rows.size
+    if n < 2:
+        return
+    perm = rng.permutation(n)
+    m = n // 2
+    ia, ib = perm[:m], perm[m:2 * m]
+    a, b = rows[ia], rows[ib]
+    shared = a & b
+    u = a ^ b
+    bits = np.arange(k)
+    ubits = ((u[:, None] >> bits) & 1).astype(bool)
+    na = (((a ^ shared)[:, None] >> bits) & 1).sum(1)          # unique bits a must keep
+    pr = rng.random((m, k))
+    pr[~ubits] = -1.0
+    order = np.argsort(-pr, axis=1)
+    rank = np.empty_like(order)
+    np.put_along_axis(rank, order, np.broadcast_to(bits, (m, k)).copy(), axis=1)
+    pick = (rank < na[:, None]) & ubits
+    rows[ia] = shared | (pick * weights).sum(1).astype(np.uint16)
+    rows[ib] = shared | ((ubits & ~pick) * weights).sum(1).astype(np.uint16)
+
+
+def curveball_test(X, domains: list[str] | None = None, permutations: int = 1000,
+                   seed: int | None = None, strata=None, burn_in: int = 30, thin: int = 3,
+                   log=None) -> CurveballResult:
+    """Pair co-occurrence against a null that keeps every row's domain count and every domain's
+    frequency (curveball trades on the 2^k pattern codes, within strata if given). The total
+    pair count is invariant under this null, so only per-pair tests are reported: upper-tail
+    (observed >= null) and lower-tail p-values, each (1 + #) / (1 + B)."""
+    X = np.asarray(X, dtype=bool)
+    n, k = X.shape
+    if k > 16:
+        raise ValueError("at most 16 domains")
+    domains = domains or [f"d{j}" for j in range(k)]
+    pats = np.arange(1 << k)
+    bits = ((pats[:, None] >> np.arange(k)) & 1).astype(np.int64)
+    multi = bits.sum(1) >= 2
+    weights = (1 << np.arange(k)).astype(np.uint16)
+    code = (X.astype(np.uint16) * weights).sum(1, dtype=np.uint16)
+    obs_c, _ = _pattern_stats(np.bincount(code, minlength=1 << k), bits, multi)
+    iu = np.triu_indices(k, 1)
+    obs_pairs = int(obs_c[iu].sum())
+    pop = bits.sum(1)
+    trade = (pop[code] >= 1) & (pop[code] <= k - 1)     # rows with 0 or k domains never change
+    fixed_counts = np.bincount(code[~trade], minlength=1 << k)
+    st = np.zeros(n, dtype=np.int64) if strata is None else np.asarray(strata)
+    groups = [code[(st == v) & trade].copy() for v in np.unique(st)]
+    rng = np.random.default_rng(seed)
+    for _ in range(burn_in):
+        for g in groups:
+            _curveball_round(g, k, weights, rng)
+    ge = np.zeros((k, k), dtype=np.int64)
+    le = np.zeros((k, k), dtype=np.int64)
+    sum_c = np.zeros((k, k))
+    for b in range(permutations):
+        for _ in range(thin):
+            for g in groups:
+                _curveball_round(g, k, weights, rng)
+        cnt = fixed_counts.copy()
+        for g in groups:
+            cnt += np.bincount(g, minlength=1 << k)
+        c, _ = _pattern_stats(cnt, bits, multi)
+        ge += c >= obs_c
+        le += c <= obs_c
+        sum_c += c
+        if log and (b + 1) % 100 == 0:
+            log(f"curveball {b + 1}/{permutations}")
+    B = permutations
+    null_mean = sum_c / B if B else np.full((k, k), np.nan)
+    return CurveballResult(domains=list(domains), observed_pairs=obs_pairs,
+                           null_mean_pairs=float(null_mean[iu].sum()), pair_observed=obs_c,
+                           pair_null_mean=null_mean, pair_p_upper=(1 + ge) / (1 + B),
+                           pair_p_lower=(1 + le) / (1 + B), permutations=B, seed=seed)
+
+
+# --- Q3 dispersion, extended (not pre-registered) --------------------------------------------
+
+def entropy_miller_madow(labels) -> float:
+    _, c = np.unique(np.asarray(labels), return_counts=True)
+    n = c.sum()
+    return entropy(labels) + (c.size - 1) / (2 * n) / math.log(2)
+
+
+def dispersion_extended(pts_cases, pts_comparison, permutations: int = 1000,
+                        seed: int | None = None, rarefactions: int = 200) -> dict:
+    """Raw, Miller-Madow and rarefied (equal code counts) Shannon entropies, with one-sided
+    (cases more dispersed) and two-sided permutation p-values on the raw difference."""
+    a, b = np.asarray(pts_cases), np.asarray(pts_comparison)
+    rng = np.random.default_rng(seed)
+    obs = entropy(a) - entropy(b)
+    pool = np.concatenate([a, b])
+    ge = two = 0
+    for _ in range(permutations):
+        s = rng.permutation(pool)
+        d = entropy(s[: a.size]) - entropy(s[a.size:])
+        ge += d >= obs
+        two += abs(d) >= abs(obs)
+    m = int(min(a.size, b.size))
+    ra = np.mean([entropy(rng.choice(a, m, replace=False)) for _ in range(rarefactions)])
+    rb = np.mean([entropy(rng.choice(b, m, replace=False)) for _ in range(rarefactions)])
+    return {"h_a": entropy(a), "h_b": entropy(b), "h_a_mm": entropy_miller_madow(a),
+            "h_b_mm": entropy_miller_madow(b), "h_a_rare": float(ra), "h_b_rare": float(rb),
+            "rare_n": m, "diff": obs, "p_upper": (1 + ge) / (1 + permutations),
+            "p_two": (1 + two) / (1 + permutations)}

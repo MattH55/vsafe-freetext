@@ -368,6 +368,60 @@ def cmd_analyse(a):
         print(f"onset checks done {time.time() - t0:.0f}s", flush=True)
 
 
+def cmd_submission(a):
+    """Analyses added for the Drug Safety submission (not pre-registered); outputs sub_*."""
+    import json
+    import time
+
+    import polars as pl
+
+    from . import link, openvsafe, submission
+    from .analysis import pacvs_domains
+
+    con = link.connect()
+    con.execute(f"SET memory_limit = '{a.memory}'")
+    t0 = time.time()
+    perms = a.permutations or int(config.analysis()["permutations"])
+    domains = pacvs_domains()
+    steps = set(a.steps.split(","))
+    def log(m):
+        print(f"{m} {time.time() - t0:.0f}s", flush=True)
+
+    if "export" in steps:
+        print("matrix ->", submission.export_q1_matrix(con, domains), flush=True)
+    if "curveball" in steps:
+        for k, df in submission.q1_curveball(domains, perms, log=log).items():
+            _write(df, f"sub_b2_curveball_{k}")
+        log("B2 done")
+    if "persistence" in steps:
+        for k, df in submission.persistence_variants(con).items():
+            _write(df, f"sub_b3_{k}")
+        log("B3 done")
+    if "structured" in steps:
+        _write(submission.structured_onset_vs_a(con), "sub_b4_structured_vs_a")
+        log("B4 done")
+    if "audit" in steps:
+        r = submission.audit_sample(con, a.model)
+        _write(r["pool"], "sub_b5_audit_pool")
+        _write(r["drawn"], "sub_b5_audit_drawn")
+        print(json.dumps({"sheet": r["sheet"], "items": r["items"]}), flush=True)
+        log("B5 done")
+    if "dispersion" in steps:
+        ov = openvsafe.connect()
+        sets = {w: openvsafe.analysis_set(ov, w) for w in openvsafe.MATCH_SETS}
+        ov.close()
+        _write(submission.q3_dispersion_extended(con, sets, perms), "sub_b6_dispersion")
+        log("B6 done")
+    if "variants" in steps:
+        _write(submission.q1_variants(con, domains, perms), "sub_b7_q1_variants")
+        log("B7 done")
+    if "reconcile" in steps:
+        df = submission.reconcile(con)
+        _write(df.with_columns(pl.lit(10**9).alias("people"), pl.lit(False).alias("suppressed")), "sub_b8_reconcile")
+        _write(submission.llm_cost(con).with_columns(pl.lit(10**9).alias("people"), pl.lit(False).alias("suppressed")), "sub_b9_llm_cost")
+        log("B8/B9 done")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="vsafe-ft")
     sub = p.add_subparsers(required=True)
@@ -469,6 +523,13 @@ def main(argv=None):
     s.add_argument("--skip-helpers", action="store_true", help="reuse ph_lt / ph_dom tables")
     s.add_argument("--memory", default="6GB", help="DuckDB memory limit")
     s.set_defaults(func=cmd_analyse)
+
+    s = sub.add_parser("submission", help="analyses added for the Drug Safety submission (sub_*)")
+    s.add_argument("--model", default="deepseek/deepseek-v4.1-flash")
+    s.add_argument("--steps", default="export,curveball,persistence,structured,audit,dispersion,variants,reconcile")
+    s.add_argument("--permutations", type=int, default=None)
+    s.add_argument("--memory", default="6GB")
+    s.set_defaults(func=cmd_submission)
 
     a = p.parse_args(argv)
     if hasattr(sys.stdout, "reconfigure"):
