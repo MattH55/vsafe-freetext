@@ -338,3 +338,26 @@ def llm_cost(con) -> pl.DataFrame:
                        FROM llm_runs GROUP BY ALL ORDER BY ALL""")
     return df.with_columns(pl.col("model").map_elements(
         lambda m: str(CLAUDE_PRICES.get(m, "")), return_dtype=pl.String).alias("claude_price_in_out_per_M"))
+
+
+def audit_score() -> pl.DataFrame:
+    """Score the coded audit sheet against the key: for each side (layer3_only, cdc_only) and
+    domain, how often the coder agreed with the side that said the domain was present. Reads
+    the sheet and key from gold_set/<db>/; returns counts only."""
+    from .gold import gold_dir
+    d = gold_dir()
+    sheet = pl.read_csv(d / "audit_layer3_vs_cdc_sheet.csv", infer_schema_length=1000)
+    key = pl.read_csv(d / "audit_layer3_vs_cdc_key.csv", infer_schema_length=1000)
+    coded = sheet.filter(pl.col("present_0_1").cast(pl.String).is_in(["0", "1"]))
+    df = coded.select("item", pl.col("present_0_1").cast(pl.Int64).alias("present")).join(key, on="item")
+    # layer3_only: layer 3 said present (CDC did not): layer 3 right if present = 1
+    # cdc_only: CDC said present (classifier did not): CDC right if present = 1
+    out = (df.group_by("side", "theme").agg(pl.len().alias("coded"), pl.col("present").sum().alias("present_1"))
+             .with_columns((pl.col("present_1") / pl.col("coded")).round(3).alias("share_side_right"))
+             .sort("side", "theme"))
+    totals = (df.group_by("side").agg(pl.len().alias("coded"), pl.col("present").sum().alias("present_1"))
+                .with_columns(pl.lit("all domains").alias("theme"),
+                              (pl.col("present_1") / pl.col("coded")).round(3).alias("share_side_right"))
+                .select(out.columns))
+    res = pl.concat([out, totals]).with_columns(pl.col("coded").alias("people"))
+    return safe(res)

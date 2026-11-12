@@ -427,6 +427,9 @@ def cmd_submission(a):
         _write(cohorts.counts(con), "sub_levilu_counts")
         _write(cohorts.overlap(con), "sub_levilu_overlap")
         log("Levi & Lu cohorts done")
+    if "audit-score" in steps:      # after the protocol owner has coded the sheet (B5)
+        _write(submission.audit_score(), "sub_b5_audit_scored")
+        log("B5 audit scored")
 
 
 def main(argv=None):
