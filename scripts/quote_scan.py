@@ -7,6 +7,7 @@ Needs VSAFE_DATA_DIR / VSAFE_DB; opens the database read-only.
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -15,8 +16,6 @@ import duckdb
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from vsafe_ft import config
-
-import os
 
 N = int(os.environ.get("QUOTE_SCAN_N", "5"))     # run length in words; 5 per the brief, 8 as a stricter check
 
@@ -61,6 +60,20 @@ def main(paths: list[str]) -> int:
              eh AS (SELECT DISTINCT hash(array_to_string(w[i:i + {N - 1}], ' ')) AS h FROM x)
         SELECT count(*) FROM grams g WHERE g.h IN (SELECT h FROM eh) AND g.h NOT IN (SELECT h FROM opt)""").fetchone()[0]
     print(f"{hits2} of those are not part of a survey answer option quoted in Methods")
+    if hits2:
+        # how many entries contain each matched run: a quoted entry matches once, stock phrasing thousands of times
+        stats = con.execute(f"""
+            WITH t AS (SELECT entry_id, list_filter(string_split(regexp_replace(lower(text), '[^a-z0-9 ]+', ' ', 'g'), ' '),
+                                                    lambda x: x <> '') AS w
+                       FROM entries WHERE length(coalesce(text, '')) >= 20),
+                 x AS (SELECT entry_id, w, unnest(generate_series(1, len(w) - {N - 1})) AS i FROM t WHERE len(w) >= {N}),
+                 eh AS (SELECT DISTINCT entry_id, hash(array_to_string(w[i:i + {N - 1}], ' ')) AS h FROM x),
+                 m AS (SELECT g.h, count(DISTINCT eh.entry_id) AS n_entries FROM grams g JOIN eh USING (h)
+                       WHERE g.h NOT IN (SELECT h FROM opt) GROUP BY g.h)
+            SELECT min(n_entries), median(n_entries), max(n_entries),
+                   count(*) FILTER (WHERE n_entries < 10) FROM m""").fetchone()
+        print(f"entries containing each matched run: min {stats[0]}, median {stats[1]}, max {stats[2]}; "
+              f"runs found in fewer than 10 entries: {stats[3]}")
     return 0 if hits2 == 0 else 1
 
 
