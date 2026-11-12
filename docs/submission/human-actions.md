@@ -35,7 +35,7 @@ are recorded here; what remains is in section B.
    `[[HUMAN: pending coding]]` in Results, as an exploratory finding. If you would rather submit
    without it, delete that sentence and the audit paragraph; the manuscript stands without it.
 2. ~~Task A~~ Done 2026-11-12: Zenodo doi:10.5281/zenodo.24178319 is in Code Availability and the cover letter.
-3. **Browser agent, Task B**: lift the OSF embargo on osf.io/gnfpd and confirm the dates.
+3. **Task B, OSF embargo**: end-of-embargo requested on 2026-11-12; the registration still showed as embargoed afterwards. OSF processes the request after contributor approval (check e-mail for an approval link) and can take up to 48 hours; confirm it reads "Public" in a private window before posting the preprint, and that the registration and update dates match the manuscript (all 2026-11-11).
 4. **Browser agent, Task C**: post the preprint on OSF Preprints (CC BY 4.0); the DOI goes into the
    cover letter.
 5. **Coding agent, Task D**: put both DOIs into the manuscript and cover letter, rebuild, re-zip,
@@ -45,8 +45,7 @@ are recorded here; what remains is in section B.
 7. **Submit to Drug Safety.** Open the live submission-guidelines page first and confirm
    `guidelines-checked.md`; the journal's form will ask for the declarations already in the
    manuscript.
-8. Optional: confirm the layer-3 cost on NanoGPT's usage page (manuscript says US$0.022 as logged
-   per request); inspect the one 8-word phrase the quote scan flagged
+8. Optional: inspect the one 8-word phrase the quote scan flagged
    (`QUOTE_SCAN_N=8 python scripts/quote_scan.py docs/submission/manuscript.txt`).
 
 ## C. Things the assistant did not do, by instruction
