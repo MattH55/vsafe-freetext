@@ -293,8 +293,9 @@ def q1_variants(con, domains: list[str], permutations: int) -> pl.DataFrame:
     return safe(pl.DataFrame([
         {"variant": "registered", "people": one(con, "SELECT count(*) FROM ph_lt_text t JOIN phenotype_groups g USING (registrant, dose_number) WHERE g.in_denominator")[0],
          "case_person_doses": cases_reg, "q1_ratio": None, "q1_p": None},
-        {"variant": "criterion 3 off", "people": None, "case_person_doses": cases_no3,
-         "q1_ratio": None, "q1_p": None},
+        {"variant": "criterion 3 off (Q1 unaffected: it does not use the case definition)",
+         "people": one(con, "SELECT count(*) FROM ph_lt_text t JOIN phenotype_groups g USING (registrant, dose_number) WHERE g.in_denominator")[0],
+         "case_person_doses": cases_no3, "q1_ratio": None, "q1_p": None},
         {"variant": "redacted entries included", "people": X.shape[0], "case_person_doses": cases_reg,
          "q1_ratio": round(r.observed_pairs / r.null_mean_pairs, 3), "q1_p": round(r.p_pairs, 4)}]))
 
