@@ -20,8 +20,8 @@ and record the page date here]]**.
 
 | Requirement | Applied |
 |---|---|
-| Article type, word limit | Original Research Article; main text 5,039 words (Introduction to Conclusions), checked by `scripts/manuscript_numbers.py` |
-| Abstract | Structured, headings as above, about 300 words |
+| Article type, word limit | Original Research Article; main text 6,031 words (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references) against the 6,000 reported by the search summary; [[HUMAN: confirm the limit on the live page; if it binds, the Methods list "Analyses not in the pre-registration" or the Discussion onset paragraph can be moved to the supplement]] |
+| Abstract | Structured, headings as above, 340 words; the journal allows up to 450 where a reporting guideline requires it (RECORD items 1.1 to 1.3 are addressed in the abstract) |
 | Key Points | Three bullets before the Introduction |
 | Title page | Title, author, affiliation [[HUMAN]], ORCID 0000-0003-2487-0636, corresponding e-mail, running title, article type |
 | Declarations | Funding, Conflicts of Interest, Ethics Approval, Consent to Participate, Consent for Publication, Availability of Data and Material, Code Availability, Authors' Contributions (CRediT roles), AI tools statement |

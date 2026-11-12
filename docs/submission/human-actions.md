@@ -1,6 +1,11 @@
 # Actions for Matthew before submission
 
-In order. Every `[[HUMAN: …]]` placeholder in the manuscript and cover letter is listed in section B.
+The package is `C:\Users\matth\OneDrive\Documents\OpenSourceMed\PACVS-vsafe-DrugSafety-submission-2026-11-12.zip`
+(also in `docs/submission/`, built from tag `v1.0-submission`). In order. Every `[[HUMAN: …]]` placeholder in
+the manuscript and cover letter is listed in section B.
+
+Also decide: the repository name. GitHub resolves `MattH55/vsafe-freetext`, not `mhalma/vsafe-freetext`
+as written in the brief; the manuscript and cover letter use the former with a flag.
 
 ## A. In order
 
