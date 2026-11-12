@@ -16,7 +16,7 @@ from . import config
 from .classify.llm import PROMPT_VERSION, has_pii
 from .db import frame, one
 from .suppress import safe
-from .themes import exploratory_filter_sql, registration_filed
+from .themes import LONG_TERM_PATTERN, exploratory_filter_sql, registration_filed
 
 LABELS_DDL = """CREATE TABLE IF NOT EXISTS llm_labels (
     text_hash VARCHAR, model VARCHAR, prompt_version VARCHAR, themes VARCHAR[],
@@ -27,10 +27,14 @@ RUNS_DDL = """CREATE TABLE IF NOT EXISTS llm_runs (
     seconds DOUBLE)"""
 
 
-def candidate_sql(*, sample: int, seed: int, residue_only: bool, long_term: bool = False,
+def candidate_sql(*, sample: int | None, seed: int, residue_only: bool, long_term: bool = False,
                   source: str = "entries_survey") -> str:
-    """Entries in the sample (stable hash order on response id + field), with text hash."""
-    where = "TRUE" if long_term else exploratory_filter_sql("e")
+    """Entries in the sample (stable hash order on response id + field), with text hash.
+
+    long_term=False: week-1 / six-week entries; long_term=True: 3-, 6- and 12-month entries
+    only (after registration). sample=None takes every eligible entry."""
+    where = (f"e.survey_matched AND regexp_matches(coalesce(e.survey_type, ''), "
+             f"'{LONG_TERM_PATTERN}')" if long_term else exploratory_filter_sql("e"))
     residue = ("AND NOT EXISTS (SELECT 1 FROM entry_themes t WHERE t.entry_id = e.entry_id)"
                if residue_only else "")
     return f"""
@@ -39,10 +43,10 @@ def candidate_sql(*, sample: int, seed: int, residue_only: bool, long_term: bool
         WHERE ({where}) AND NOT coalesce(e.redacted, false)
           AND length(trim(coalesce(e.text, ''))) > 0 {residue}
         ORDER BY hash(concat_ws('|', e.response_id, e.field, '{int(seed)}'))
-        LIMIT {int(sample)}"""
+        {"" if sample is None else f"LIMIT {int(sample)}"}"""
 
 
-def label_entries(con, labeller, *, sample: int, seed: int = 1, residue_only: bool = False,
+def label_entries(con, labeller, *, sample: int | None, seed: int = 1, residue_only: bool = False,
                   batch: int = 20, max_usd: float = 5.0, long_term: bool = False,
                   source: str = "entries_survey", log=print) -> dict:
     """Label the unique texts of a sample of entries; returns run counts (no text)."""

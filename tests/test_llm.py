@@ -6,7 +6,7 @@ import re
 import duckdb
 import pytest
 
-from vsafe_ft import layer3, themes
+from vsafe_ft import config, layer3, themes
 from vsafe_ft.classify import llm
 
 THEMES = {"fatigue_pem": "fatigue", "cognitive": "brain fog", "pain": "headache"}
@@ -137,6 +137,15 @@ def test_residue_only(con):
 def test_long_term_refused(con):
     with pytest.raises(PermissionError):
         layer3.label_entries(con, labeller(), sample=10, long_term=True)
+
+
+def test_long_term_only_after_registration(con, monkeypatch):
+    real = config.analysis()
+    monkeypatch.setattr(config, "analysis", lambda: {**real, "osf_registration": "osf.io/x"})
+    post = FakePost()
+    run = layer3.label_entries(con, labeller(post), sample=None, long_term=True,
+                               log=lambda *_: None)
+    assert _sent_texts(post) == ["zebra long"] and run["sample_entries"] == 12
 
 
 def test_cost_cap_stops(con):

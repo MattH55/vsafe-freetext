@@ -34,3 +34,4 @@ happened after filing and follows the registered plan.
 | 2026-11-11 | `vsafe-ft link` on all 12 updated releases and the under-3 file, into `interim/vsafe_full.duckdb` | all survey types, including 3-, 6- and 12-month |
 | 2026-11-11 | `vsafe-ft classify --long-term`: layer 1 (taxonomy v1.0) on all 7,819,251 entries | aggregates only (`docs/phase2-report.md`) |
 | 2026-11-11 | `vsafe-ft gold draw --period long_term --seed 1`, sheets A and B written | texts not opened |
+| 2026-11-11 | `vsafe-ft llm-label --long-term --residue --all` (layer 3, `z-ai/glm-5.3`, NanoGPT ZDR, prompt v0.1): every long-term entry layer 1 left unthemed, 649,516 entries, 386,870 unique texts | labels stored in `llm_labels`; no text read by the analyst |

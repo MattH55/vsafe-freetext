@@ -187,8 +187,9 @@ def cmd_llm_label(a):
 
     con = link.connect()
     for model in a.model:
-        run = layer3.label_entries(con, _llm(model), sample=a.sample, seed=a.seed,
-                                   residue_only=a.residue, batch=a.batch, max_usd=a.max_usd)
+        run = layer3.label_entries(con, _llm(model), sample=None if a.all else a.sample,
+                                   seed=a.seed, residue_only=a.residue, batch=a.batch,
+                                   max_usd=a.max_usd, long_term=a.long_term)
         print(json.dumps(run, indent=2))
 
 
@@ -332,6 +333,9 @@ def main(argv=None):
     s.add_argument("--sample", type=int, default=1000, help="entries to sample")
     s.add_argument("--seed", type=int, default=1)
     s.add_argument("--residue", action="store_true", help="only entries layer 1 left unthemed")
+    s.add_argument("--long-term", action="store_true",
+                   help="3-, 6- and 12-month entries only (refused before OSF registration)")
+    s.add_argument("--all", action="store_true", help="every eligible entry, not a sample")
     s.add_argument("--batch", type=int, default=20, help="entries per request")
     s.add_argument("--max-usd", type=float, default=5.0, help="stop when spend reaches this")
     s.set_defaults(func=cmd_llm_label)
