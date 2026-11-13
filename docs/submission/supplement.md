@@ -687,3 +687,278 @@ No age field exists in the released files, so the adult check-in file stands in 
 | cdc_only | all domains | 153 | 92 | 0.601 |
 
 Single coder (the author), blind to side. 'layer3_only' = only the classifier called the domain; 'cdc_only' = only CDC's MedDRA coding did. present_1 = entries the coder judged to contain the domain.
+
+## S29. Q1 within each sex: registered, text-matched and curveball nulls, and by dose (not pre-registered)
+
+| null | sex | people | observed_pairs | null_mean_pairs | ratio | p_pairs | pairs_above_null_holm | pairs_below_null_holm | permutations |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| curveball, unstratified | Female | 884,746 | 184,805 | 184,805 | 1 |  | 15 | 17 | 1,000 |
+| matched: entries x character deciles | Female | 884,746 | 184,805 | 179,898 | 1.027 | 0.001 | 17 |  | 1,000 |
+| registered | Female | 884,746 | 184,805 | 151,302.8 | 1.221 | 0.001 | 22 |  | 1,000 |
+| registered, dose=1 | Female | 101,336 | 24,074 | 19,972.7 | 1.205 | 0.001 | 21 |  | 1,000 |
+| registered, dose=2 | Female | 586,757 | 123,612 | 104,322.1 | 1.185 | 0.001 | 22 |  | 1,000 |
+| registered, dose=3 | Female | 169,128 | 32,751 | 24,042.6 | 1.362 | 0.001 | 22 |  | 1,000 |
+| registered, dose=4 | Female | 27,509 | 4,364 | 3,281 | 1.33 | 0.001 | 9 |  | 1,000 |
+| curveball, unstratified | Male | 370,519 | 47,724 | 47,724 | 1 |  | 12 | 10 | 1,000 |
+| matched: entries x character deciles | Male | 370,519 | 47,724 | 45,232.3 | 1.055 | 0.001 | 12 |  | 1,000 |
+| registered | Male | 370,519 | 47,724 | 37,579.7 | 1.27 | 0.001 | 21 |  | 1,000 |
+| registered, dose=1 | Male | 44,911 | 6,444 | 5,159.1 | 1.249 | 0.001 | 18 |  | 1,000 |
+| registered, dose=2 | Male | 232,317 | 30,925 | 25,102.2 | 1.232 | 0.001 | 19 |  | 1,000 |
+| registered, dose=3 | Male | 76,401 | 8,828 | 6,301.1 | 1.401 | 0.001 | 15 |  | 1,000 |
+| registered, dose=4 | Male | 16,868 | 1,526 | 1,136.6 | 1.343 | 0.001 | 5 |  | 1,000 |
+
+Women and men only; 'Other' and 'Unknown' sex were not tested. Under the curveball null the total pair count is invariant, so no p is given for it.
+
+## S30. Q1 domain pairs within each sex (not pre-registered)
+
+| sex | null | domain_a | domain_b | both_people | expected_people | ratio | p_holm |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Female | registered | cardiorespiratory | cognitive | 845 | 489.7 | 1.726 | 0.036 |
+| Female | registered | cardiorespiratory | dysautonomia | 3,548 | 2,107.3 | 1.684 | 0.036 |
+| Female | registered | cardiorespiratory | fatigue_pem | 7,282 | 4,910.8 | 1.483 | 0.036 |
+| Female | registered | cardiorespiratory | gastrointestinal | 2,628 | 3,089.8 | 0.851 | 1 |
+| Female | registered | cardiorespiratory | menstrual | 333 | 1,109 | 0.3 | 1 |
+| Female | registered | cardiorespiratory | pain | 9,579 | 8,799.6 | 1.089 | 0.036 |
+| Female | registered | cardiorespiratory | sensory_neuropathic | 888 | 1,222.7 | 0.726 | 1 |
+| Female | registered | cardiorespiratory | sleep | 377 | 238.8 | 1.579 | 0.036 |
+| Female | registered | cognitive | dysautonomia | 1,615 | 733.4 | 2.202 | 0.036 |
+| Female | registered | cognitive | fatigue_pem | 5,108 | 1,709 | 2.989 | 0.036 |
+| Female | registered | cognitive | gastrointestinal | 1,152 | 1,075.3 | 1.071 | 0.1119 |
+| Female | registered | cognitive | menstrual | 243 | 386 | 0.63 | 1 |
+| Female | registered | cognitive | pain | 4,144 | 3,062.4 | 1.353 | 0.036 |
+| Female | registered | cognitive | sensory_neuropathic | 912 | 425.5 | 2.143 | 0.036 |
+| Female | registered | cognitive | sleep | 349 | 83.1 | 4.2 | 0.036 |
+| Female | registered | dysautonomia | fatigue_pem | 8,251 | 7,354.6 | 1.122 | 0.036 |
+| Female | registered | dysautonomia | gastrointestinal | 5,963 | 4,627.5 | 1.289 | 0.036 |
+| Female | registered | dysautonomia | menstrual | 819 | 1,660.9 | 0.493 | 1 |
+| Female | registered | dysautonomia | pain | 11,952 | 13,178.6 | 0.907 | 1 |
+| Female | registered | dysautonomia | sensory_neuropathic | 2,673 | 1,831.2 | 1.46 | 0.036 |
+| Female | registered | dysautonomia | sleep | 553 | 357.6 | 1.546 | 0.036 |
+| Female | registered | fatigue_pem | gastrointestinal | 15,197 | 10,783.9 | 1.409 | 0.036 |
+| Female | registered | fatigue_pem | menstrual | 1,680 | 3,870.7 | 0.434 | 1 |
+| Female | registered | fatigue_pem | pain | 51,422 | 30,711.7 | 1.674 | 0.036 |
+| Female | registered | fatigue_pem | sensory_neuropathic | 2,910 | 4,267.5 | 0.682 | 1 |
+| Female | registered | fatigue_pem | sleep | 1,761 | 833.4 | 2.113 | 0.036 |
+| Female | registered | gastrointestinal | menstrual | 1,171 | 2,435.4 | 0.481 | 1 |
+| Female | registered | gastrointestinal | pain | 24,617 | 19,323.5 | 1.274 | 0.036 |
+| Female | registered | gastrointestinal | sensory_neuropathic | 1,558 | 2,685.1 | 0.58 | 1 |
+| Female | registered | gastrointestinal | sleep | 711 | 524.4 | 1.356 | 0.036 |
+| Female | registered | menstrual | pain | 3,232 | 6,935.8 | 0.466 | 1 |
+| Female | registered | menstrual | sensory_neuropathic | 434 | 963.8 | 0.45 | 1 |
+| Female | registered | menstrual | sleep | 190 | 188.2 | 1.009 | 1 |
+| Female | registered | pain | sensory_neuropathic | 8,144 | 7,646.9 | 1.065 | 0.036 |
+| Female | registered | pain | sleep | 2,179 | 1,493.4 | 1.459 | 0.036 |
+| Female | registered | sensory_neuropathic | sleep | 385 | 207.5 | 1.855 | 0.036 |
+| Female | matched: entries x character deciles | cardiorespiratory | cognitive | 845 | 702.1 | 1.204 | 0.036 |
+| Female | matched: entries x character deciles | cardiorespiratory | dysautonomia | 3,548 | 2,649.7 | 1.339 | 0.036 |
+| Female | matched: entries x character deciles | cardiorespiratory | fatigue_pem | 7,282 | 6,080.8 | 1.198 | 0.036 |
+| Female | matched: entries x character deciles | cardiorespiratory | gastrointestinal | 2,628 | 3,698.4 | 0.711 | 1 |
+| Female | matched: entries x character deciles | cardiorespiratory | menstrual | 333 | 1,390.1 | 0.24 | 1 |
+| Female | matched: entries x character deciles | cardiorespiratory | pain | 9,579 | 10,588.7 | 0.905 | 1 |
+| Female | matched: entries x character deciles | cardiorespiratory | sensory_neuropathic | 888 | 1,746.8 | 0.508 | 1 |
+| Female | matched: entries x character deciles | cardiorespiratory | sleep | 377 | 337.4 | 1.117 | 0.1618 |
+| Female | matched: entries x character deciles | cognitive | dysautonomia | 1,615 | 987.7 | 1.635 | 0.036 |
+| Female | matched: entries x character deciles | cognitive | fatigue_pem | 5,108 | 2,261.8 | 2.258 | 0.036 |
+| Female | matched: entries x character deciles | cognitive | gastrointestinal | 1,152 | 1,343.5 | 0.857 | 1 |
+| Female | matched: entries x character deciles | cognitive | menstrual | 243 | 525.9 | 0.462 | 1 |
+| Female | matched: entries x character deciles | cognitive | pain | 4,144 | 3,846.5 | 1.077 | 0.036 |
+| Female | matched: entries x character deciles | cognitive | sensory_neuropathic | 912 | 680.4 | 1.34 | 0.036 |
+| Female | matched: entries x character deciles | cognitive | sleep | 349 | 134.3 | 2.598 | 0.036 |
+| Female | matched: entries x character deciles | dysautonomia | fatigue_pem | 8,251 | 8,434.8 | 0.978 | 1 |
+| Female | matched: entries x character deciles | dysautonomia | gastrointestinal | 5,963 | 5,334.1 | 1.118 | 0.036 |
+| Female | matched: entries x character deciles | dysautonomia | menstrual | 819 | 1,951.9 | 0.42 | 1 |
+| Female | matched: entries x character deciles | dysautonomia | pain | 11,952 | 15,027.2 | 0.795 | 1 |
+| Female | matched: entries x character deciles | dysautonomia | sensory_neuropathic | 2,673 | 2,500.3 | 1.069 | 0.036 |
+| Female | matched: entries x character deciles | dysautonomia | sleep | 553 | 477.6 | 1.158 | 0.036 |
+| Female | matched: entries x character deciles | fatigue_pem | gastrointestinal | 15,197 | 12,263.4 | 1.239 | 0.036 |
+| Female | matched: entries x character deciles | fatigue_pem | menstrual | 1,680 | 4,724.5 | 0.356 | 1 |
+| Female | matched: entries x character deciles | fatigue_pem | pain | 51,422 | 35,997 | 1.429 | 0.036 |
+| Female | matched: entries x character deciles | fatigue_pem | sensory_neuropathic | 2,910 | 5,437.9 | 0.535 | 1 |
+| Female | matched: entries x character deciles | fatigue_pem | sleep | 1,761 | 1,080.5 | 1.63 | 0.036 |
+| Female | matched: entries x character deciles | gastrointestinal | menstrual | 1,171 | 2,809.8 | 0.417 | 1 |
+| Female | matched: entries x character deciles | gastrointestinal | pain | 24,617 | 21,607.1 | 1.139 | 0.036 |
+| Female | matched: entries x character deciles | gastrointestinal | sensory_neuropathic | 1,558 | 3,365.6 | 0.463 | 1 |
+| Female | matched: entries x character deciles | gastrointestinal | sleep | 711 | 650.4 | 1.093 | 0.1329 |
+| Female | matched: entries x character deciles | menstrual | pain | 3,232 | 8,089.1 | 0.4 | 1 |
+| Female | matched: entries x character deciles | menstrual | sensory_neuropathic | 434 | 1,274.6 | 0.34 | 1 |
+| Female | matched: entries x character deciles | menstrual | sleep | 190 | 252.4 | 0.753 | 1 |
+| Female | matched: entries x character deciles | pain | sensory_neuropathic | 8,144 | 9,471.7 | 0.86 | 1 |
+| Female | matched: entries x character deciles | pain | sleep | 2,179 | 1,849.4 | 1.178 | 0.036 |
+| Female | matched: entries x character deciles | sensory_neuropathic | sleep | 385 | 327.4 | 1.176 | 0.036 |
+| Female | curveball, unstratified | cardiorespiratory | cognitive | 845 | 694.6 | 1.217 | 0.036 |
+| Female | curveball, unstratified | cardiorespiratory | dysautonomia | 3,548 | 2,849.5 | 1.245 | 0.036 |
+| Female | curveball, unstratified | cardiorespiratory | fatigue_pem | 7,282 | 6,264.5 | 1.162 | 0.036 |
+| Female | curveball, unstratified | cardiorespiratory | gastrointestinal | 2,628 | 4,088.1 | 0.643 | 1 |
+| Female | curveball, unstratified | cardiorespiratory | menstrual | 333 | 1,540.8 | 0.216 | 1 |
+| Female | curveball, unstratified | cardiorespiratory | pain | 9,579 | 10,500.3 | 0.912 | 1 |
+| Female | curveball, unstratified | cardiorespiratory | sensory_neuropathic | 888 | 1,693.4 | 0.524 | 1 |
+| Female | curveball, unstratified | cardiorespiratory | sleep | 377 | 341.5 | 1.104 | 0.5994 |
+| Female | curveball, unstratified | cognitive | dysautonomia | 1,615 | 1,021.5 | 1.581 | 0.036 |
+| Female | curveball, unstratified | cognitive | fatigue_pem | 5,108 | 2,223 | 2.298 | 0.036 |
+| Female | curveball, unstratified | cognitive | gastrointestinal | 1,152 | 1,457.3 | 0.79 | 1 |
+| Female | curveball, unstratified | cognitive | menstrual | 243 | 550.1 | 0.442 | 1 |
+| Female | curveball, unstratified | cognitive | pain | 4,144 | 3,712.5 | 1.116 | 0.036 |
+| Female | curveball, unstratified | cognitive | sensory_neuropathic | 912 | 606.1 | 1.505 | 0.036 |
+| Female | curveball, unstratified | cognitive | sleep | 349 | 122.7 | 2.844 | 0.036 |
+| Female | curveball, unstratified | dysautonomia | fatigue_pem | 8,251 | 9,243 | 0.893 | 1 |
+| Female | curveball, unstratified | dysautonomia | gastrointestinal | 5,963 | 6,025.9 | 0.99 | 1 |
+| Female | curveball, unstratified | dysautonomia | menstrual | 819 | 2,266.4 | 0.361 | 1 |
+| Female | curveball, unstratified | dysautonomia | pain | 11,952 | 15,561.2 | 0.768 | 1 |
+| Female | curveball, unstratified | dysautonomia | sensory_neuropathic | 2,673 | 2,488.9 | 1.074 | 0.036 |
+| Female | curveball, unstratified | dysautonomia | sleep | 553 | 501.9 | 1.102 | 0.2517 |
+| Female | curveball, unstratified | fatigue_pem | gastrointestinal | 15,197 | 13,323.6 | 1.141 | 0.036 |
+| Female | curveball, unstratified | fatigue_pem | menstrual | 1,680 | 4,965.4 | 0.338 | 1 |
+| Female | curveball, unstratified | fatigue_pem | pain | 51,422 | 34,962.1 | 1.471 | 0.036 |
+| Female | curveball, unstratified | fatigue_pem | sensory_neuropathic | 2,910 | 5,461.2 | 0.533 | 1 |
+| Female | curveball, unstratified | fatigue_pem | sleep | 1,761 | 1,092.1 | 1.613 | 0.036 |
+| Female | curveball, unstratified | gastrointestinal | menstrual | 1,171 | 3,243.8 | 0.361 | 1 |
+| Female | curveball, unstratified | gastrointestinal | pain | 24,617 | 22,517.2 | 1.093 | 0.036 |
+| Female | curveball, unstratified | gastrointestinal | sensory_neuropathic | 1,558 | 3,567.2 | 0.437 | 1 |
+| Female | curveball, unstratified | gastrointestinal | sleep | 711 | 714.7 | 0.995 | 1 |
+| Female | curveball, unstratified | menstrual | pain | 3,232 | 8,317.1 | 0.389 | 1 |
+| Female | curveball, unstratified | menstrual | sensory_neuropathic | 434 | 1,345.6 | 0.323 | 1 |
+| Female | curveball, unstratified | menstrual | sleep | 190 | 270.7 | 0.702 | 1 |
+| Female | curveball, unstratified | pain | sensory_neuropathic | 8,144 | 9,154.9 | 0.89 | 1 |
+| Female | curveball, unstratified | pain | sleep | 2,179 | 1,819.2 | 1.198 | 0.036 |
+| Female | curveball, unstratified | sensory_neuropathic | sleep | 385 | 296.9 | 1.297 | 0.036 |
+| Male | registered | cardiorespiratory | cognitive | 287 | 145.4 | 1.974 | 0.036 |
+| Male | registered | cardiorespiratory | dysautonomia | 1,069 | 635.1 | 1.683 | 0.036 |
+| Male | registered | cardiorespiratory | fatigue_pem | 2,364 | 1,640.3 | 1.441 | 0.036 |
+| Male | registered | cardiorespiratory | gastrointestinal | 748 | 950.7 | 0.787 | 1 |
+| Male | registered | cardiorespiratory | menstrual | 14 | 14.7 | 0.952 | 1 |
+| Male | registered | cardiorespiratory | pain | 2,924 | 2,683.6 | 1.09 | 0.036 |
+| Male | registered | cardiorespiratory | sensory_neuropathic | 262 | 406.4 | 0.645 | 1 |
+| Male | registered | cardiorespiratory | sleep | 175 | 89.9 | 1.947 | 0.036 |
+| Male | registered | cognitive | dysautonomia | 364 | 180.6 | 2.016 | 0.036 |
+| Male | registered | cognitive | fatigue_pem | 1,369 | 466.4 | 2.935 | 0.036 |
+| Male | registered | cognitive | gastrointestinal | 275 | 270.3 | 1.017 | 1 |
+| Male | registered | cognitive | menstrual |  |  |  |  |
+| Male | registered | cognitive | pain | 1,043 | 763.1 | 1.367 | 0.036 |
+| Male | registered | cognitive | sensory_neuropathic | 208 | 115.6 | 1.8 | 0.036 |
+| Male | registered | cognitive | sleep | 95 | 25.6 | 3.718 | 0.036 |
+| Male | registered | dysautonomia | fatigue_pem | 2,046 | 2,037.1 | 1.004 | 1 |
+| Male | registered | dysautonomia | gastrointestinal | 1,338 | 1,180.6 | 1.133 | 0.036 |
+| Male | registered | dysautonomia | menstrual | 21 | 18.3 | 1.149 | 1 |
+| Male | registered | dysautonomia | pain | 2,748 | 3,332.6 | 0.825 | 1 |
+| Male | registered | dysautonomia | sensory_neuropathic | 639 | 504.7 | 1.266 | 0.036 |
+| Male | registered | dysautonomia | sleep | 177 | 111.6 | 1.586 | 0.036 |
+| Male | registered | fatigue_pem | gastrointestinal | 4,048 | 3,049.5 | 1.327 | 0.036 |
+| Male | registered | fatigue_pem | menstrual | 88 | 47.2 | 1.865 | 0.036 |
+| Male | registered | fatigue_pem | pain | 14,291 | 8,608.1 | 1.66 | 0.036 |
+| Male | registered | fatigue_pem | sensory_neuropathic | 722 | 1,303.6 | 0.554 | 1 |
+| Male | registered | fatigue_pem | sleep | 634 | 288.3 | 2.199 | 0.036 |
+| Male | registered | gastrointestinal | menstrual | 37 | 27.3 | 1.353 | 0.6144 |
+| Male | registered | gastrointestinal | pain | 6,047 | 4,988.9 | 1.212 | 0.036 |
+| Male | registered | gastrointestinal | sensory_neuropathic | 363 | 755.5 | 0.48 | 1 |
+| Male | registered | gastrointestinal | sleep | 230 | 167.1 | 1.377 | 0.036 |
+| Male | registered | menstrual | pain | 82 | 77.2 | 1.062 | 1 |
+| Male | registered | menstrual | sensory_neuropathic |  |  |  |  |
+| Male | registered | menstrual | sleep |  |  |  |  |
+| Male | registered | pain | sensory_neuropathic | 2,164 | 2,132.6 | 1.015 | 1 |
+| Male | registered | pain | sleep | 721 | 471.6 | 1.529 | 0.036 |
+| Male | registered | sensory_neuropathic | sleep | 110 | 71.4 | 1.54 | 0.036 |
+| Male | matched: entries x character deciles | cardiorespiratory | cognitive | 287 | 214.7 | 1.337 | 0.036 |
+| Male | matched: entries x character deciles | cardiorespiratory | dysautonomia | 1,069 | 827.8 | 1.291 | 0.036 |
+| Male | matched: entries x character deciles | cardiorespiratory | fatigue_pem | 2,364 | 2,012.2 | 1.175 | 0.036 |
+| Male | matched: entries x character deciles | cardiorespiratory | gastrointestinal | 748 | 1,145.5 | 0.653 | 1 |
+| Male | matched: entries x character deciles | cardiorespiratory | menstrual | 14 | 21.4 | 0.654 | 1 |
+| Male | matched: entries x character deciles | cardiorespiratory | pain | 2,924 | 3,306.7 | 0.884 | 1 |
+| Male | matched: entries x character deciles | cardiorespiratory | sensory_neuropathic | 262 | 584.5 | 0.448 | 1 |
+| Male | matched: entries x character deciles | cardiorespiratory | sleep | 175 | 130.8 | 1.338 | 0.036 |
+| Male | matched: entries x character deciles | cognitive | dysautonomia | 364 | 252 | 1.445 | 0.036 |
+| Male | matched: entries x character deciles | cognitive | fatigue_pem | 1,369 | 616 | 2.222 | 0.036 |
+| Male | matched: entries x character deciles | cognitive | gastrointestinal | 275 | 341.5 | 0.805 | 1 |
+| Male | matched: entries x character deciles | cognitive | menstrual |  |  |  |  |
+| Male | matched: entries x character deciles | cognitive | pain | 1,043 | 993.4 | 1.05 | 0.6593 |
+| Male | matched: entries x character deciles | cognitive | sensory_neuropathic | 208 | 186 | 1.118 | 0.7972 |
+| Male | matched: entries x character deciles | cognitive | sleep | 95 | 42.7 | 2.225 | 0.036 |
+| Male | matched: entries x character deciles | dysautonomia | fatigue_pem | 2,046 | 2,357.1 | 0.868 | 1 |
+| Male | matched: entries x character deciles | dysautonomia | gastrointestinal | 1,338 | 1,380.7 | 0.969 | 1 |
+| Male | matched: entries x character deciles | dysautonomia | menstrual | 21 | 25.2 | 0.834 | 1 |
+| Male | matched: entries x character deciles | dysautonomia | pain | 2,748 | 3,891.8 | 0.706 | 1 |
+| Male | matched: entries x character deciles | dysautonomia | sensory_neuropathic | 639 | 701.8 | 0.911 | 1 |
+| Male | matched: entries x character deciles | dysautonomia | sleep | 177 | 153.1 | 1.156 | 0.5974 |
+| Male | matched: entries x character deciles | fatigue_pem | gastrointestinal | 4,048 | 3,420.3 | 1.184 | 0.036 |
+| Male | matched: entries x character deciles | fatigue_pem | menstrual | 88 | 70.4 | 1.25 | 0.4555 |
+| Male | matched: entries x character deciles | fatigue_pem | pain | 14,291 | 10,207.4 | 1.4 | 0.036 |
+| Male | matched: entries x character deciles | fatigue_pem | sensory_neuropathic | 722 | 1,630.7 | 0.443 | 1 |
+| Male | matched: entries x character deciles | fatigue_pem | sleep | 634 | 377.2 | 1.681 | 0.036 |
+| Male | matched: entries x character deciles | gastrointestinal | menstrual | 37 | 34.5 | 1.073 | 1 |
+| Male | matched: entries x character deciles | gastrointestinal | pain | 6,047 | 5,623.6 | 1.075 | 0.036 |
+| Male | matched: entries x character deciles | gastrointestinal | sensory_neuropathic | 363 | 940.2 | 0.386 | 1 |
+| Male | matched: entries x character deciles | gastrointestinal | sleep | 230 | 208.2 | 1.105 | 1 |
+| Male | matched: entries x character deciles | menstrual | pain | 82 | 105.1 | 0.78 | 1 |
+| Male | matched: entries x character deciles | menstrual | sensory_neuropathic |  |  |  |  |
+| Male | matched: entries x character deciles | menstrual | sleep |  |  |  |  |
+| Male | matched: entries x character deciles | pain | sensory_neuropathic | 2,164 | 2,679.3 | 0.808 | 1 |
+| Male | matched: entries x character deciles | pain | sleep | 721 | 608.2 | 1.186 | 0.036 |
+| Male | matched: entries x character deciles | sensory_neuropathic | sleep | 110 | 113 | 0.974 | 1 |
+| Male | curveball, unstratified | cardiorespiratory | cognitive | 287 | 210.4 | 1.364 | 0.036 |
+| Male | curveball, unstratified | cardiorespiratory | dysautonomia | 1,069 | 885.2 | 1.208 | 0.036 |
+| Male | curveball, unstratified | cardiorespiratory | fatigue_pem | 2,364 | 2,150.6 | 1.099 | 0.036 |
+| Male | curveball, unstratified | cardiorespiratory | gastrointestinal | 748 | 1,293.7 | 0.578 | 1 |
+| Male | curveball, unstratified | cardiorespiratory | menstrual | 14 | 21.6 | 0.649 | 1 |
+| Male | curveball, unstratified | cardiorespiratory | pain | 2,924 | 3,358.3 | 0.871 | 1 |
+| Male | curveball, unstratified | cardiorespiratory | sensory_neuropathic | 262 | 573.5 | 0.457 | 1 |
+| Male | curveball, unstratified | cardiorespiratory | sleep | 175 | 131.4 | 1.331 | 0.036 |
+| Male | curveball, unstratified | cognitive | dysautonomia | 364 | 258 | 1.411 | 0.036 |
+| Male | curveball, unstratified | cognitive | fatigue_pem | 1,369 | 624.5 | 2.192 | 0.036 |
+| Male | curveball, unstratified | cognitive | gastrointestinal | 275 | 379 | 0.726 | 1 |
+| Male | curveball, unstratified | cognitive | menstrual |  |  |  |  |
+| Male | curveball, unstratified | cognitive | pain | 1,043 | 971.7 | 1.073 | 0.0719 |
+| Male | curveball, unstratified | cognitive | sensory_neuropathic | 208 | 169.1 | 1.23 | 0.05 |
+| Male | curveball, unstratified | cognitive | sleep | 95 | 38.6 | 2.46 | 0.036 |
+| Male | curveball, unstratified | dysautonomia | fatigue_pem | 2,046 | 2,653.6 | 0.771 | 1 |
+| Male | curveball, unstratified | dysautonomia | gastrointestinal | 1,338 | 1,595.3 | 0.839 | 1 |
+| Male | curveball, unstratified | dysautonomia | menstrual | 21 | 26.6 | 0.791 | 1 |
+| Male | curveball, unstratified | dysautonomia | pain | 2,748 | 4,150.5 | 0.662 | 1 |
+| Male | curveball, unstratified | dysautonomia | sensory_neuropathic | 639 | 705.8 | 0.905 | 1 |
+| Male | curveball, unstratified | dysautonomia | sleep | 177 | 161.1 | 1.099 | 1 |
+| Male | curveball, unstratified | fatigue_pem | gastrointestinal | 4,048 | 3,906.6 | 1.036 | 0.0719 |
+| Male | curveball, unstratified | fatigue_pem | menstrual | 88 | 63.7 | 1.382 | 0.036 |
+| Male | curveball, unstratified | fatigue_pem | pain | 14,291 | 10,333.4 | 1.383 | 0.036 |
+| Male | curveball, unstratified | fatigue_pem | sensory_neuropathic | 722 | 1,719.9 | 0.42 | 1 |
+| Male | curveball, unstratified | fatigue_pem | sleep | 634 | 388.6 | 1.631 | 0.036 |
+| Male | curveball, unstratified | gastrointestinal | menstrual | 37 | 38.5 | 0.96 | 1 |
+| Male | curveball, unstratified | gastrointestinal | pain | 6,047 | 6,133.2 | 0.986 | 1 |
+| Male | curveball, unstratified | gastrointestinal | sensory_neuropathic | 363 | 1,032.6 | 0.352 | 1 |
+| Male | curveball, unstratified | gastrointestinal | sleep | 230 | 234.6 | 0.98 | 1 |
+| Male | curveball, unstratified | menstrual | pain | 82 | 98.5 | 0.833 | 1 |
+| Male | curveball, unstratified | menstrual | sensory_neuropathic |  |  |  |  |
+| Male | curveball, unstratified | menstrual | sleep |  |  |  |  |
+| Male | curveball, unstratified | pain | sensory_neuropathic | 2,164 | 2,679.7 | 0.808 | 1 |
+| Male | curveball, unstratified | pain | sleep | 721 | 603.3 | 1.195 | 0.036 |
+| Male | curveball, unstratified | sensory_neuropathic | sleep | 110 | 105.3 | 1.045 | 1 |
+
+## S31. Core-subgraph statistic: co-occurrences summed over the six pairs among cognitive, fatigue, sleep and dysautonomia, and over the other pairs, under each null (not pre-registered)
+
+| source | sex | null | subgraph | pairs | observed_people | expected_people | ratio |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| registered | all | registered | core (6 pairs) | 6 | 22,587 | 14,251 | 1.585 |
+| registered | all | registered | other pairs | 30 | 212,597 | 174,533.3 | 1.218 |
+| VAERS replication | all | VAERS replication | core (6 pairs) | 6 | 46,291 | 23,769.5 | 1.947 |
+| VAERS replication | all | VAERS replication | other pairs | 30 | 440,212 | 238,707 | 1.844 |
+| text-matched | all | matched: character deciles | core (6 pairs) | 6 | 22,587 | 17,083.3 | 1.322 |
+| text-matched | all | matched: character deciles | other pairs | 30 | 212,597 | 203,951.5 | 1.042 |
+| text-matched | all | matched: entries x character deciles | core (6 pairs) | 6 | 22,587 | 17,345.2 | 1.302 |
+| text-matched | all | matched: entries x character deciles | other pairs | 30 | 212,597 | 209,011.8 | 1.017 |
+| curveball | all | curveball within entries 1 / 2 / 3+ | core (6 pairs) | 6 | 22,587 | 18,573.1 | 1.216 |
+| curveball | all | curveball within entries 1 / 2 / 3+ | other pairs | 30 | 212,597 | 216,610.7 | 0.981 |
+| curveball | all | curveball within text-length tertiles | core (6 pairs) | 6 | 22,587 | 18,654.3 | 1.211 |
+| curveball | all | curveball within text-length tertiles | other pairs | 30 | 212,597 | 216,530.1 | 0.982 |
+| curveball | all | curveball, unstratified | core (6 pairs) | 6 | 22,587 | 18,624.1 | 1.213 |
+| curveball | all | curveball, unstratified | other pairs | 30 | 212,597 | 216,560.1 | 0.982 |
+| by sex | Female | curveball, unstratified | core (6 pairs) | 6 | 17,637 | 14,204.2 | 1.242 |
+| by sex | Female | curveball, unstratified | other pairs | 30 | 167,168 | 170,600.7 | 0.98 |
+| by sex | Female | matched: entries x character deciles | core (6 pairs) | 6 | 17,637 | 13,376.7 | 1.318 |
+| by sex | Female | matched: entries x character deciles | other pairs | 30 | 167,168 | 166,524.1 | 1.004 |
+| by sex | Female | registered | core (6 pairs) | 6 | 17,637 | 11,071.1 | 1.593 |
+| by sex | Female | registered | other pairs | 30 | 167,168 | 140,252.9 | 1.192 |
+| by sex | Male | curveball, unstratified | core (6 pairs) | 6 | 4,685 | 4,124.4 | 1.136 |
+| by sex | Male | curveball, unstratified | other pairs | 27 | 43,018 | 43,572 | 0.987 |
+| by sex | Male | matched: entries x character deciles | core (6 pairs) | 6 | 4,685 | 3,798.1 | 1.234 |
+| by sex | Male | matched: entries x character deciles | other pairs | 27 | 43,018 | 41,404.9 | 1.039 |
+| by sex | Male | registered | core (6 pairs) | 6 | 4,685 | 3,109.6 | 1.507 |
+| by sex | Male | registered | other pairs | 27 | 43,018 | 34,451.3 | 1.249 |
+
+Computed from the suppressed pair tables above (S2, S3, S5, S7, S30).

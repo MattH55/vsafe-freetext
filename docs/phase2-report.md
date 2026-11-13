@@ -269,3 +269,25 @@ Survey-type mapping (day 0–7 = w1, week 2–6 = 6w); impact = any non-'N/A' an
 pre-vaccine entries dropped if either layer flags them; layer 2 never built; layer 3 on
 long-term text only; persistence reference = first worse/impact long-term survey; Q3 at
 person level; model-sensitivity sample 2,000 (pilot size); permutation re-implemented.
+
+## Addendum 3: pre-submission review of 12 November 2026 (not pre-registered)
+
+A critical review of the manuscript (recorded in `docs/submission/review-response.md`) asked for a
+core-subgraph statistic and a sex stratification of Q1. Both were run from the exported Q1 matrix
+(`interim/q1_matrix.parquet`, now carrying sex) with `vsafe-ft submission --steps export,sex,core`;
+R1 took 36 min (women: registered 210 s, text-matched 128 s, curveball 1,168 s; men: 129 s, 38 s,
+472 s), R2 under a second.
+
+R2, `sub_r2_core_subgraph`: co-occurrences summed over the six pairs among cognitive, fatigue, sleep
+and dysautonomia, and over the other 30 pairs. Core 22,587 observed; ratio 1.58 under the registered
+null, 1.32 and 1.30 under the text-matched nulls, 1.21 to 1.22 under the three curveball nulls;
+other pairs 212,597 observed, 1.22, 1.04, 1.02 and 0.98. VAERS: core 1.95, other pairs 1.84.
+
+R1, `sub_r1_q1_sex_summary` / `_pairs`: 884,746 women and 370,519 men with long-term text. Registered
+ratio 1.22 (women) and 1.27 (men), p = 0.001, and in every sex x dose stratum (women 1.19 to 1.36,
+men 1.23 to 1.40). Text-matched (entries x character deciles) 1.03 and 1.06. Curveball: 15 pairs above
+and 17 below the null in women, 12 and 10 in men. Core pairs under the curveball null, women / men:
+cognitive + sleep 2.84 / 2.46, cognitive + fatigue 2.30 / 2.19, fatigue + sleep 1.61 / 1.63,
+cognitive + dysautonomia 1.58 / 1.41; core six pairs summed 1.24 / 1.14, other pairs 0.98 / 0.99.
+Three menstrual pairs in men fell below the 10-person cell and are suppressed. No headline result
+changed in direction or significance.

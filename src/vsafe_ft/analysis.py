@@ -125,18 +125,21 @@ def q1_matrix(con, domains: list[str]) -> pl.DataFrame:
              d AS (SELECT registrant, dose_number, theme FROM ph_dom WHERE rnk >= 3),
              man AS (SELECT registrant, dose_number, any_value(manufacturer) AS manufacturer
                      FROM vax GROUP BY ALL),
+             sx AS (SELECT registrant, any_value(sex) AS sex FROM entries GROUP BY ALL),
              amt AS (SELECT e.registrant, e.dose_number, count(*)::BIGINT AS n_entries,
                             sum(length(e.text))::BIGINT AS chars FROM entries_survey e
                      SEMI JOIN ph_lt l ON l.response_id = e.response_id
                      WHERE NOT coalesce(e.redacted, false)
                        AND length(trim(coalesce(e.text, ''))) > 0 GROUP BY ALL)
         SELECT coalesce(m.manufacturer, 'unknown') AS manufacturer,
-               r.dose_number::VARCHAR AS dose, any_value(a.n_entries) AS n_entries,
+               r.dose_number::VARCHAR AS dose, coalesce(s.sex, 'Unknown') AS sex,
+               any_value(a.n_entries) AS n_entries,
                any_value(a.chars) AS chars, {cols}
         FROM rows_ r LEFT JOIN d USING (registrant, dose_number)
         LEFT JOIN man m USING (registrant, dose_number)
+        LEFT JOIN sx s USING (registrant)
         LEFT JOIN amt a USING (registrant, dose_number)
-        GROUP BY r.registrant, r.dose_number, m.manufacturer""")
+        GROUP BY r.registrant, r.dose_number, m.manufacturer, s.sex""")
 
 
 def q1_test(X: np.ndarray, domains: list[str], permutations: int, seed: int = SEED):

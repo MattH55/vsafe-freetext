@@ -430,6 +430,13 @@ def cmd_submission(a):
     if "audit-score" in steps:      # after the protocol owner has coded the sheet (B5)
         _write(submission.audit_score(), "sub_b5_audit_scored")
         log("B5 audit scored")
+    if "sex" in steps:              # review of 12 Nov, R1 (not pre-registered)
+        for k, df in submission.q1_by_sex(domains, perms, log=log).items():
+            _write(df, f"sub_r1_q1_sex_{k}")
+        log("R1 done")
+    if "core" in steps:             # review of 12 Nov, R2 (aggregates of saved pair tables)
+        _write(submission.core_subgraph_tables(), "sub_r2_core_subgraph")
+        log("R2 done")
 
 
 def main(argv=None):

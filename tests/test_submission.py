@@ -55,3 +55,45 @@ def test_dispersion_extended_fields():
     assert r["rare_n"] == 800
     assert 0 < r["p_two"] <= 1 and 0 < r["p_upper"] <= 1
     assert r["h_a"] > r["h_b"]
+
+
+def test_core_subgraph_sums_core_and_other_pairs():
+    import polars as pl
+
+    from vsafe_ft import submission
+
+    doms = ["cognitive", "fatigue_pem", "sleep", "dysautonomia", "pain"]
+    rows = []
+    for i, a in enumerate(doms):
+        for b in doms[i + 1:]:
+            rows.append({"null": "x", "domain_a": a, "domain_b": b, "both_people": 100, "expected_people": 50.0})
+    out = submission.core_subgraph(pl.DataFrame(rows))
+    core = out.filter(pl.col("subgraph") == "core (6 pairs)").row(0, named=True)
+    other = out.filter(pl.col("subgraph") == "other pairs").row(0, named=True)
+    assert core["pairs"] == 6 and core["observed_people"] == 600 and core["ratio"] == 2.0
+    assert other["pairs"] == 4 and other["observed_people"] == 400
+    assert "suppressed" in out.columns and not out["suppressed"].any()
+
+
+def test_q1_by_sex_runs_on_synthetic_matrix(tmp_path):
+    import polars as pl
+
+    from vsafe_ft import submission
+
+    rng = np.random.default_rng(7)
+    doms = ["cognitive", "fatigue_pem", "sleep", "dysautonomia"]
+    n = 3000
+    X = rng.random((n, 4)) < 0.3
+    df = pl.DataFrame({d: X[:, i] for i, d in enumerate(doms)}).with_columns(
+        pl.Series("sex", rng.choice(["Female", "Male", "Unknown"], n, p=[0.6, 0.35, 0.05])),
+        pl.Series("dose", rng.choice(["1", "2"], n)),
+        pl.Series("n_entries", rng.integers(1, 5, n)),
+        pl.Series("chars", rng.integers(10, 500, n)))
+    p = tmp_path / "m.parquet"
+    df.write_parquet(p)
+    out = submission.q1_by_sex(doms, permutations=20, path=p, log=lambda m: None, curveball=False)
+    s = out["summary"]
+    assert set(s["sex"].unique()) == {"Female", "Male"}
+    assert {"registered", "matched: entries x character deciles"} <= set(s["null"].unique())
+    assert out["pairs"].height == 2 * 2 * 6
+    assert not any("sex" in c and c != "sex" for c in s.columns)

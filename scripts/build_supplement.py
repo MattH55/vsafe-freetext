@@ -73,6 +73,14 @@ TABLES = [
      "sub_b5_audit_scored.csv", ["side", "domain", "coded", "present_1", "share_side_right"],
      ("Single coder (the author), blind to side. 'layer3_only' = only the classifier called the domain; "
      "'cdc_only' = only CDC's MedDRA coding did. present_1 = entries the coder judged to contain the domain.")),
+    ("S29. Q1 within each sex: registered, text-matched and curveball nulls, and by dose (not pre-registered)",
+     "sub_r1_q1_sex_summary.csv", None,
+     "Women and men only; 'Other' and 'Unknown' sex were not tested. Under the curveball null the total pair count is invariant, so no p is given for it."),
+    ("S30. Q1 domain pairs within each sex (not pre-registered)", "sub_r1_q1_sex_pairs.csv",
+     ["sex", "null", "domain_a", "domain_b", "both_people", "expected_people", "ratio", "p_holm"], None),
+    ("S31. Core-subgraph statistic: co-occurrences summed over the six pairs among cognitive, fatigue, sleep and dysautonomia, and over the other pairs, under each null (not pre-registered)",
+     "sub_r2_core_subgraph.csv", ["source", "sex", "null", "subgraph", "pairs", "observed_people", "expected_people", "ratio"],
+     "Computed from the suppressed pair tables above (S2, S3, S5, S7, S30)."),
 ]
 
 

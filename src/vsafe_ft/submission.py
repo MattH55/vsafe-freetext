@@ -9,6 +9,8 @@ B6  Q3 dispersion with Miller-Madow correction, rarefaction and a two-sided test
 B7  case count and Q1 with criterion 3 off and with redacted entries included
 B8  reconciliation of the counts quoted in the manuscript
 B9  layer-3 cost from the logged runs
+R1  Q1 within each sex (review of 12 Nov 2026)
+R2  core-subgraph statistic over the saved pair tables (same review)
 Counts only; every table goes through suppress.safe.
 """
 
@@ -71,6 +73,130 @@ def q1_curveball(domains: list[str], permutations: int, path: Path | None = None
             "p_upper": r.pair_p_upper[iu].round(4), "p_lower": r.pair_p_lower[iu].round(4),
             "p_upper_holm": stats.holm(r.pair_p_upper[iu]).round(4)}))
     return {"summary": safe(pl.DataFrame(rows)), "pairs": _safe_pairs(pl.concat(pair_tabs))}
+
+
+# --- R1, R2 (review of 2026-11-12) -----------------------------------------------------------------
+
+CORE = ("cognitive", "fatigue_pem", "sleep", "dysautonomia")
+SEXES = ("Female", "Male")
+
+
+def q1_by_sex(domains: list[str], permutations: int, path: Path | None = None,
+              log=print, curveball: bool = True) -> dict[str, pl.DataFrame]:
+    """R1: Q1 within each sex (women, men), under the registered null, the text-matched null
+    (entries x character deciles) and, optionally, the curveball null; plus the registered null
+    within sex x dose strata. Reads the exported matrix; 'Other' and 'Unknown' sex are too few
+    or uninformative and are not tested."""
+    path = path or config.DATA_DIR / "interim" / MATRIX
+    m = pl.read_parquet(path)
+    k = len(domains)
+    iu = np.triu_indices(k, 1)
+    rows, pair_tabs = [], []
+
+    def add(label, sex, n, obs, null_mean, p, above, below=None, perms=permutations):
+        rows.append({"null": label, "sex": sex, "people": n, "observed_pairs": int(obs),
+                     "null_mean_pairs": round(float(null_mean), 1),
+                     "ratio": round(float(obs) / float(null_mean), 3) if null_mean else None,
+                     "p_pairs": None if p is None else round(float(p), 4),
+                     "pairs_above_null_holm": above, "pairs_below_null_holm": below,
+                     "permutations": perms})
+
+    for sex in SEXES:
+        g = m.filter(pl.col("sex") == sex)
+        X = g.select(domains).to_numpy().astype(bool)
+        chars = g["chars"].fill_null(0).to_numpy()
+        n_ent = g["n_entries"].fill_null(1).to_numpy()
+        dec = np.searchsorted(np.quantile(chars, np.linspace(0, 1, 11)[1:-1]), chars)
+        fine = np.minimum(n_ent, 4) * 10 + dec
+        for label, st in [("registered", None), ("matched: entries x character deciles", fine)]:
+            r = stats.cooccurrence_test(X, domains, permutations=permutations, seed=SEED, strata=st)
+            add(label, sex, X.shape[0], r.observed_pairs, r.null_mean_pairs, r.p_pairs,
+                int((stats.holm(r.pair_p[iu]) < 0.05).sum()))
+            if st is None:
+                marg = X.sum(0).astype(float)
+                exp = np.outer(marg, marg) / X.shape[0]
+            else:
+                exp = np.zeros((k, k))
+                for v in np.unique(st):
+                    idx = st == v
+                    mm = X[idx].sum(0).astype(float)
+                    exp += np.outer(mm, mm) / idx.sum()
+            pair_tabs.append(pl.DataFrame({
+                "null": label, "sex": sex, "domain_a": [domains[i] for i in iu[0]],
+                "domain_b": [domains[j] for j in iu[1]],
+                "both_people": r.pair_observed[iu].astype(np.int64),
+                "expected_people": exp[iu].round(1),
+                "ratio": (r.pair_observed[iu] / np.maximum(exp[iu], 1e-9)).round(3),
+                "p_holm": stats.holm(r.pair_p[iu]).round(4)}))
+            log(f"R1 {sex} {label} done")
+        if curveball:
+            r = stats.curveball_test(X, domains, permutations=permutations, seed=SEED, log=log)
+            add("curveball, unstratified", sex, X.shape[0], r.observed_pairs, r.null_mean_pairs,
+                None, int((stats.holm(r.pair_p_upper[iu]) < 0.05).sum()),
+                int((stats.holm(r.pair_p_lower[iu]) < 0.05).sum()), r.permutations)
+            pair_tabs.append(pl.DataFrame({
+                "null": "curveball, unstratified", "sex": sex,
+                "domain_a": [domains[i] for i in iu[0]], "domain_b": [domains[j] for j in iu[1]],
+                "both_people": r.pair_observed[iu].astype(np.int64),
+                "expected_people": r.pair_null_mean[iu].round(1),
+                "ratio": (r.pair_observed[iu] / np.maximum(r.pair_null_mean[iu], 1e-9)).round(3),
+                "p_holm": stats.holm(r.pair_p_upper[iu]).round(4)}))
+            log(f"R1 {sex} curveball done")
+        for (dose,), gd in g.group_by(["dose"]):
+            if gd.height < 1000:
+                continue
+            Xd = gd.select(domains).to_numpy().astype(bool)
+            r = stats.cooccurrence_test(Xd, domains, permutations=permutations, seed=SEED)
+            add(f"registered, dose={dose}", sex, Xd.shape[0], r.observed_pairs, r.null_mean_pairs,
+                r.p_pairs, int((stats.holm(r.pair_p[iu]) < 0.05).sum()))
+    summary = pl.DataFrame(rows).sort(["sex", "null"])
+    return {"summary": safe(summary), "pairs": _safe_pairs(pl.concat(pair_tabs))}
+
+
+def core_subgraph(pairs: pl.DataFrame, core=CORE, by: tuple[str, ...] = ("null",)) -> pl.DataFrame:
+    """R2: observed and expected co-occurrences summed over the six pairs among the core domains
+    (cognitive, fatigue, sleep, dysautonomia) and over the other pairs, per null. Built from
+    suppressed pair tables, so it is an aggregate of aggregates. Columns needed: domain_a,
+    domain_b, both_people, expected_people and the `by` columns (absent `by` columns are filled)."""
+    df = pairs
+    for c in by:
+        if c not in df.columns:
+            df = df.with_columns(pl.lit("registered").alias(c))
+    df = df.with_columns(
+        (pl.col("domain_a").is_in(core) & pl.col("domain_b").is_in(core)).alias("core"))
+    out = (df.group_by([*by, "core"])
+             .agg(pl.len().alias("pairs"), pl.col("both_people").sum().alias("observed_people"),
+                  pl.col("expected_people").sum().round(1).alias("expected_people"))
+             .with_columns((pl.col("observed_people") / pl.col("expected_people")).round(3).alias("ratio"),
+                           pl.when(pl.col("core")).then(pl.lit("core (6 pairs)"))
+                             .otherwise(pl.lit("other pairs")).alias("subgraph"))
+             .drop("core").sort([*by, "subgraph"]))
+    return safe(out)
+
+
+def core_subgraph_tables(aggregates: Path | None = None) -> pl.DataFrame:
+    """R2 over every saved Q1 pair table: registered, text-matched, curveball, VAERS, by sex."""
+    d = aggregates or config.DATA_DIR / "aggregates" / ("" if config.DB_NAME == "vsafe" else config.DB_NAME)
+    parts = []
+    for label, name, by in [("registered", "analysis_sens9_q1_pairs.csv", ()),
+                            ("VAERS replication", "analysis_sens9_q1_vaers_pairs.csv", ()),
+                            ("text-matched", "analysis_expl_q1_textmatched_pairs.csv", ("null",)),
+                            ("curveball", "sub_b2_curveball_pairs.csv", ("null",)),
+                            ("by sex", "sub_r1_q1_sex_pairs.csv", ("sex", "null"))]:
+        p = d / name
+        if not p.exists():
+            continue
+        t = pl.read_csv(p)
+        if "suppressed" in t.columns:
+            t = t.filter(~pl.col("suppressed"))
+        t = core_subgraph(t, by=by or ("null",))
+        if not by:
+            t = t.with_columns(pl.lit(label).alias("null"))
+        if "sex" not in t.columns:
+            t = t.with_columns(pl.lit("all").alias("sex"))
+        parts.append(t.with_columns(pl.lit(label).alias("source"))
+                      .select(["source", "sex", "null", "subgraph", "pairs", "observed_people", "expected_people", "ratio", "suppressed"]))
+    return pl.concat(parts)
 
 
 # --- B3 ------------------------------------------------------------------------------------------
