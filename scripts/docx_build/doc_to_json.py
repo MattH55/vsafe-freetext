@@ -42,8 +42,8 @@ except json.JSONDecodeError:
 xml = d["data"]["xml"]
 
 FIG_FILES = {1: "figure1_validation.png", 2: "figure2_pair_ratios.png", 3: "figure3_onset.png",
-             4: "figure4_summary.png", 5: "figure5_text_matched.png"}
-FIG_ASPECT = {1: 738 / 1344, 2: 784 / 1344, 3: 720 / 1344, 4: 898 / 1344, 5: 1512 / 1344}
+             4: "figure4_text_matched.png", 5: "figure5_summary.png"}
+FIG_ASPECT = {1: 738 / 1344, 2: 784 / 1344, 3: 720 / 1344, 4: 1512 / 1344, 5: 898 / 1344}
 CITE = re.compile(r"\((\d{1,2}(?:[,–—-]\d{1,2})*)\)")
 
 

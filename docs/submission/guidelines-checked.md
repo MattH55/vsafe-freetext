@@ -19,14 +19,14 @@ therefore come from two indirect sources. They were not confirmed on the live pa
 
 | Requirement | Applied |
 |---|---|
-| Article type, word limit | Original Research Article; main text about 7,000 words after the pre-submission review of 12 Nov (Introduction to Conclusions, counting lists, excluding tables, figure captions, abstract, Key Points, declarations and references; 6,156 before the review) against the 6,000 reported by the search summary; the extra length is the expanded Limitations and the two review-requested analyses, and the author decides whether to trim or to submit at this length |
+| Article type, word limit | Original Research Article; main text 5,988 words after the review revisions and line edit of 12 Nov (Introduction to Conclusions, counting lists, excluding tables, figure legends, abstract, Key Points, declarations and references), under the 6,000 reported by the search summary; abstract about 400 words |
 | Abstract | Structured, headings as above, about 350 words; the journal allows up to 450 where a reporting guideline requires it (RECORD items 1.1 to 1.3 are addressed in the abstract) |
 | Key Points | Three bullets before the Introduction |
 | Title page | Title, author, affiliation (Open Source Medicine, Tallinn), ORCID 0000-0003-2487-0636, corresponding e-mail, running title, article type |
 | Declarations | Funding, Conflicts of Interest, Ethics Approval, Consent to Participate, Consent for Publication, Availability of Data and Material, Code Availability, Authors' Contributions (CRediT roles), AI tools statement |
 | References | Numbered, square brackets, Zotero fields; preprint cited with server, "[Preprint]", posting date and DOI (ref. 22) |
-| Figures | Five, PNG at 1344 px wide embedded in the manuscript; separate high-resolution files can be exported from the figure widgets if the journal asks |
-| Tables | Editable Word tables, eighteen in the main text (Tables 13 and 14 added after the review), 31 in the supplement |
+| Figures | Five, PNG at 1344 px wide embedded in the manuscript, numbered in order of first citation with full legends (previously Figures 1 to 3 were uncited and Figure 5 preceded Figure 4); separate high-resolution files can be exported from the figure widgets if the journal asks |
+| Tables | Editable Word tables, 14 in the main text, each captioned and numbered in order of first citation (four were uncaptioned before the line edit), 31 in the supplement |
 | Supplement | supplement.docx: 31 tables (S1 to S31), including every not-pre-registered analysis in full |
 | Reporting guideline | RECORD (STROBE extension for routinely collected data), RECORD-checklist.docx with section references |
 | Preprint policy | Not read; Springer journals generally accept prior preprints, to be confirmed at submission |

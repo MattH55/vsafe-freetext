@@ -4,19 +4,19 @@ Matthew Halma¹
 
 ¹ Open Source Medicine, Tallinn, Estonia. ORCID: 0000-0003-2487-0636. Corresponding author: Matthew Halma, Director, Open Source Medicine, Pärnu mnt. 139c, 11317 Tallinn, Estonia; mhalma@opensourcemed.info.
 
-Running title: PACVS signature in v-safe free text. Article type: Original Research Article. Draft of 2026-11-12.
+Running title: PACVS signature in v-safe free text. Article type: Original Research Article.
 
 Abstract
 
-Introduction. Post-acute COVID-19 vaccination syndrome (PACVS) is a chronic multi-system condition that pharmacovigilance systems code one symptom at a time. CDC's v-safe collected free-text answers at 3, 6 and 12 months after a dose; one prior analysis used its structured answers [22], none its free text.
+Introduction. Post-acute COVID-19 vaccination syndrome (PACVS) is a chronic multi-system condition that pharmacovigilance systems code one symptom at a time. CDC's v-safe collected free-text answers at 3, 6 and 12 months after a dose; one prior analysis used its structured answers, none its free text.
 
 Objective. To test, under a pre-registered protocol, whether long-term v-safe free text shows a coherent, persistent and under-captured multi-domain symptom pattern.
 
 Methods. Four questions were registered (osf.io/gnfpd) before any long-term text was read: clustering of nine candidate symptom domains, early onset and persistence, under-capture and dispersed coding in VAERS, and burden. Text was classified by a frozen keyword lexicon plus a language model and validated against CDC's MedDRA coding, with a confirmatory gate of precision and recall of at least 0.85.
 
-Results. Only fatigue passed the gate, so the primary analysis could not be run; every result is the registered nine-domain sensitivity analysis. Of 7,819,251 entries, 1,595,121 were long-term, and of 8.62 million person-doses with a long-term survey, 87,229 (1.01%) met the case definition. Domain pairs co-occurred 1.25 times as often as chance (p = 0.001) in every dose and manufacturer stratum and in 1.06 million VAERS reports. Nulls matched on how much each person wrote, or fixing each person-dose's own domain count, removed that aggregate excess but left a core in which cognitive symptoms co-occurred with sleep 2.3 to 2.7 times and with fatigue 2.1 to 2.3 times more than chance, in women and in men. The registered onset test was uninformative (28% early against a schedule-dependent 71% expected). Symptoms recurred at a later survey in 47 to 60% of cases, depending on how cases qualified, against 1.5 to 10.5% of comparison groups. Cases reached VAERS about as often as named acute diagnoses (rate ratio 0.94, 95% CI 0.90 to 0.98), with less dispersed coding.
+Results. Only fatigue passed the gate, so the primary analysis could not be run; every result is the registered nine-domain sensitivity analysis. Of 7,819,251 entries, 1,595,121 were long-term, and of 8.62 million person-doses with a long-term survey, 87,229 (1.01%) met the case definition. Domain pairs co-occurred 1.25 times as often as chance (p = 0.001) in every dose and manufacturer stratum and in 1.06 million VAERS reports. Nulls matched on how much each person wrote, or fixing each person-dose's own domain count, removed that aggregate excess but left a core in which cognitive symptoms co-occurred with sleep 2.3 to 2.7 times and with fatigue 2.1 to 2.3 times more than chance, in women and in men. The registered onset test was uninformative (28% early against a schedule-dependent 71% expected). Symptoms recurred at a later survey in 47 to 60% of cases, depending on how cases qualified, against 1.5 to 10.5% of comparison groups. Cases reached VAERS slightly less often than people with named acute diagnoses (rate ratio 0.94, 95% CI 0.90 to 0.98), and their reports were coded to a narrower, not wider, spread of terms.
 
-Conclusion. 1.01% of person-doses with a long-term v-safe survey describe a multi-domain pattern whose cognitive, fatigue, sleep and dysautonomia core clusters beyond chance after adjustment for verbosity. When the symptoms began could not be established, and the data cannot attribute the pattern to vaccination rather than to intercurrent illness or to selection into long-term response. The classifier did not meet its pre-registered accuracy standard, though a blind single-coder audit of 306 disagreements found it right in 86% of its unmatched positives against 60% for CDC's; the findings are hypothesis-generating.
+Conclusion. Of person-doses with a long-term v-safe survey, 1.01% describe a multi-domain pattern whose cognitive, fatigue, sleep and dysautonomia core clusters beyond chance after adjustment for verbosity. When the symptoms began could not be established, and the data cannot attribute the pattern to vaccination rather than to intercurrent illness or selection into long-term response. The classifier did not meet its pre-registered accuracy standard, although a blind single-coder audit of 306 disagreements found it right in 86% of its unmatched positives against 60% for CDC's coding; the findings are hypothesis-generating.
 
 Key Points
 
@@ -24,17 +24,15 @@ Key Points
 
 - Cognitive symptoms, fatigue, sleep disturbance and dysautonomia co-occurred 1.4 to 2.7 times more often than chance under every null tried, including one that fixes each person's own number of symptoms; the aggregate excess did not survive those nulls, the core did.
 
-- The registered onset test could not establish when the symptoms began, and VAERS captured these cases at nearly the same rate as named acute events; the findings are hypothesis-generating and call for independent, multi-coder validation of the classifier before any confirmatory claim.
+- The registered onset test could not establish when symptoms began, and recorded VAERS filing for these cases was only slightly lower than for named acute events; the findings are hypothesis-generating and call for independent, multi-coder validation of the classifier before any confirmatory claim.
 
 Introduction
 
-Post-acute COVID-19 vaccination syndrome (PACVS) is a complex multi-system condition following COVID-19 vaccination, with symptoms similar to long COVID: fatigue, cognitive difficulty ("brain fog") and post-exertional malaise among them. Assigning causality to vaccination has been difficult, especially for a complex multi-system disorder [1, 2]. That leaves patients without the coherent clinical entity on which compensation, treatment and research depend [3].
+Post-acute COVID-19 vaccination syndrome (PACVS) is a multi-system condition following COVID-19 vaccination, with symptoms resembling long COVID: fatigue, cognitive difficulty ("brain fog") and post-exertional malaise among them. Causality has been hard to assign for a multi-system disorder [1, 2], which leaves patients without the clinical entity on which compensation, treatment and research depend [3]. Prevalence estimates range from 0.003% to 0.9% of recipients [2]; the higher figure comes from an occupational survey, the lower from verified reports, which understate the rate. Case series describe a coherent presentation [4–15], but their patients came forward attributing symptoms to vaccination.
 
-Prevalence estimates range from 0.003% to 0.9% of COVID-19 vaccine recipients [2]. The higher figure comes from an occupational survey of workers; the lower relies on verified reports, which understate the rate. Case series have described a coherent presentation [4–15], but their patients came forward attributing symptoms to vaccination. Screening and pharmacovigilance do not identify PACVS, because there is no disease entity to code to: a system can flag fatigue or brain fog one symptom at a time, but not a constellation.
+Routine surveillance is poorly placed to see such a syndrome. Spontaneous reports are coded one symptom at a time to MedDRA Preferred Terms, so a multi-system pattern is split across many terms, and their denominators are unknown, so reporting can track awareness of the system or the salience of the campaign rather than the rate of events [16]. Active surveillance counts events inside a fixed risk window after the dose, so later problems fall outside it. There is no disease entity to code to: a system can flag fatigue or brain fog, but not a constellation.
 
-A syndrome that spans several organ systems and begins weeks to months after vaccination is hard for routine safety surveillance to see. Spontaneous reports are coded one symptom at a time to MedDRA Preferred Terms, so a multi-system pattern is split across many terms. Their denominators are also unknown, so changes in reporting can reflect awareness of the system or the salience of the vaccination campaign rather than the rate of events [16]. Active surveillance designs usually count events inside a fixed risk window after the dose, so later problems fall outside it.
-
-v-safe, CDC's smartphone check-in system, followed about 10 million COVID-19 vaccine recipients in the United States for up to a year, soliciting their condition at fixed time points, and has been used to examine preliminary signals from VAERS [17]. A followed cohort with solicited reports gives the denominator that stimulated reporting lacks. v-safe asked open questions at 3, 6 and 12 months after a dose. Released under FOIA, these answers are the largest body of long-term, participant-written text on post-vaccination health. Levi and Lu [22] analysed v-safe's structured check-in answers: among 9,904,924 enrollees aged 16 or older, 185,285 (1.87%) reported worse health lasting at least three months that they attributed to vaccination (2.24% of women), while 1.92% reported prolonged worse health without attributing it. Their phenotype rests on the participant's attribution and the structured health answers. The present study differs in using the free text to define a symptom-based phenotype that does not depend on attribution, in testing whether symptom domains cluster against a null model, and in examining onset and recorded VAERS filing. The two analyses were independent; the preprint was read on 12 November 2026, after this study was registered and after its registered results had been computed.
+v-safe, CDC's smartphone check-in system, followed about 10 million COVID-19 vaccine recipients in the United States for up to a year, soliciting their condition at fixed time points, and has been used to examine preliminary VAERS signals [17]. A followed cohort supplies the denominator that spontaneous reporting lacks, and v-safe asked open questions at 3, 6 and 12 months after a dose; released under FOIA, these answers are the largest body of long-term, participant-written text on post-vaccination health. Levi and Lu [22] analysed v-safe's structured answers: among 9,904,924 enrollees aged 16 or older, 185,285 (1.87%) reported worse health lasting at least three months that they attributed to vaccination, and 1.92% reported prolonged worse health without attributing it. Their phenotype rests on attribution. The present study uses the free text to define a symptom-based phenotype that does not, tests whether symptom domains cluster against a null model, and examines onset and recorded VAERS filing; the two analyses were independent.
 
 We asked four pre-registered questions:
 
@@ -49,6 +47,8 @@ We asked four pre-registered questions:
 Methods
 
 Data sources
+
+Table 1. Data sources, content and use.
 
   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Source                                                                               Content                                                                                                   Use
@@ -66,7 +66,7 @@ Data sources
   VAERS public data (dated 2026-06-03) [20]                                            Reports, MedDRA terms, symptom text                                                                       Q3, Q1 replication
   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Each entry was linked to its registrant, the check-in it answered, the most recent preceding dose, CDC's MedDRA codes and call-centre outcomes within 90 days. Entries redacted under FOIA exemption (b)[6] were excluded. OpenVSafe match data were read from its public per-registrant pages [18] on 2026-11-10 and 2026-11-11 for the 44,954 people whom the call-centre data marked as VAERS-filed, at one request per second, within the access the site's robots.txt allows for those pages; no bulk file exists, and no permission beyond the site's published access rules was sought. Only the VAERS ID, match score, confidence and runner-up score were kept.
+Each entry was linked to its registrant, the check-in it answered, the most recent preceding dose, CDC's MedDRA codes and call-centre outcomes within 90 days (Table 1); entries redacted under FOIA exemption (b)[6] were excluded. OpenVSafe match data were read from its public per-registrant pages [18] on 2026-11-10 and 2026-11-11 for the 44,954 people whom the call-centre data marked as VAERS-filed, at one request per second and within the access the site's robots.txt allows; no bulk file exists, and no permission beyond the site's published access rules was sought. Only the VAERS ID, match score, confidence and runner-up score were kept.
 
 Pre-registration
 
@@ -96,7 +96,7 @@ The unit is a person-dose. A case meets three criteria:
 
 3.  Free text at S names no exclusion theme.
 
-Three comparison groups were defined, mutually exclusive, with priority case, then (b), (c), (a):
+Three mutually exclusive comparison groups were defined, assigned in the priority case, (b), (c), (a):
 
 - (a) No symptoms: no long-term survey worse or with impact, and no PACVS text.
 
@@ -106,15 +106,15 @@ Three comparison groups were defined, mutually exclusive, with priority case, th
 
 Statistical analysis
 
-Q1. We built a person-dose by domain matrix for person-doses with long-term text. The statistic is the sum, over the 36 domain pairs, of the people having both. The null permutes each domain column independently 1,000 times (seed 20261110), keeping each domain's frequency. The one-sided p-value is (1 + number of null values at least the observed) / 1,001. Per-pair p-values were Holm-adjusted. The test was repeated within each dose and manufacturer with at least 1,000 person-doses, and on VAERS COVID-19 report text classified by layer 1.
+Q1. For person-doses with long-term text we built a person-dose by domain matrix. The statistic is the sum, over the 36 domain pairs, of the people having both. The null permutes each domain column independently 1,000 times (seed 20261110), keeping each domain's frequency; the one-sided p-value is (1 + number of null values at least as large as the observed) / 1,001, and per-pair p-values were Holm-adjusted. The test was repeated within each dose and manufacturer with at least 1,000 person-doses, and on VAERS COVID-19 report text classified by layer 1.
 
-Q2. Onset is the first survey type (week 1, six weeks, 3, 6 or 12 months) whose text names any of the case's long-term domains. Each case's null probability of early onset is the share of their completed check-ins for that dose that were in week 1 or the six-week period. The number of early-onset cases was compared with this Poisson-binomial null by an exact one-sided test. Persistence compares cases with group (c) on the share naming a PACVS domain at a later long-term survey, among those who completed one. We used a risk difference with a Newcombe interval and a one-sided z-test.
+Q2. Onset is the first survey type (week 1, six weeks, 3, 6 or 12 months) whose text names any of the case's long-term domains. Each case's null probability of early onset is the share of their completed check-ins for that dose that fell in week 1 or the six-week period; the number of early-onset cases was compared with this Poisson-binomial null by an exact one-sided test. Persistence compares cases with group (c) on the share naming a PACVS domain at a later long-term survey, among those who completed one, as a risk difference with a Newcombe interval and a one-sided z-test.
 
-Q3. Analysis was at the person level: a case if any dose was a case, otherwise group (b) if any dose was. A person reached VAERS if a call-centre contact within 90 days of an entry recorded a VAERS filing, or OpenVSafe [18], a project of OpenVAERS that matches v-safe records to VAERS reports on timing, dose and shared symptoms, matched them to a report. We call this measure recorded VAERS filing. It is not VAERS capture in general: a report filed without call-centre contact and not matched by OpenVSafe is not counted. Matches needed a score of at least 8 of 11, and reports matched to more than one person were dropped (main set: 25,913 people). A sensitivity set used high-confidence matches only (23,925 people). Capture was compared as a rate ratio with a log-scale Wald interval. Dispersion compared the Shannon entropy of matched reports' MedDRA terms between groups, using a 1,000-fold permutation of group labels.
+Q3. Analysis was per person: a case if any dose was a case, otherwise group (b) if any dose was. A person reached VAERS if a call-centre contact within 90 days of an entry recorded a VAERS filing, or if OpenVSafe [18], a project of OpenVAERS that matches v-safe records to VAERS reports on timing, dose and shared symptoms, matched them to a report (score at least 8 of 11; reports matched to more than one person dropped; main set 25,913 people, high-confidence set 23,925). We call this recorded VAERS filing; a report filed without call-centre contact and not matched by OpenVSafe is not counted. Filing was compared as a rate ratio with a log-scale Wald interval. Dispersion compared the Shannon entropy of matched reports' MedDRA terms between groups by a 1,000-fold permutation of group labels.
 
 Q4 and attrition. Q4 gives rates per 1,000 for health impact, care and call-centre cases by group. Case prevalence was bounded by assuming every person-dose without a long-term survey was well (lower bound) or a case (upper bound).
 
-Disclosure. Only aggregates were exported. Any cell with fewer than 10 people was suppressed, and nothing was reported below the national level. No free text was quoted.
+Disclosure. Only aggregates were exported. Any cell with fewer than 10 people was suppressed, and nothing was reported below the national level.
 
 Decisions where the registration was silent
 
@@ -126,8 +126,6 @@ Decisions where the registration was silent
 
 - Q1's permutation was re-implemented after registration for speed (each domain's positive rows drawn directly), which gives the same null distribution.
 
-- The model-sensitivity check used 2,000 long-term residue entries (seed 1), the pilot's sample size, because the registration fixed none.
-
 Model-sensitivity check
 
 As registered, a second model, claude-opus-5-5 through the Anthropic API, labelled a fixed sample of long-term text: 2,000 long-term residue entries drawn with seed 1 (the pilot's sample size, since the registration fixed none), 1,687 unique texts. A theme is model-sensitive if its entry count differs by more than 20% between the two models on the texts both labelled.
@@ -136,49 +134,43 @@ Analyses not in the pre-registration
 
 These were specified after the registered results were seen, each for the reason given, and are reported as exploratory. They do not replace any registered result.
 
-1.  Text-matched co-occurrence null. Reason: the registered null ignores how much each person-dose wrote. Each domain's positives are placed at random within strata of long-term characters (deciles) and of entries (1, 2, 3, 4 or more) crossed with deciles; expected pair counts are the within-stratum products summed.
+1.  Text-matched null (Q1): the registered null ignores how much each person-dose wrote, so each domain's positives are placed at random within deciles of long-term characters, and within entries (1, 2, 3, 4 or more) crossed with deciles.
 
-2.  Curveball null. Reason: the text-matched null still lets a person-dose's own domain count vary. Curveball trades keep every person-dose's domain count and every domain's frequency (30 burn-in rounds, 3 between samples, 1,000 samples, seed 20261110), unstratified and within entries (1, 2, 3 or more) and text-length tertiles. The total pair count is then fixed by construction, so only the 36 pairs are tested, with upper- and lower-tail p-values.
+2.  Curveball null (Q1): the text-matched null still lets a person-dose's own domain count vary. Curveball trades keep every person-dose's domain count and every domain's frequency (30 burn-in rounds, 3 between samples, 1,000 samples, seed 20261110), unstratified and within entries and text-length tertiles; the total pair count is then fixed, so only the 36 pairs are tested, with upper- and lower-tail p-values.
 
-3.  Exclusion criterion variants. Reason: the exclusion tags had low precision. Criterion 3 and group (b) from keyword tags only, and criterion 3 dropped; group sizes, Q2 and Q3 for each.
+3.  Core-subgraph statistic and Q1 within each sex, to locate the excess and to check it in each sex: co-occurrences summed over the six pairs among cognitive symptoms, fatigue, sleep and dysautonomia and over the other 30 pairs, under each null, with no test attached; and the registered, text-matched and curveball nulls within women and within men, and the registered null within sex × dose strata.
 
-4.  Persistence by qualification route and against group (d). Reason: the across-surveys route is partly circular and group (c) has no long-term impact by definition. Cases that met criterion 2 at a single survey are separated; group (d) is long-term responders worse or impacted at a long-term survey who named fewer than two domains there, excluding cases and acute events.
+4.  Exclusion criterion variants: criterion 3 and group (b) from keyword tags only, and criterion 3 dropped, because the exclusion tags had low precision; and Q1 with redacted entries included.
 
-5.  Onset from structured week-1 answers. Reason: free text under-records early symptoms, check-boxes do not. Week-1 symptoms and severity for fatigue (fatigue field or 'Fatigue or tiredness'), pain (headache, joint pains, muscle or body aches) and gastrointestinal (nausea, diarrhoea, vomiting, abdominal pain), among cases with the domain and in group (a).
+5.  Persistence by qualification route (cases meeting criterion 2 at a single survey) and against group (d), long-term responders worse or impacted who named fewer than two domains, excluding cases and acute events.
 
-6.  Symmetric classifier. Reason: layer 3 had labelled long-term text only. It was also run on cases' early residue (38,647 entries) and the onset test repeated, with a second null uniform over completed survey types.
+6.  Onset re-examined: layer 3 also run on cases' early residue (32,212 entries) with a second null uniform over completed survey types; and week-1 check-box symptoms and severity for fatigue, pain and gastrointestinal symptoms among cases with the domain, group (a) and group (c).
 
-7.  Validation audit. Reason: CDC coding is not ground truth. 306 long-term entries where layer 3 and CDC disagree on a domain (17 per domain per side), seed 20261112, drawn for blind coding by the author.
+7.  Validation audit: 306 long-term entries where layer 3 and CDC disagree on a domain (17 per domain per side, seed 20261112), coded by the author blind to side.
 
-8.  Dispersion with small-sample corrections. Reason: entropy rises with code count. Miller-Madow correction, rarefaction to equal code counts, two-sided permutation test.
+8.  Dispersion with Miller-Madow correction, rarefaction to equal code counts and a two-sided test.
 
-9.  Redacted entries included in the Q1 rows, to bound the (b)[6] redactions; and the case count without criterion 3.
-
-10. Levi and Lu's cohorts rebuilt from the structured answers (their rules; no age field exists, so the adult check-in file stands in for 16 or older), as a linkage check, and cross-tabulated with the text-defined case at person level with Cohen's kappa.
-
-11. Q1 within each sex. Reason: a reviewer asked whether the cluster holds in women and men separately, since 77.5% of cases are women. The registered, text-matched (entries × character deciles) and curveball nulls were run within women and within men, and the registered null within sex × dose strata; 'Other' and 'Unknown' sex were not tested.
-
-12. Core-subgraph statistic. Reason: a sum over all 36 pairs hides where the excess sits. Observed and expected co-occurrences were summed over the six pairs among cognitive symptoms, fatigue, sleep and dysautonomia, and over the other 30 pairs, under each null, from the saved pair tables; no test is attached to the sums.
+9.  Levi and Lu's cohorts rebuilt from the structured answers by their rules (no age field exists, so the adult file stands in for 16 or older) as a linkage check, and cross-tabulated with the text-defined case with Cohen's kappa.
 
 Results
 
 Corpus
 
-The twelve updated FOIA releases and the under-3 file hold 7,819,275 rows, 7,819,251 after de-duplication; the release description gives 7,554,929 entries, and the difference is unexplained. Of the 7,819,251 entries, 1,595,121 came from long-term surveys, written by 1,207,426 people: 565,626 at 3 months, 586,468 at 6 months and 443,027 at 12 months. A further 5,791,000 came from week-1 and six-week surveys, and 433,130 could not be matched to a survey. The 144,972,101 check-ins are the 144,856,043 rows of the adult file and 116,294 of the under-3 file in our download, de-duplicated by response ID; Levi and Lu report 151,581,805 adult rows, so the file versions differ. Layer 3 labelled all 386,862 unique long-term residue texts with no failed requests after retry. The provider's per-request charges logged by the run total US$0.022 for that run and US$0.0005 for the later runs; the main run's row in the run table was lost when its process dropped a connection, so its token count is not logged.
+The twelve updated FOIA releases and the under-3 file hold 7,819,275 rows, 7,819,251 after de-duplication; the release description gives 7,554,929 entries, and the difference is unexplained. Of the 7,819,251 entries, 1,595,121 came from long-term surveys, written by 1,207,426 people: 565,626 at 3 months, 586,468 at 6 months and 443,027 at 12 months. A further 5,791,000 came from week-1 and six-week surveys, and 433,130 could not be matched to a survey. The 144,972,101 check-ins are the 144,856,043 rows of the adult file and 116,294 of the under-3 file in our download, de-duplicated by response ID; Levi and Lu report 151,581,805 adult rows. Layer 3 labelled all 386,862 unique long-term residue texts with no failed requests after retry; logged provider charges were US$0.022 for that run and US$0.0005 for later runs, and the main run's token count was not logged.
 
 Classifier validation: one domain passed
 
-Only fatigue passed the gate (precision 0.961, recall 0.859). Layer 3 raised recall in every domain but lowered precision. Dysautonomia, which passed on keywords alone (0.978 / 0.872), failed on precision once layer 3 was added (0.774). Eight domains are therefore exploratory, and the registered primary analysis, which needs at least two passing domains, could not be run. Every result below is the registered nine-domain sensitivity analysis.
+Only fatigue passed the gate (precision 0.961, recall 0.859; Figure 1). Layer 3 raised recall in every domain but lowered precision. Dysautonomia, which passed on keywords alone (0.978 / 0.872), failed on precision once layer 3 was added (0.774). Eight domains are therefore exploratory, and the registered primary analysis, which needs at least two passing domains, could not be run. Every result below is the registered nine-domain sensitivity analysis.
 
 []
 
-Figure 1. validate_meddra_lexicon and validate_meddra_final aggregates · 9 PACVS domains, long-term entries
-
-A domain passes only if both its final (filled) dots sit right of the dashed line.
+Figure 1. Precision and recall of each PACVS domain against CDC's MedDRA coding of long-term entries, for keywords alone (open circles) and for the final classifier, keywords plus language model (filled). The dashed line marks the pre-registered 0.85 gate; a domain passes only if both filled dots lie to its right. Only fatigue / post-exertional malaise passed.
 
 The exclusion themes also had low precision against the reference: unrelated cause 0.144, acute diagnosis 0.311. A post-hoc look at the CDC terms on these entries suggests most of the shortfall comes from gaps in the frozen map rather than from wrong tags. The commonest terms were COVID-19, a positive SARS-CoV-2 test, nasopharyngitis, cerebrovascular accident and thrombosis, none of which are in the map. Two real errors were seen: entries mentioning a negative COVID-19 test were tagged as an unrelated cause, and chronic conditions were tagged as acute diagnoses.
 
 Case and comparison groups
+
+Table 2. Case and comparison groups: person-doses, people and long-term response.
 
   ------------------------------------------------------------------------------------------------------------------
   Group                          Person-doses      People            Share of person-doses with a long-term survey
@@ -194,13 +186,13 @@ Case and comparison groups
   Other                          2,267,821         2,036,216         11.2% (963,254 with a long-term survey)
   ------------------------------------------------------------------------------------------------------------------
 
-Of 17.46 million person-doses with any check-in, 49.4% completed a long-term survey. Response was higher after a week-1 health impact (60.1%) than without one (42.4%). The five groups cover 9,939,933 person-doses; the other 7.52 million completed no long-term survey and had neither an acute-diagnosis entry nor a severe week 1, so belong to no group. Case prevalence among responders was 1.01%, with bounds of 0.50% (all non-responders well) to 51.1% (all non-responders cases).
+Of 17.46 million person-doses with any check-in, 49.4% completed a long-term survey; response was higher after a week-1 health impact (60.1%) than without one (42.4%). The five groups in Table 2 cover 9,939,933 person-doses; the other 7.52 million completed no long-term survey and had neither an acute-diagnosis entry nor a severe week 1. Case prevalence among responders was 1.01%, with bounds of 0.50% (all non-responders well) to 51.1% (all non-responders cases).
 
 Characteristics of the groups
 
-Cases were more often women and more often second-dose person-doses than the no-symptoms group (Table 1). Manufacturer shares were similar across groups. Age was not present in the linked release.
+Cases were more often women and more often second-dose person-doses than the no-symptoms group (Table 3); manufacturer shares were similar across groups. Age was not present in the linked release.
 
-Table 1. Share of person-doses in each group, %.
+Table 3. Sex, manufacturer and dose by group, % of person-doses.
 
   --------------------------------------------------------------------------------------------------------
                          Case           (a) No symptoms   (b) Acute event   (c) Severe week 1, recovered
@@ -228,35 +220,29 @@ Table 1. Share of person-doses in each group, %.
 
 Q1: the domains cluster
 
-Among 1,267,509 person-doses with long-term text, domain pairs co-occurred 235,184 times against 188,776 expected under the null (ratio 1.25, p = 0.001). The test rejected in all seven strata with at least 1,000 person-doses: doses 1 to 4 (ratios 1.21 to 1.39) and Pfizer-BioNTech, Moderna and Janssen (1.22 to 1.26). This meets the registered criterion for reproducibility, though at these sample sizes any real dependence reaches p = 0.001, so the ratios carry the information. The null keeps each domain's frequency but not each person's amount of text: a person-dose with more entries or longer entries has more chances to name several domains, and this alone produces some excess co-occurrence.
+Among 1,267,509 person-doses with long-term text, domain pairs co-occurred 235,184 times against 188,776 expected under the null (ratio 1.25, p = 0.001). The test rejected in all seven strata with at least 1,000 person-doses: doses 1 to 4 (ratios 1.21 to 1.39) and Pfizer-BioNTech, Moderna and Janssen (1.22 to 1.26). This meets the registered criterion for reproducibility, but at these sample sizes any real dependence reaches p = 0.001, so the ratios carry the information, and the registered null does not account for how much each person wrote (see Analyses not in the pre-registration).
 
 []
 
-Figure 2. analysis_sens9_q1_pairs aggregate · 36 domain pairs, final classifier
+Figure 2. Q1 under the registered null: observed / expected number of person-doses naming both domains, for the 36 domain pairs among 1,267,509 person-doses with long-term text. Values above 1 indicate co-occurrence beyond chance.
 
-Twenty-three of the 36 pairs exceeded the null after Holm adjustment (adjusted p = 0.036). The strongest ties were cognitive symptoms with sleep (4.1 times expected), fatigue (3.0) and dysautonomia (2.2). The other 13 pairs were at or below chance:
-
-- all eight pairs involving menstrual symptoms;
-
-- sensory symptoms with fatigue, gastrointestinal or cardiorespiratory symptoms;
-
-- cardiorespiratory with gastrointestinal symptoms;
-
-- dysautonomia with pain.
+Twenty-three of the 36 pairs exceeded the null after Holm adjustment (adjusted p = 0.036; Figure 2). The strongest ties were cognitive symptoms with sleep (4.1 times expected), fatigue (3.0) and dysautonomia (2.2). The other 13 pairs were at or below chance: all eight involving menstrual symptoms, sensory symptoms with fatigue, gastrointestinal or cardiorespiratory symptoms, cardiorespiratory with gastrointestinal symptoms, and dysautonomia with pain.
 
 Replication in VAERS. We applied the keyword classifier to the symptom text of 1,057,077 VAERS reports for COVID-19 vaccines (2020 to 2026), one row per report. Pairs co-occurred 486,503 times against 262,471 expected (ratio 1.85, p = 0.001). Thirty-one of 36 pairs exceeded the null after Holm adjustment. As in v-safe, the strongest tie was cognitive symptoms with sleep (4.2 times expected), followed by cognitive symptoms with dysautonomia (2.9) and fatigue (2.8). Menstrual symptoms again did not cluster with fatigue, pain or sensory symptoms. VAERS reports mostly describe acute reactions, in which several symptoms often appear together, so this replication shows the same structure but not its timing.
 
 Q2: onset test uninformative, strong persistence
 
-Onset. Of 87,217 cases with an onset survey, 24,316 (27.9%) first described their case domains in week 1 or by six weeks. 62,192 (71.3%) were expected under the null, so H0 is not rejected (p = 1.0). 72% first described them at 3 months or later; 3 months was the commonest first survey (34%).
+Onset. Of 87,217 cases with an onset survey, 24,316 (27.9%) first described their case domains in week 1 or by six weeks, against 62,192 (71.3%) expected under the null, so H0 is not rejected (p = 1.0). Most (72%) first described them at 3 months or later, and 3 months was the commonest first survey (34%; Figure 3).
 
 []
 
-Figure 3. analysis_sens9_q2_onset and onset_distribution aggregates · 87,217 cases
+Figure 3. Survey at which each of 87,217 cases first named any of their case domains. By six weeks 28% had done so, against 71% expected under the registered null. Early text was classified by keywords only, long-term text also by the language model.
 
 Persistence. Among those who completed a later long-term survey, 60.3% of cases (30,907 of 51,221) named a PACVS domain again, against 1.5% of group (c) (17,416 of 1,169,538). The risk difference was 58.9 percentage points (95% CI 58.4 to 59.3, p < 0.001).
 
 Q3: recorded VAERS filing slightly lower for cases, coding not more dispersed
+
+Table 4. Recorded VAERS filing and dispersion of MedDRA Preferred Terms on matched reports, cases against group (b), per person.
 
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------
   Match set         Cases with a recorded VAERS filing   Group (b) with a recorded VAERS filing   Rate ratio (95% CI)   PT entropy, cases vs (b)   Dispersion p
@@ -266,9 +252,11 @@ Q3: recorded VAERS filing slightly lower for cases, coding not more dispersed
   High confidence   3,925 / 86,323 (4.55%)               4,921 / 101,690 (4.84%)                  0.94 (0.90 to 0.98)   8.31 vs 8.61               1.0
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Cases reached VAERS about 6% less often than people with named acute diagnoses; the upper limit is below 1, so H0 is rejected, but the two rates are close (4.6% and 4.9%). Group (b) here has 101,690 people rather than 102,616 because 926 people who were a case at one dose and an acute event at another count as cases. Dispersion was tested on matched reports of 2,122 cases and 2,642 group (b) people. Cases' reports were coded to a narrower, not wider, spread of terms, so H0 is not rejected. The difference survives the small-sample corrections added after the results were seen (Table 8): with the Miller-Madow correction the entropies are 8.38 and 8.67 bits, rarefied to equal code counts 8.31 and 8.59, and a two-sided permutation test gives p = 0.001.
+Cases reached VAERS about 6% less often than people with named acute diagnoses (4.6% against 4.9%; Table 4); the upper confidence limit is below 1, so H0 is rejected. Group (b) here has 101,690 people rather than 102,616 because 926 people who were a case at one dose and an acute event at another count as cases. On matched reports of 2,122 cases and 2,642 group (b) people, cases' reports were coded to a narrower, not wider, spread of Preferred Terms (entropy 8.31 against 8.59 bits), so H0 is not rejected; small-sample corrections did not change this (below).
 
 Q4: burden (descriptive)
+
+Table 5. Health impact, care and call-centre cases at long-term surveys by group, per 1,000.
 
   -----------------------------------------------------------------------------------------------------------------------------------------------------
   Group                          Health impact at a long-term survey, per 1,000   Care at a long-term survey, per 1,000   Call-centre case, per 1,000
@@ -282,13 +270,13 @@ Q4: burden (descriptive)
   (c) Severe week 1, recovered   0                                                0                                       54.5
   -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Zero rates in groups (a) and (c) follow from their definitions.
+Nearly all cases (952.7 per 1,000) reported a health impact at a long-term survey and 462.6 per 1,000 sought care, against 680.7 and 518.1 in group (b); 587.2 per 1,000 cases and 771.4 per 1,000 in group (b) had a call-centre case (Table 5). Zero rates in groups (a) and (c) follow from their definitions.
 
 Model sensitivity (registered check)
 
-On the fixed sample of 2,000 long-term residue entries (1,687 unique texts, all labelled by both models, no failures or refusals), four of nine PACVS domains were model-sensitive by the registered 20% rule: fatigue, menstrual, cardiorespiratory and cognitive symptoms (Table 2). Sleep had too few entries to report. Dysautonomia, gastrointestinal, pain and sensory-neuropathic symptoms were stable. Among the other themes, unrelated cause, persistence and care sought were flagged; Claude Opus applied each more often than DeepSeek. The sample is residue text, where the keyword layer found nothing, so the counts per domain are small and the shift statistic is noisy below about 50 entries. The direction for fatigue is nonetheless clear: on such text DeepSeek labelled it less than half as often as Claude. An earlier pilot on 2,000 random early entries had found every PACVS domain within 13% between the two models; the disagreement is specific to the harder long-term residue.
+On the fixed sample of 2,000 long-term residue entries (1,687 unique texts, all labelled by both models without failures or refusals), four of nine PACVS domains were model-sensitive by the registered 20% rule: fatigue, menstrual, cardiorespiratory and cognitive symptoms (Table 6). Sleep had too few entries to report; dysautonomia, gastrointestinal, pain and sensory-neuropathic symptoms were stable. Among the other themes, unrelated cause, persistence and care sought were flagged, each applied more often by Claude Opus. Counts per domain are small on residue text, where the keyword layer found nothing, and the shift statistic is noisy below about 50 entries, but the direction for fatigue is clear: DeepSeek labelled it less than half as often as Claude. A pilot on 2,000 random early entries had found every PACVS domain within 13% between the two models, so the disagreement is specific to the harder long-term residue.
 
-Table 2. Entries labelled with each theme by the two models on the fixed long-term residue sample.
+Table 6. Entries labelled with each theme by the two models on the fixed long-term residue sample.
 
   --------------------------------------------------------------------------------------------------------
   Theme                           DeepSeek V4.1 Flash   Claude Opus 5.5   Shift          Model-sensitive
@@ -326,9 +314,9 @@ Table 2. Entries labelled with each theme by the two models on the fixed long-te
 
 Analyses not in the pre-registration
 
-Text-matched null for Q1. Mean domains per person-dose rose from 0.26 in the lowest decile of long-term characters to 1.07 in the highest. Matching the null on amount of text cut the ratio of observed to expected pairs from 1.25 to 1.06 (character deciles) and 1.04 (entries crossed with deciles), still at p = 0.001 at this sample size (Table 3).
+Text-matched null for Q1. Mean domains per person-dose rose from 0.26 in the lowest decile of long-term characters to 1.07 in the highest. Matching the null on amount of text cut the ratio of observed to expected pairs from 1.25 to 1.06 (character deciles) and 1.04 (entries crossed with deciles), still p = 0.001 at this sample size (Table 7).
 
-Table 3. Q1 under the registered null and two text-matched nulls.
+Table 7. Q1 under the registered null and two text-matched nulls.
 
   ----------------------------------------------------------------------------------------------------------------------------
   Null                                     Strata      Observed pairs   Expected pairs   Ratio       Pairs above null (Holm)
@@ -340,15 +328,15 @@ Table 3. Q1 under the registered null and two text-matched nulls.
   Matched on entries × character deciles   39          235,184          226,337          1.04        16 of 36
   ----------------------------------------------------------------------------------------------------------------------------
 
-The specific structure survived (Figure 5): under the strictest matching, cognitive symptoms co-occurred with sleep 2.5 times, with fatigue 2.3 and with dysautonomia 1.6 times more than expected, fatigue with sleep 1.6 and with pain 1.4, and cardiorespiratory with dysautonomia 1.3; pairs that had been modestly above chance moved close to it, and the 13 pairs below chance stayed below.
+The specific structure survived (Figure 4): under the strictest matching, cognitive symptoms co-occurred with sleep 2.5 times, with fatigue 2.3 and with dysautonomia 1.6 times more than expected, and fatigue with sleep 1.6 and with pain 1.4; pairs that had been modestly above chance moved close to it, and the 13 pairs below chance stayed below.
 
 []
 
-Figure 5. analysis_sens9_q1_pairs and analysis_expl_q1_textmatched_pairs aggregates · 36 domain pairs
+Figure 4. Observed / expected co-occurrence for the 36 domain pairs under the registered null (open circles) and under a null matched on entries × character deciles (filled), log scale. Pairs in blue remain at least 1.5 times chance after matching. Not pre-registered.
 
-Curveball null. With every person-dose's domain count and every domain's frequency fixed, the total pair count is invariant (235,184 in every sample), so only the 36 pairs can be tested (Table 11). The same core stood out under all three stratifications: cognitive with sleep 2.3 to 2.7 times expected, with fatigue 2.1 to 2.3 and with dysautonomia 1.4 to 1.5; fatigue with sleep 1.5 to 1.6 and with pain 1.4 to 1.5. Thirteen to fifteen pairs lay above the null after Holm adjustment and seventeen to nineteen below it, every menstrual pair among the latter.
+Curveball null. With both margins fixed the total pair count is invariant (235,184 in every sample), so only the 36 pairs can be tested (Table 8). The same core stood out under all three stratifications: cognitive symptoms with sleep 2.3 to 2.7 times expected, with fatigue 2.1 to 2.3 and with dysautonomia 1.4 to 1.5, and fatigue with sleep 1.5 to 1.6. Thirteen to fifteen pairs lay above the null after Holm adjustment and seventeen to nineteen below it, every menstrual pair among the latter.
 
-Table 11. Q1 domain pairs under the curveball null (both margins fixed), observed / expected.
+Table 8. Q1 domain pairs under the curveball null (both margins fixed), observed / expected.
 
   --------------------------------------------------------------------------------------------------------------
   Pair                               Unstratified      Within entries 1 / 2 / 3+   Within text-length tertiles
@@ -376,11 +364,11 @@ Table 11. Q1 domain pairs under the curveball null (both margins fixed), observe
   Cardiorespiratory + menstrual      0.22              0.23                        0.22
   --------------------------------------------------------------------------------------------------------------
 
-1,000 samples after 30 burn-in rounds, 3 rounds between samples, seed 20261110; the full 36-pair table is in the supplement.
+Curveball samples: 1,000 after 30 burn-in rounds, 3 rounds between samples, seed 20261110. The full 36-pair table is in the supplement.
 
-Core subgraph. Summing observed and expected co-occurrences over the six pairs among cognitive symptoms, fatigue, sleep and dysautonomia, and over the other 30 pairs, gives a single statistic per null (Table 13). The core ratio fell from 1.58 under the registered null to 1.30 to 1.32 under the text-matched nulls and 1.21 to 1.22 under the curveball null, while the other pairs fell from 1.22 to 1.02 to 1.04 and then to 0.98: the excess that survives the strict nulls is confined to the core. In VAERS the core ratio was 1.95 against 1.84 for the other pairs.
+Core subgraph. Summed over the six core pairs, the ratio of observed to expected co-occurrences fell from 1.58 under the registered null to 1.30 to 1.32 under the text-matched nulls and 1.21 to 1.22 under the curveball null; for the other 30 pairs it fell from 1.22 to 1.02 to 1.04 and then 0.98 (Table 9). The excess that survives the strict nulls is confined to the core. In VAERS the core ratio was 1.95 against 1.84 for the other pairs.
 
-Table 13. Co-occurrences summed over the six core pairs and over the other 30 pairs, observed / expected (ratio), under each null.
+Table 9. Co-occurrences summed over the six core pairs and over the other 30 pairs, observed / expected (ratio), under each null.
 
   --------------------------------------------------------------------------------------------
   Null                                     Core pairs               Other pairs
@@ -400,51 +388,15 @@ Table 13. Co-occurrences summed over the six core pairs and over the other 30 pa
   VAERS replication, registered null       46,291 / 23,769 (1.95)   440,212 / 238,707 (1.84)
   --------------------------------------------------------------------------------------------
 
-Computed from the pair tables (supplement S2, S3, S5, S7); no test is attached to the sums, each pair's Holm-adjusted p is in those tables.
+Computed from the pair tables (supplement S2, S3, S5, S7); no test is attached to the sums.
 
-Q1 within each sex. Among 884,746 women and 370,519 men with long-term text, the registered test rejected in both (ratios 1.22 and 1.27, p = 0.001) and in every sex × dose stratum (women 1.19 to 1.36, men 1.23 to 1.40). Matching on entries and character deciles brought the aggregate ratio to 1.03 in women and 1.06 in men, and under the curveball null 15 pairs in women and 12 in men stayed above the null after Holm adjustment. The core was the same in both sexes (Table 14): under the curveball null cognitive symptoms co-occurred with sleep 2.8 times expected in women and 2.5 in men, with fatigue 2.3 and 2.2, and with dysautonomia 1.6 and 1.4; fatigue with sleep 1.6 in both. Summed over the six core pairs the curveball ratio was 1.24 in women and 1.14 in men, against 0.98 and 0.99 for the other pairs. Three menstrual pairs in men fell below the 10-person cell and are suppressed.
+Q1 within each sex. The registered test rejected in 884,746 women and 370,519 men with long-term text (ratios 1.22 and 1.27) and in every sex × dose stratum (1.19 to 1.40, all p = 0.001); text-matching brought the ratios to 1.03 and 1.06. Under the curveball null the core was the same in both sexes: cognitive symptoms co-occurred with sleep 2.8 and 2.5 times expected in women and men, with fatigue 2.3 and 2.2 and with dysautonomia 1.6 and 1.4, all above the null after Holm adjustment; the six core pairs summed to 1.24 and 1.14, against 0.98 and 0.99 for the other pairs (supplement S29 to S31).
 
-Table 14. Q1 within each sex: aggregate ratio and the core pairs, observed / expected, under three nulls.
+Exclusion criterion variants. Criterion 3 removed about a third of would-be cases (135,252 without it against 87,229). Keyword-only exclusions changed the case count little (89,198) but shrank group (b) from 104,736 to 64,629, because most acute-diagnosis tags on the residue came from the language model and often named chronic conditions. Q1 was unaffected and Q2 held (early onset 27.7% and 23.3%; persistence 60.4% and 52.3% against 1.5%). Recorded VAERS filing fell to rate ratios of 0.82 (95% CI 0.79 to 0.86) and 0.78 (0.75 to 0.81), because the keyword-tagged group (b) filed more often (5.6%); dispersion was never higher for cases (supplement S10 to S13, S18). Including redacted entries among the Q1 rows (1,269,337 person-doses) left the ratio at 1.247.
 
-  ----------------------------------------------------------------------------------------------------------------------------------------------
-                             Women, registered   Women, text-matched   Women, curveball   Men, registered   Men, text-matched   Men, curveball
-  -------------------------- ------------------- --------------------- ------------------ ----------------- ------------------- ----------------
-  All 36 pairs               1.22                1.03                  1.00               1.27              1.06                1.00
+Onset re-examined. Applying the language model to cases' early residue (32,212 entries) raised the early share from 27.9% to 32.7%, still below the check-in null (71.3%) and a null spread evenly over completed survey types (42.2%; p = 1.0 for both). Check-boxes measure something else (Table 10): 80.9% of the 68,386 cases with a week-1 check-in and a fatigue, pain or gastrointestinal case domain had ticked a symptom in that domain, against 24.2% whose week-1 text named it, but so had 89 to 92% of the severe-then-recovered group, whose persistence was 1.5%, and 35 to 40% of the no-symptoms group. Cases with fatigue had ticked week-1 fatigue in 78.9% (64.4% moderate or severe) against 35.5% (14.6%) of group (a), with similar gaps for pain and gastrointestinal symptoms (supplement S15). The check-boxes record the common acute reaction, not the start of a persistent syndrome: they separate cases from the well, not from the recovered.
 
-  Pairs above null (Holm)    22                  17                    15                 21                12                  12
-
-  Cognitive + sleep          4.20                2.60                  2.84               3.72              2.23                2.46
-
-  Cognitive + fatigue        2.99                2.26                  2.30               2.94              2.22                2.19
-
-  Fatigue + sleep            2.11                1.63                  1.61               2.20              1.68                1.63
-
-  Cognitive + dysautonomia   2.20                1.64                  1.58               2.02              1.45                1.41
-
-  Core six pairs, summed     1.59                1.32                  1.24               1.51              1.23                1.14
-
-  Other pairs, summed        1.19                1.00                  0.98               1.25              1.04                0.99
-  ----------------------------------------------------------------------------------------------------------------------------------------------
-
-Text-matched = entries × character deciles within sex; curveball unstratified within sex, 1,000 samples, seed 20261110. Every core pair shown is above its null after Holm adjustment (adjusted p = 0.036). 'Other' and 'Unknown' sex were not tested. Full tables in the supplement (S29 to S31).
-
-Exclusion criterion variants. Criterion 3 removed about a third of would-be cases (135,252 without it against 87,229). Keyword-only exclusions changed the case count little (89,198) but shrank group (b) from 104,736 to 64,629, because most acute-diagnosis tags on the residue came from the language model and often named chronic conditions. Q1 is unaffected and Q2 held (early onset 27.7% and 23.3%; persistence 60.4% and 52.3% against 1.5%). Recorded VAERS filing fell to rate ratios of 0.82 (95% CI 0.79 to 0.86) and 0.78 (0.75 to 0.81), because the keyword-tagged group (b) filed more often (5.6%) (Table 4). Dispersion was never higher for cases. Including redacted entries among the Q1 rows (1,269,337 person-doses) left the ratio at 1.247 (p = 0.001).
-
-Table 4. Case definition under three readings of the exclusion criterion.
-
-  ----------------------------------------------------------------------------------------------------------------------------------------------------
-  Reading                 Case person-doses   Group (b) person-doses   Early onset   Persistence, cases vs (c)   VAERS rate ratio (95% CI), main set
-  ----------------------- ------------------- ------------------------ ------------- --------------------------- -------------------------------------
-  Registered: any layer   87,229              104,736                  27.9%         60.3% vs 1.5%               0.94 (0.90 to 0.98)
-
-  Keyword tags only       89,198              64,629                   27.7%         60.4% vs 1.5%               0.82 (0.79 to 0.86)
-
-  No criterion 3          135,252             103,009                  23.3%         52.3% vs 1.5%               0.78 (0.75 to 0.81)
-  ----------------------------------------------------------------------------------------------------------------------------------------------------
-
-Onset re-examined. Applying the language model to cases' early residue (32,212 entries) raised the early share from 27.9% to 32.7%, still below the check-in null (71.3%) and a null spread evenly over completed survey types (42.2%; p = 1.0 for both). Structured week-1 answers tell a different story about a different thing: 80.9% of the 68,386 cases with a week-1 check-in and a fatigue, pain or gastrointestinal case domain had ticked a symptom in that domain, against 24.2% whose week-1 text named it; but 35 to 40% of the no-symptoms group and 89 to 92% of the severe-then-recovered group had ticked the same boxes. The check-boxes record the common acute reaction, not the start of a persistent syndrome (Table 5).
-
-Table 5. Onset of cases' domains under four readings.
+Table 10. Onset of cases' domains under four readings.
 
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Measure                                                             Early (week 1 or six weeks)                       Comparison
@@ -458,11 +410,11 @@ Table 5. Onset of cases' domains under four readings.
   Week-1 checkbox in the same domain                                  55,342 of 68,386 with a week-1 check-in (80.9%)   no-symptoms group 35 to 40%; severe-then-recovered 89 to 92%
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-By-group checkbox rates use all cases and a 1-in-20 sample of other person-doses.
+By-group check-box rates use all cases and a 1-in-20 sample of other person-doses.
 
-Persistence by qualification route and against group (d). 69,816 case person-doses (80.0%) met criterion 2 at a single survey and 17,413 only across surveys. Persistence was 47.1% for same-survey cases against 60.3% for all, both against 1.5% in group (c); group (d), worse or impacted but naming fewer than two domains, had 10.5%. The risk difference is 58.9 points for the registered comparison and 36.6 (95% CI 36.1 to 37.1) for same-survey cases against group (d) (Table 7).
+Persistence by qualification route and against group (d). Of case person-doses, 69,816 (80.0%) met criterion 2 at a single survey and 17,413 only across surveys. Persistence was 47.1% for same-survey cases against 60.3% for all, both against 1.5% in group (c); group (d) had 10.5%. The risk difference is 58.9 points for the registered comparison and 36.6 (95% CI 36.1 to 37.1) for same-survey cases against group (d) (Table 11).
 
-Table 7. Persistence of a PACVS domain at a later long-term survey, by case route and comparison group.
+Table 11. Persistence of a PACVS domain at a later long-term survey, by case route and comparison group.
 
   -----------------------------------------------------------------------------------------------------------------------------
   Comparison                           Cases                     Comparison group            Risk difference, points (95% CI)
@@ -476,7 +428,7 @@ Table 7. Persistence of a PACVS domain at a later long-term survey, by case rout
   Same-survey cases vs group (d)       17,177 / 36,478 (47.1%)   32,391 / 308,869 (10.5%)    36.6 (36.1 to 37.1)
   -----------------------------------------------------------------------------------------------------------------------------
 
-Validation audit. Layer 3 and CDC coding disagreed on a PACVS domain for 223,652 entry-domain pairs where only CDC was positive and 111,523 where only layer 3 was; a seeded sample of 306 (17 per domain per side) was coded by the author, blind to which side had claimed the domain. Where only the classifier was positive, the coder agreed with it in 131 of 153 entries (85.6%); where only CDC's coding was positive, the coder agreed with CDC in 92 of 153 (60.1%) (Table 12). The classifier's unmatched positives were right in every sampled dysautonomia and sensory-neuropathic entry; CDC's unmatched codes were right least often for fatigue (6 of 17) and menstrual symptoms (2 of 17). Most of what the validation counted as false positives were symptoms CDC had not coded, so measured precision understates the classifier for several domains; the registered gate is applied as registered. The coder was the author, blind to side but not to the hypotheses.
+Validation audit. Layer 3 and CDC coding disagreed on a PACVS domain for 223,652 entry-domain pairs where only CDC was positive and 111,523 where only layer 3 was; a seeded sample of 306 (17 per domain per side) was coded by the author, blind to side but not to the hypotheses. Where only the classifier was positive, the coder agreed with it in 131 of 153 entries (85.6%); where only CDC was positive, with CDC in 92 of 153 (60.1%) (Table 12). The classifier's unmatched positives were right in every sampled dysautonomia and sensory-neuropathic entry; CDC's unmatched codes were right least often for fatigue (6 of 17) and menstrual symptoms (2 of 17). Most of what the validation counted as false positives were symptoms CDC had not coded, so measured precision understates the classifier for several domains; the registered gate is applied as registered.
 
 Table 12. Blind audit of 306 classifier-versus-CDC disagreements: entries in which the coder agreed with the side that had called the domain present (n of 17 per cell).
 
@@ -504,9 +456,9 @@ Table 12. Blind audit of 306 classifier-versus-CDC disagreements: entries in whi
   All domains             131 of 153 (85.6%)                               92 of 153 (60.1%)
   -------------------------------------------------------------------------------------------------------
 
-Dispersion with small-sample corrections. Group (b) contributed more codes (19,063) than cases (18,072). Neither the Miller-Madow correction nor rarefaction to 18,072 codes changed the direction, and the two-sided permutation test rejects equality (Table 8).
+Dispersion with small-sample corrections. Group (b) contributed more codes (19,063) than cases (18,072). Neither the Miller-Madow correction nor rarefaction to 18,072 codes changed the direction, the two-sided permutation test rejected equality (Table 13), and the high-confidence match set gave the same picture (raw 8.31 against 8.61; p = 0.001).
 
-Table 8. Shannon entropy (bits) of MedDRA Preferred Terms on matched VAERS reports, main match set.
+Table 13. Shannon entropy (bits) of MedDRA Preferred Terms on matched VAERS reports, main match set.
 
   ----------------------------------------------------------------------------------------------------------------------------
   Measure                                        Cases (2,122 people, 18,072 codes)   Group (b) (2,642 people, 19,063 codes)
@@ -524,65 +476,13 @@ Table 8. Shannon entropy (bits) of MedDRA Preferred Terms on matched VAERS repor
   p, two-sided                                   0.001                                
   ----------------------------------------------------------------------------------------------------------------------------
 
-The high-confidence match set gave the same picture (raw 8.31 vs 8.61; two-sided p = 0.001).
-
-Week-1 structured answers, cases against group (a). Cases whose case domains included fatigue had ticked week-1 fatigue in 78.9% (64.4% moderate or severe) against 35.5% (14.6%) of group (a); pain 80.2% (63.1%) against 40.0% (16.0%); gastrointestinal symptoms 47.8% (29.3%) against 10.2% (2.7%); 53 to 57% reported a week-1 health impact, which group (a) has none of by construction (Table 9). Cases had a heavier week 1 than people who stayed well, but so did group (c), whose persistence was 1.5%: the structured answers separate cases from the well, not from the recovered.
-
-Table 9. Week-1 check-box answers, cases with the domain against group (a) (1-in-20 sample), % of person-doses.
-
-  -------------------------------------------------------------------------------------------------------------------------------------------------------
-  Domain             Group                                  Person-doses   Any week-1 symptom in the domain   Moderate or severe   Week-1 health impact
-  ------------------ -------------------------------------- -------------- ---------------------------------- -------------------- ----------------------
-  Fatigue            cases with fatigue                     37,326         78.9                               64.4                 56.6
-
-  Fatigue            group (a)                              219,910        35.5                               14.6                 0
-
-  Pain               cases with pain                        51,151         80.2                               63.1                 55.5
-
-  Pain               group (a)                              219,910        40.0                               16.0                 0
-
-  Gastrointestinal   cases with gastrointestinal symptoms   24,325         47.8                               29.3                 53.3
-
-  Gastrointestinal   group (a)                              219,910        10.2                               2.7                  0
-  -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Reproduction of Levi and Lu's cohorts. Rebuilt from the structured answers alone, their dose-1 and dose-2 Prolonged-AE counts agree within 0.5% (32,732 against 32,838; 101,064 against 100,564), which supports the linkage (Table 10). The shortfalls of 3.6% in enrollees, 9.7% in Prolonged-AE and 11.6% in Prolonged-NoAttr sit almost entirely in the dose-3-or-more sub-cohorts (35% fewer in each), consistent with our check-in file holding 6.7 million fewer rows than theirs; the released files carry no age field, so their 16-or-older restriction could not be applied, which would raise our counts. The joins were not adjusted. Among 6,754,831 people in both denominators, 29,593 were both a text-defined case and in Prolonged-AE, 56,730 text-defined only and 137,742 Prolonged-AE only: 34.3% of text-defined cases attributed worse health to vaccination on a check-box, and 17.7% of Prolonged-AE met the text definition (Cohen's kappa 0.22). The two definitions select overlapping but largely different people.
-
-Table 10. Levi and Lu's cohorts rebuilt from structured answers.
-
-  --------------------------------------------------------------------------------------------------------------
-  Group                                              This study     Levi and Lu    Difference     %
-  -------------------------------------------------- -------------- -------------- -------------- --------------
-  Enrollees (adult file; theirs: aged 16 or older)   9,552,127      9,904,924      -352,797       -3.6
-
-  Prolonged-AE                                       167,335        185,285        -17,950        -9.7
-
-  Prolonged-AE, dose 1                               32,732         32,838         -106           -0.3
-
-  Prolonged-AE, dose 2                               101,064        100,564        +500           +0.5
-
-  Prolonged-AE, dose 3 or more                       33,539         51,883         -18,344        -35.4
-
-  Prolonged-NoAttr                                   167,930        189,982        -22,052        -11.6
-
-  Prolonged-NoAttr, dose 1                           20,389         18,710         +1,679         +9.0
-
-  Prolonged-NoAttr, dose 2                           89,862         81,462         +8,400         +10.3
-
-  Prolonged-NoAttr, dose 3 or more                   57,679         89,810         -32,131        -35.8
-
-  Control                                            9,216,862      9,529,657      -312,795       -3.3
-
-  Women in Prolonged-AE                              124,376        137,430        -13,054        -9.5
-
-  Women (denominator)                                5,941,118      6,141,800      -200,682       -3.3
-  --------------------------------------------------------------------------------------------------------------
+Reproduction of Levi and Lu's cohorts. Rebuilt from the structured answers alone, their dose-1 and dose-2 Prolonged-AE counts agree within 0.5% (32,732 against 32,838; 101,064 against 100,564), which supports the linkage. The shortfalls of 3.6% in enrollees, 9.7% in Prolonged-AE and 11.6% in Prolonged-NoAttr sit almost entirely in the dose-3-or-more sub-cohorts (35% fewer in each), consistent with our check-in file holding 6.7 million fewer rows than theirs; the released files carry no age field, so their 16-or-older restriction could not be applied (supplement S26). Among 6,754,831 people in both denominators, 29,593 were both a text-defined case and in Prolonged-AE, 56,730 text-defined only and 137,742 Prolonged-AE only: 34.3% of text-defined cases attributed worse health to vaccination on a check-box, and 17.7% of Prolonged-AE met the text definition (Cohen's kappa 0.22; S27).
 
 Symptom frequencies among cases, compared with published case series
 
-Among the 87,229 case person-doses, pain was the most often named domain (70.2%), then fatigue (51.5%), gastrointestinal symptoms (33.1%) and dysautonomia (25.1%); cognitive (8.5%), menstrual (5.3%) and sleep (4.0%) symptoms were named least. Cases named a median of 2 domains (mean 2.29). Table 6 sets these beside six published PACVS series [4–6, 10, 12, 13], using each paper's own symptom label.
+Among the 87,229 case person-doses, pain was the most often named domain (70.2%), then fatigue (51.5%), gastrointestinal symptoms (33.1%) and dysautonomia (25.1%); cognitive (8.5%), menstrual (5.3%) and sleep (4.0%) symptoms were named least. Cases named a median of 2 domains (mean 2.29). Table 14 sets these beside published PACVS series [4–6, 10, 12, 13], using each paper's own symptom label.
 
-Table 6. Share of patients with each symptom domain: this study and published PACVS case series, %.
+Table 14. Share of patients with each symptom domain: this study and published PACVS case series, %.
 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Domain                  This study, v-safe cases, free text (n = 87,229 person-doses)   Mundorf 2024, online checklist (n = 191) [5]   Krumholz 2023, online checklist (n = 241) [6]   Dinser 2026, CCC questionnaire (n = 26) [4]             Gerhard 2023, neurology clinic (n = 50) [12]   Tokumasu 2023, clinic records (n = 121) [10]
@@ -606,27 +506,19 @@ Table 6. Share of patients with each symptom domain: this study and published PA
   Cardiorespiratory       16.3                                                            exertional dyspnoea 59.7; angina 46.4          shortness of breath 37; chest pain 26 to 28     dyspnoea 38.5                                           not reported                                   chest discomfort 3.3
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Percentages are of each series' whole sample; menstrual items in this study and in [5, 6] use denominators that include men. Finsterer and Scorza [13] describe three patients and are not tabulated. Samples differ in how symptoms were elicited: fixed checklists of 38 to 96 items [4–6], clinician-recorded complaints [10, 12], or, here, unprompted free text at 3 to 12 months.
+Percentages are of each series' whole sample; menstrual items in this study and in [5, 6] use denominators that include men. Finsterer and Scorza [13] describe three patients and are not tabulated. Symptoms were elicited by checklists of 38 to 96 items [4–6], clinician-recorded complaints [10, 12] or, here, unprompted free text at 3 to 12 months.
 
-The rank order overlaps but the levels do not: checklist series report most domains in 60 to 90% of patients, clinician-recorded series in 4 to 56%, and v-safe free text sits between for fatigue, pain and gastrointestinal symptoms and well below both for cognitive and sleep symptoms. The 8.5% naming cognitive symptoms, against 36 to 88% elsewhere, reflects the classifier's recall for that domain (0.74), the symptoms people find easiest to name unprompted, and a question that asked about health after a dose rather than about a syndrome.
+The rank order overlaps but the levels do not: checklist series report most domains in 60 to 90% of patients, clinician-recorded series in 4 to 56%, and v-safe free text sits between for fatigue, pain and gastrointestinal symptoms and well below both for cognitive and sleep symptoms. The 8.5% naming cognitive symptoms, against 36 to 88% elsewhere, reflects the classifier's recall for that domain (0.74), what people name unprompted, and a question about health after a dose rather than about a syndrome.
 
 Discussion
 
-The pre-registered confirmatory analysis could not be run, because only one of nine domains met the accuracy gate. In the registered sensitivity analysis, three of five hypotheses were supported:
-
-- symptoms cluster (Q1);
-
-- they persist (Q2);
-
-- cases reach VAERS less often than people with named acute diagnoses (Q3).
-
-Two were not supported, and both results ran in the opposite direction: early onset (Q2) and dispersed VAERS coding (Q3). The supported effects differ greatly in size. Clustering and persistence are large; under-capture is a 6% difference between two rates near 5%.
+The pre-registered confirmatory analysis could not be run, because only one of nine domains met the accuracy gate. In the registered sensitivity analysis three of five hypotheses were supported (Figure 5): symptoms cluster (Q1), they persist (Q2), and cases reach VAERS less often than people with named acute diagnoses (Q3). Early onset (Q2) and dispersed VAERS coding (Q3) were not supported, and for both the observed value lay on the other side of the null. The supported effects differ greatly in size: clustering and persistence are large, while under-capture is a 6% relative difference between two rates near 5%.
 
 []
 
-Figure 4. analysis_sens9 Q1–Q3 aggregates · registered tests, nine-domain sensitivity analysis
+Figure 5. Registered tests of the nine-domain sensitivity analysis, log scale (1 = no difference). Persistence is shown as a risk ratio; the registered test is the risk difference, 58.9 points (95% CI 58.4 to 59.3). Onset and dispersion were tested by exact and permutation tests and have no interval. 'VAERS capture' is the recorded VAERS filing defined in Methods.
 
-Clustering. The excess co-occurrence centres on cognitive symptoms, fatigue, sleep and dysautonomia. That is the core described for PACVS and for long COVID. It held in every dose and manufacturer stratum, and in women and in men. Pain and gastrointestinal symptoms, the commonest domains, contributed large absolute counts but smaller excesses. Menstrual and sensory symptoms did not join the cluster. The text-matched null (Table 3, Figure 5) settled most of it: matching on amount of text removed most of the aggregate excess, from 1.25 to 1.04, but the cognitive, fatigue, sleep and dysautonomia core remained at 1.6 to 2.5 times chance, and 16 pairs stayed above the null. A curveball null that fixes each person-dose's domain count as well (Table 11) gives the same core at 1.4 to 2.7 times, with 13 to 15 pairs above it; under that null the aggregate ratio is 1 by construction. Summed over the six pairs among the four core domains (Table 13), co-occurrence was 1.58 times expected under the registered null, 1.30 to 1.32 under the text-matched nulls and 1.21 to 1.22 under the curveball null, against 1.22, 1.02 to 1.04 and 0.98 for the other 30 pairs: the whole excess that survives the strict nulls sits in that core. Not every core pair carries it; fatigue with dysautonomia lay at or below chance under every null, and the strongest ties all involve cognitive symptoms, the domain with the lowest recall (0.74) among the four. The syndrome-like finding is that core, not the aggregate ratio.
+Clustering. The excess co-occurrence centres on cognitive symptoms, fatigue, sleep and dysautonomia, the core described for PACVS and for long COVID, and it held in every dose and manufacturer stratum and in both sexes. Pain and gastrointestinal symptoms, the commonest domains, contributed large counts but small excesses; menstrual and sensory symptoms did not join the cluster. Matching the null on amount of text (Table 7, Figure 4) removed most of the aggregate excess but left the core at 1.6 to 2.5 times chance, and fixing each person-dose's domain count as well (Table 8) left it at 1.4 to 2.7. Summed over the six core pairs (Table 9), the whole excess that survives these nulls sits in the core. Not every core pair carries it: fatigue with dysautonomia lay at or below chance under every null, and the strongest ties all involve cognitive symptoms, the domain with the lowest recall of the four (0.74). The syndrome-like finding is that core, not the aggregate ratio.
 
 Onset. The registered hypothesis assumed that a vaccine-related syndrome would be described first in the weeks after the dose. Instead, 72% of cases first described their case domains at 3 months or later. This has three readings, and our data cannot separate them:
 
@@ -636,53 +528,45 @@ Onset. The registered hypothesis assumed that a vaccine-related syndrome would b
 
 - Late reporting. Symptoms present early may be written down only once they have lasted, or once an open-ended long-term survey invites a description that the check-box surveys of the first weeks did not.
 
-Three features of the data bias our onset measure towards late description:
+Three features of the data bias the measure towards late description: early surveys collected symptoms mainly through check-boxes while long-term surveys were open-ended; early text was classified by keywords only, with lower recall; and daily week-1 check-ins inflate the expected early share to 71%. Classifying early and late text alike raised the early share only to 32.7%, and the check-boxes record reactogenicity that cannot be told apart from the start of a persistent syndrome (Table 10). The registered test therefore records when symptoms were first written down, not when they began; it is uninformative about onset, and the structured data cannot settle it.
 
-1.  Early surveys collected symptoms mainly through checkboxes, while long-term surveys were open-ended.
+Persistence. Persistence in 60% of cases, against 1.5% of group (c), is large, but part of the gap is built in: group (c) by construction reported no worse health or impact at long-term surveys, and cases were selected for naming at least two domains at a long-term survey, which makes naming one later more likely. Two checks specified after the results were seen narrow the gap without closing it (Table 11): same-survey cases persist in 47.1%, and group (d), people with the same worse health or impact who named one domain or none, in 10.5%, a difference of 36.6 points. Group (d) is the comparison the question needs, because it measures how often a single long-term complaint recurs in the same responders. The multi-domain pattern is therefore not a slow resolution of a severe first week, and it recurs more often than other long-term complaints among people who kept answering. Persistence relative to the general population or to those who stopped responding is not estimated, and the risk ratio in Figure 5 should not be read as an effect size.
 
-2.  Early text was classified by keywords only, which had lower recall.
+Detection. Cases were about 6% less likely than people with named acute diagnoses to reach VAERS, and, contrary to our hypothesis, their reports were coded to a narrower spread of terms, a difference that held under the Miller-Madow correction, rarefaction and a two-sided test. VAERS coding does not appear to scatter this pattern; the few cases who reach VAERS may be those with a more recognisable presentation. The detection problem, if there is one, lies in the 95% of cases who never reach VAERS, which this comparison cannot see. Of three readings of the exclusion criterion, the registered one gives the most conservative rate ratio.
 
-3.  Daily week-1 check-ins inflate the expected early share to 71%.
+Model sensitivity. The two language models agreed on early text but not on the long-term residue. DeepSeek labelled fatigue there less than half as often as Claude Opus, so fatigue's recall of 0.86, and its passing the gate, depend on which model labelled the residue; three other domains were also model-sensitive, and Claude applied the unrelated-cause exclusion 45% more often, so the case count itself would differ between models.
 
-Both re-examinations were run (Table 5). Classifying early and late text alike raised the early share from 27.9% to 32.7%, still below even a null spread evenly over survey types. Structured week-1 answers show that most cases had ticked fatigue or pain in week 1, but so had most people who were severe and recovered and a third of those who stayed well: the checkboxes record reactogenicity, which cannot be told apart from the start of a persistent syndrome. The registered test therefore records when symptoms were first written down, not when they began. It is uninformative about onset, and the structured data cannot settle it either.
-
-Persistence. Persistence in 60% of cases, against 1.5% of group (c), is large. Part of the gap is built into the definitions: group (c) by construction reported no worse health or impact at long-term surveys. Cases, in turn, were selected for naming at least two domains at a long-term survey, which makes naming one at a later survey more likely. Two checks specified after the results were seen, and so not pre-registered, narrow the gap without closing it (Table 7): restricting to cases that met criterion 2 at a single survey lowers persistence to 47.1%, and group (d), people with the same worse health or impact who named one domain or none, has 10.5% persistence, so the strictest difference is 36.6 points rather than 58.9. Group (d) is the comparison the question needs, since it measures how often a single long-term complaint recurs in the same responders. The comparison shows that the multi-domain pattern is not a slow resolution of a severe first week and recurs more often than other long-term complaints among people who kept answering, and little more. It does not show how persistence compares with the general population or with the people who stopped responding, and the risk ratio in Figure 4 should not be read as an effect size.
-
-Detection. Cases were about 6% less likely than people with named acute diagnoses to reach VAERS, a small but clear difference. Their VAERS reports were, contrary to our hypothesis, coded to a narrower spread of terms, a difference that held under the Miller-Madow correction, rarefaction and a two-sided test. VAERS coding does not appear to scatter this pattern. One possible reason is that the few cases who reach VAERS are those with a more recognisable presentation. On these data, the detection problem, if there is one, lies in the 95% of cases who never reach VAERS at all, which this comparison cannot see, rather than in a lower filing rate than acute events or in coding. Under the two alternative readings of the exclusion criterion (Table 4) the rate ratio fell to 0.82 and 0.78, because the language model's acute-diagnosis tags had diluted group (b) with chronic conditions; the registered figure is the most conservative of the three.
-
-Model sensitivity. The two language models agreed on early text but not on the long-term residue, the text the keywords had missed. Fatigue, the only domain to pass the gate, was labelled less than half as often there by DeepSeek as by Claude Opus. The final classifier's fatigue recall of 0.86, and so its passing the gate, depends on which model labelled the residue. Cardiorespiratory, cognitive and menstrual symptoms were also model-sensitive, and the unrelated-cause exclusion was applied 45% more often by Claude, so the case count itself would differ between models.
-
-Relation to earlier work. Case series of PACVS describe fatigue, cognitive impairment, post-exertional malaise, dysautonomia and neuropathic symptoms as the core presentation [4–6, 10, 12], and a shared clinical and immunological profile with post-acute COVID-19 has been reported [4]. The cluster found here, centred on cognitive symptoms, fatigue, sleep and dysautonomia, matches that core. Sensory-neuropathic symptoms, prominent in some series [8, 9, 12], did not join it, which may reflect the classifier's low recall for that domain (0.25). Published prevalence estimates run from 0.003% to 0.9% [2]; the 1.01% of person-doses with a long-term survey here sits at the top of that range, before any adjustment for attrition or classifier error, and is a share of responses rather than of recipients. Levi and Lu's analysis of v-safe's structured answers found 1.87% of participants reporting worse health lasting at least three months that they attributed to vaccination [22]; our 1.01% applies a stricter definition, at least two symptom domains in free text and no named alternative cause, to long-term responders. Rebuilding their cohorts from the structured answers reproduced their dose-1 and dose-2 counts within 0.5% (Table 10), and the two definitions overlap only partly: a third of text-defined cases attributed worse health to vaccination on a check-box, and a sixth of their cohort met the text definition (kappa 0.22). The text-defined phenotype is therefore not a relabelling of self-attribution. The predominance of women among cases (77.5%) matches case series [5, 6], but v-safe registrants were also mostly women, and the no-symptoms group was 58% women.
+Relation to earlier work. Case series of PACVS describe fatigue, cognitive impairment, post-exertional malaise, dysautonomia and neuropathic symptoms as the core presentation [4–6, 10, 12], with a clinical and immunological profile shared with post-acute COVID-19 [4]. The cluster found here matches that core; sensory-neuropathic symptoms, prominent in some series [8, 9, 12], did not join it, which may reflect the classifier's recall for that domain (0.25). Published prevalence estimates run from 0.003% to 0.9% [2]; the 1.01% here sits at the top of that range before any adjustment for attrition or classifier error, and is a share of long-term responses, not of recipients. Levi and Lu found that 1.87% of participants reported worse health lasting at least three months that they attributed to vaccination [22]; our definition is stricter, requiring at least two symptom domains in free text and no named alternative cause. Their cohorts were reproduced within 0.5% at doses 1 and 2, and the two definitions overlap only partly (kappa 0.22): a third of text-defined cases attributed worse health to vaccination on a check-box, and a sixth of their cohort met the text definition, so the text-defined phenotype is not a relabelling of self-attribution. Women predominated among cases (77.5%), as in case series [5, 6], but v-safe registrants were also mostly women, and the no-symptoms group was 58% women.
 
 Limitations
 
-- The classifier failed its gate. Eight of nine domains fell short of 0.85 precision or recall, so every analysis rests on exploratory labels. Low recall undercounts cases; low precision in some domains overcounts them. Recall was 0.74 for cognitive symptoms and 0.72 for sleep, the two domains that drive the core cluster, so the domains most responsible for the signal are among the least completely counted. Independent coding of a sample sized for domain-level precision and recall with usable confidence intervals is required before any confirmatory claim.
+- The classifier failed its gate. Eight of nine domains fell short of 0.85 precision or recall, so every analysis rests on exploratory labels. Recall was 0.74 for cognitive and 0.72 for sleep symptoms, so the domains that drive the core are among the least completely counted. Independent coding of a sample large enough for domain-level precision and recall with usable confidence intervals is required before any confirmatory claim.
 
-- The co-occurrence null ignores amount of text. Each permutation keeps a domain's frequency but gives every person-dose the same chance of each domain, whatever they wrote. More or longer entries give more chances to name several domains. The text-matched and curveball nulls removed the aggregate excess and left a specific core; the registered ratio of 1.25 should not be quoted without them.
+- The registered null ignores amount of text. The text-matched and curveball nulls removed the aggregate excess and left a specific core; the registered ratio of 1.25 should not be quoted without them.
 
-- The reference is coding, not truth. CDC coded entries for adverse-event reporting, often to the most prominent symptom. The frozen map was built from the lexicon's own terms and misses relevant Preferred Terms, as the exclusion themes showed. Measured precision is likely too low for some domains, but we did not alter the map after registration; the blind audit (Table 12) supports this reading but comes from a single coder, the author, blind to side but not to the hypotheses, so it cannot rescue the registered gate.
+- The reference is coding, not truth. CDC coded entries for adverse-event reporting, often to the most prominent symptom, and the frozen map misses relevant Preferred Terms, so measured precision is likely too low for some domains. The blind audit (Table 12) supports this reading but comes from a single coder, the author, blind to side but not to the hypotheses, and cannot rescue the gate.
 
-- Unequal classification over time. Layer 3 labelled only long-term text, which favours finding domains at long-term surveys. This affects onset (Q2) most.
+- Unequal classification over time. Layer 3 labelled only long-term text, which favours finding domains at long-term surveys and affects onset most.
 
-- The one gate pass is model-dependent. On the registered model-sensitivity sample, four PACVS domains, including fatigue, were model-sensitive, so fatigue's passing the gate is specific to the model that labelled the residue.
+- The one gate pass is model-dependent: four PACVS domains, including fatigue, were model-sensitive.
 
-- Self-described text, not diagnosis. A case describes a pattern in their own words. No clinical confirmation was available.
+- Self-described text, not diagnosis; no clinical confirmation was available.
 
-- No age and no infection history. The linked release carries no age field, so no result is age-adjusted and Levi and Lu's age restriction could not be applied. Intercurrent COVID-19 infection and other medical events are visible only through the exclusion tags, so a late vaccine effect cannot be told from background illness.
+- No age and no infection history. Nothing is age-adjusted, and intercurrent COVID-19 infection and other medical events are visible only through the exclusion tags, so a late vaccine effect cannot be told from background illness.
 
-- Attrition. Only 49% of person-doses with a check-in completed a long-term survey, so the prevalence bounds are wide. People with a week-1 health impact were more likely to respond (60.1% against 42.4%), which may inflate the observed 1.01%, and v-safe registrants were self-selected.
+- Attrition and self-selection. Only 49% of person-doses with a check-in completed a long-term survey, so the prevalence bounds are wide; response was higher after a week-1 health impact (60.1% against 42.4%), which may inflate the 1.01%, and v-safe registrants were self-selected.
 
-- Exclusions are imperfect. The unrelated-cause and acute-diagnosis tags had precision of 0.14 and 0.31 against CDC coding, and negative COVID-19 tests and chronic conditions were sometimes tagged as exclusions. Criterion 3 and group (b) are therefore leaky: some true cases are removed, and the VAERS rate ratio moves from 0.94 to 0.78 under other readings of the criterion.
+- Exclusions are imperfect. The unrelated-cause and acute-diagnosis tags had precision of 0.14 and 0.31, and negative COVID-19 tests and chronic conditions were sometimes tagged as exclusions, so criterion 3 and group (b) are leaky and the VAERS rate ratio ranges from 0.78 to 0.94 across readings.
 
-- Comparison groups are partly defined by the outcome. Group (c)'s low persistence and cases' high persistence are both partly built into their definitions; the strictest contrast, same-survey cases against group (d), was specified after the results were seen.
+- Comparison groups are partly defined by the outcome, and the strictest persistence contrast was specified after the results were seen.
 
-- VAERS linkage and the detection test. VAERS capture relies on call-centre dispositions and on OpenVSafe's probabilistic matches [18], which we did not validate independently. Matched reports exist only for people the call centre recorded as filing. Q3 was run at person level, while the groups are defined per dose. A contrast between two filing rates near 5% is a weak test of under-capture and says nothing about the cases who never reach VAERS.
+- VAERS linkage and the detection test. Recorded filing relies on call-centre dispositions and OpenVSafe's probabilistic matches [18], which were not validated independently; Q3 was run per person while groups are defined per dose; and a contrast between two filing rates near 5% is a weak test of under-capture that says nothing about cases who never reach VAERS.
 
-- Implementation choices after registration. These are listed in Methods; all were made without seeing results.
+- Implementation choices after registration are listed in Methods; all were made without seeing results.
 
 Conclusions
 
-1.01% of person-doses with a long-term v-safe survey describe a multi-domain symptom pattern. Its domains cluster beyond chance; once the null is matched on how much people wrote and on each person's own number of symptoms, the clustering is confined to a core of cognitive symptoms, fatigue, sleep and dysautonomia, in women and in men alike. It persists across surveys and reaches VAERS slightly less often than named acute events. It was mostly first described months after vaccination, which leaves open whether it reflects late vaccine effects, background illness including COVID-19 infection, or late reporting; these data do not establish that vaccination caused the pattern, its prevalence among vaccine recipients, or its status as a clinical entity. Because the classifier did not meet its pre-registered accuracy standard, these findings are hypothesis-generating. The next steps are independent multi-coder validation of the classifier on a sample sized for domain-level accuracy, an onset analysis that treats the survey schedule as the observation process, and replication in other free-text or survey sources.
+Of person-doses with a long-term v-safe survey, 1.01% describe a multi-domain symptom pattern. Once the null is matched on how much people wrote and on each person's number of symptoms, its clustering is confined to a core of cognitive symptoms, fatigue, sleep and dysautonomia, in women and men alike. The pattern persists across surveys and reaches VAERS slightly less often than named acute events. It was mostly first described months after vaccination, which is compatible with late vaccine effects, background illness including COVID-19 infection, or late reporting; these data do not establish that vaccination caused the pattern, its prevalence among recipients, or its status as a clinical entity. Because the classifier did not meet its pre-registered accuracy standard, the findings are hypothesis-generating. The next steps are independent multi-coder validation of the classifier, an onset analysis that treats the survey schedule as the observation process, and replication in other free-text or survey sources.
 
 Acknowledgements. The author thanks OpenVAERS for publishing OpenVSafe's v-safe-to-VAERS matches and ICAN for hosting the FOIA releases.
 
@@ -706,7 +590,7 @@ Authors' Contributions. Matthew Halma: conceptualisation, methodology, software,
 
 AI tools. A large language model (DeepSeek V4.1 Flash) served as the layer-3 classifier and a second (Claude Opus 5.5) as the model-sensitivity comparator, as described in Methods. AI assistants (Anthropic Claude) assisted with code and with drafting and editing this manuscript under the author's direction; the author reviewed all content and takes full responsibility for it. No AI tool is an author.
 
-Data protection. Free text was stored and classified locally. For layer 3 it was sent, in batches of 20 entries with no registrant code, date or other field attached, to NanoGPT's API routed to DeepSeek V4.1 Flash with the provider's zero-data-retention and no-data-collection options set; the 2,000-entry comparison sample was sent to the Anthropic API (claude-opus-5-5) under that provider's standard API terms at the time of use. Entries containing a detectable e-mail address or phone number were not sent. The retention terms as read at the time of use are recorded in the repository (docs/data-use.md). No free text is quoted.
+Data protection. Free text was stored locally, and layer 1 ran locally. For layer 3 it was sent, in batches of 20 entries with no registrant code, date or other field attached, to NanoGPT's API routed to DeepSeek V4.1 Flash with the provider's zero-data-retention and no-data-collection options set; the 2,000-entry comparison sample was sent to the Anthropic API (claude-opus-5-5) under that provider's standard API terms at the time of use. Entries containing a detectable e-mail address or phone number were not sent. The retention terms as read at the time of use are recorded in the repository (docs/data-use.md). No free text is quoted.
 
 References
 
