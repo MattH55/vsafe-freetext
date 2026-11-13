@@ -1,25 +1,682 @@
 {
-  "18": {"id": 9018, "uris": ["http://zotero.org/users/local/Oz67iTD5/items/OPENVSF1"],
-         "itemData": {"id": 9018, "type": "webpage", "title": "OpenVSafe: v-safe participant records matched to VAERS reports",
-                      "container-title": "openvsafe.org", "author": [{"literal": "OpenVAERS"}],
-                      "URL": "https://openvsafe.org/", "accessed": {"date-parts": [[2026, 11, 11]]},
-                      "note": "Person pages read 2026-11-10 to 2026-11-11; only the VAERS ID, match score (0 to 11), confidence and runner-up score of each match were retained."}},
-  "19": {"id": 9019, "uris": ["http://zotero.org/users/local/Oz67iTD5/items/ICANVSF1"],
-         "itemData": {"id": 9019, "type": "dataset", "title": "v-safe data: free-text responses (FOIA 24-01322), registrants, vaccinations, health check-ins, call-centre records (FOIA 23-00925, 23-00926) and CDC MedDRA coding (November 2024)",
-                      "author": [{"literal": "Informed Consent Action Network"}], "URL": "https://icandecide.org/v-safe-data/",
-                      "issued": {"date-parts": [[2024]]}, "accessed": {"date-parts": [[2026, 11, 10]]}}},
-  "20": {"id": 9020, "uris": ["http://zotero.org/users/local/Oz67iTD5/items/VAERSDT1"],
-         "itemData": {"id": 9020, "type": "dataset", "title": "Vaccine Adverse Event Reporting System (VAERS) data, all years, CSV files dated 2026-06-03",
-                      "author": [{"literal": "US Department of Health and Human Services"}], "URL": "https://vaers.hhs.gov/data.html",
-                      "issued": {"date-parts": [[2026]]}, "accessed": {"date-parts": [[2026, 6, 3]]}}},
-  "21": {"id": 9021, "uris": ["http://zotero.org/users/local/Oz67iTD5/items/MEDDRA01"],
-         "itemData": {"id": 9021, "type": "webpage", "title": "Medical Dictionary for Regulatory Activities (MedDRA)",
-                      "author": [{"literal": "MedDRA Maintenance and Support Services Organization"}], "URL": "https://www.meddra.org/"}},
-  "22": {"id": 9022, "uris": ["http://zotero.org/users/local/Oz67iTD5/items/LEVILU01"],
-         "itemData": {"id": 9022, "type": "article", "genre": "preprint",
-                      "title": "Reporting on Prolonged Adverse Health Impact Among V-SAFE Enrollees",
-                      "author": [{"family": "Levi", "given": "Retsef"}, {"family": "Lu", "given": "Nelson"}],
-                      "publisher": "Research Square", "issued": {"date-parts": [[2026, 8, 25]]},
-                      "DOI": "10.21203/rs.3.rs-10768889/v1",
-                      "URL": "https://www.researchsquare.com/article/rs-10768889/v1"}}
+ "18": {
+  "id": 9018,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/OPENVSF1"
+  ],
+  "itemData": {
+   "id": 9018,
+   "type": "webpage",
+   "title": "OpenVSafe: v-safe participant records matched to VAERS reports",
+   "container-title": "openvsafe.org",
+   "author": [
+    {
+     "literal": "OpenVAERS"
+    }
+   ],
+   "URL": "https://openvsafe.org/",
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      11,
+      11
+     ]
+    ]
+   },
+   "note": "Person pages read 2026-11-10 to 2026-11-11; only the VAERS ID, match score (0 to 11), confidence and runner-up score of each match were retained."
+  }
+ },
+ "19": {
+  "id": 9019,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/ICANVSF1"
+  ],
+  "itemData": {
+   "id": 9019,
+   "type": "dataset",
+   "title": "v-safe data: free-text responses (FOIA 24-01322), registrants, vaccinations, health check-ins, call-centre records (FOIA 23-00925, 23-00926) and CDC MedDRA coding (November 2024)",
+   "author": [
+    {
+     "literal": "Informed Consent Action Network"
+    }
+   ],
+   "URL": "https://icandecide.org/v-safe-data/",
+   "issued": {
+    "date-parts": [
+     [
+      2024
+     ]
+    ]
+   },
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      11,
+      10
+     ]
+    ]
+   }
+  }
+ },
+ "20": {
+  "id": 9020,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/VAERSDT1"
+  ],
+  "itemData": {
+   "id": 9020,
+   "type": "dataset",
+   "title": "Vaccine Adverse Event Reporting System (VAERS) data, all years, CSV files dated 2026-06-03",
+   "author": [
+    {
+     "literal": "US Department of Health and Human Services"
+    }
+   ],
+   "URL": "https://vaers.hhs.gov/data.html",
+   "issued": {
+    "date-parts": [
+     [
+      2026
+     ]
+    ]
+   },
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      6,
+      3
+     ]
+    ]
+   }
+  }
+ },
+ "21": {
+  "id": 9021,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/MEDDRA01"
+  ],
+  "itemData": {
+   "id": 9021,
+   "type": "webpage",
+   "title": "Medical Dictionary for Regulatory Activities (MedDRA)",
+   "author": [
+    {
+     "literal": "MedDRA Maintenance and Support Services Organization"
+    }
+   ],
+   "URL": "https://www.meddra.org/"
+  }
+ },
+ "22": {
+  "id": 9022,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/LEVILU01"
+  ],
+  "itemData": {
+   "id": 9022,
+   "type": "article",
+   "genre": "preprint",
+   "title": "Reporting on Prolonged Adverse Health Impact Among V-SAFE Enrollees",
+   "author": [
+    {
+     "family": "Levi",
+     "given": "Retsef"
+    },
+    {
+     "family": "Lu",
+     "given": "Nelson"
+    }
+   ],
+   "publisher": "Research Square",
+   "issued": {
+    "date-parts": [
+     [
+      2026,
+      8,
+      25
+     ]
+    ]
+   },
+   "DOI": "10.21203/rs.3.rs-10768889/v1",
+   "URL": "https://www.researchsquare.com/article/rs-10768889/v1"
+  }
+ },
+ "23": {
+  "id": 9023,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/SCHOLK01"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "COVID-19, post-acute COVID-19 syndrome (PACS, “long COVID”) and post-COVID-19 vaccination syndrome (PCVS, “post-COVIDvac-syndrome”): Similarities and differences",
+   "container-title": "Pathology - Research and Practice",
+   "container-title-short": "Pathology - Research and Practice",
+   "author": [
+    {
+     "family": "Scholkmann",
+     "given": "Felix"
+    },
+    {
+     "family": "May",
+     "given": "Christian-Albrecht"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2023,
+      6
+     ]
+    ]
+   },
+   "volume": "246",
+   "page": "154497",
+   "DOI": "10.1016/j.prp.2023.154497",
+   "URL": "http://dx.doi.org/10.1016/j.prp.2023.154497",
+   "publisher": "Elsevier BV",
+   "id": 9023
+  }
+ },
+ "24": {
+  "id": 9024,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/KENNY001"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "Complex chronic adverse events following immunization: a systemic critique and reform proposal for vaccine pharmacovigilance",
+   "container-title": "Therapeutic Advances in Drug Safety",
+   "container-title-short": "Therapeutic Advances in Drug Safety",
+   "author": [
+    {
+     "family": "Kenny",
+     "given": "Tiff-Annie"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2025,
+      12
+     ]
+    ]
+   },
+   "volume": "16",
+   "DOI": "10.1177/20420986251395925",
+   "URL": "http://dx.doi.org/10.1177/20420986251395925",
+   "publisher": "SAGE Publications",
+   "page": "20420986251395925",
+   "id": 9024
+  }
+ },
+ "25": {
+  "id": 9025,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/ROSENB01"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "Safety of mRNA vaccines administered during the initial 6 months of the US COVID-19 vaccination programme: an observational study of reports to the Vaccine Adverse Event Reporting System and v-safe",
+   "container-title": "The Lancet Infectious Diseases",
+   "container-title-short": "The Lancet Infectious Diseases",
+   "author": [
+    {
+     "family": "Rosenblum",
+     "given": "Hannah G"
+    },
+    {
+     "family": "Gee",
+     "given": "Julianne"
+    },
+    {
+     "family": "Liu",
+     "given": "Ruiling"
+    },
+    {
+     "family": "Marquez",
+     "given": "Paige L"
+    },
+    {
+     "family": "Zhang",
+     "given": "Bicheng"
+    },
+    {
+     "family": "Strid",
+     "given": "Penelope"
+    },
+    {
+     "family": "Abara",
+     "given": "Winston E"
+    },
+    {
+     "family": "McNeil",
+     "given": "Michael M"
+    },
+    {
+     "family": "Myers",
+     "given": "Tanya R"
+    },
+    {
+     "family": "Hause",
+     "given": "Anne M"
+    },
+    {
+     "family": "Su",
+     "given": "John R"
+    },
+    {
+     "family": "Markowitz",
+     "given": "Lauri E"
+    },
+    {
+     "family": "Shimabukuro",
+     "given": "Tom T"
+    },
+    {
+     "family": "Shay",
+     "given": "David K"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2022,
+      6
+     ]
+    ]
+   },
+   "volume": "22",
+   "issue": "6",
+   "page": "802-812",
+   "DOI": "10.1016/s1473-3099(22)00054-8",
+   "URL": "http://dx.doi.org/10.1016/S1473-3099(22)00054-8",
+   "publisher": "Elsevier BV",
+   "id": 9025
+  }
+ },
+ "26": {
+  "id": 9026,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/BOTSIS01"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "Text mining for the Vaccine Adverse Event Reporting System: medical text classification using informative feature selection",
+   "container-title": "Journal of the American Medical Informatics Association",
+   "container-title-short": "J Am Med Inform Assoc",
+   "author": [
+    {
+     "family": "Botsis",
+     "given": "Taxiarchis"
+    },
+    {
+     "family": "Nguyen",
+     "given": "Michael D"
+    },
+    {
+     "family": "Woo",
+     "given": "Emily Jane"
+    },
+    {
+     "family": "Markatou",
+     "given": "Marianthi"
+    },
+    {
+     "family": "Ball",
+     "given": "Robert"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2011,
+      9
+     ]
+    ]
+   },
+   "volume": "18",
+   "issue": "5",
+   "page": "631-638",
+   "DOI": "10.1136/amiajnl-2010-000022",
+   "URL": "http://dx.doi.org/10.1136/amiajnl-2010-000022",
+   "publisher": "Oxford University Press (OUP)",
+   "id": 9026
+  }
+ },
+ "28": {
+  "id": 9028,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/FUJISA01"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "Characterizing persistent Post-COVID-19 vaccination symptoms using MedDRA system organ class and preferred term classifications",
+   "container-title": "Scientific Reports",
+   "container-title-short": "Sci Rep",
+   "author": [
+    {
+     "family": "Fujisawa",
+     "given": "Akinori"
+    },
+    {
+     "family": "Kodama",
+     "given": "Shinichiro"
+    },
+    {
+     "family": "Konishi",
+     "given": "Nafuko"
+    },
+    {
+     "family": "Ueda",
+     "given": "Jun"
+    },
+    {
+     "family": "Kitagawa",
+     "given": "Akiko"
+    },
+    {
+     "family": "Okada",
+     "given": "Eri"
+    },
+    {
+     "family": "Miyokawa",
+     "given": "Mariko"
+    },
+    {
+     "family": "Hirai",
+     "given": "Yuriko"
+    },
+    {
+     "family": "Nakatani",
+     "given": "Eiji"
+    },
+    {
+     "family": "Fukushima",
+     "given": "Masanori"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2026,
+      3,
+      14
+     ]
+    ]
+   },
+   "volume": "16",
+   "issue": "1",
+   "DOI": "10.1038/s41598-026-43949-z",
+   "URL": "http://dx.doi.org/10.1038/s41598-026-43949-z",
+   "publisher": "Springer Science and Business Media LLC",
+   "page": "12366",
+   "id": 9028
+  }
+ },
+ "29": {
+  "id": 9029,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/SEMMLE01"
+  ],
+  "itemData": {
+   "type": "journal-article",
+   "title": "Chronic Fatigue and Dysautonomia following COVID-19 Vaccination Is Distinguished from Normal Vaccination Response by Altered Blood Markers",
+   "container-title": "Vaccines",
+   "container-title-short": "Vaccines",
+   "author": [
+    {
+     "family": "Semmler",
+     "given": "Amelie"
+    },
+    {
+     "family": "Mundorf",
+     "given": "Anna Katharina"
+    },
+    {
+     "family": "Kuechler",
+     "given": "Anna Sabrina"
+    },
+    {
+     "family": "Schulze-Bosse",
+     "given": "Karin"
+    },
+    {
+     "family": "Heidecke",
+     "given": "Harald"
+    },
+    {
+     "family": "Schulze-Forster",
+     "given": "Kai"
+    },
+    {
+     "family": "Schott",
+     "given": "Matthias"
+    },
+    {
+     "family": "Uhrberg",
+     "given": "Markus"
+    },
+    {
+     "family": "Weinhold",
+     "given": "Sandra"
+    },
+    {
+     "family": "Lackner",
+     "given": "Karl J."
+    },
+    {
+     "family": "Pawlitzki",
+     "given": "Marc"
+    },
+    {
+     "family": "Meuth",
+     "given": "Sven Guenther"
+    },
+    {
+     "family": "Boege",
+     "given": "Fritz"
+    },
+    {
+     "family": "Ruhrländer",
+     "given": "Jana"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2023,
+      10,
+      26
+     ]
+    ]
+   },
+   "volume": "11",
+   "issue": "11",
+   "page": "1642",
+   "DOI": "10.3390/vaccines11111642",
+   "URL": "http://dx.doi.org/10.3390/vaccines11111642",
+   "publisher": "MDPI AG",
+   "id": 9029
+  }
+ },
+ "30": {
+  "id": 9030,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/BHATTA01"
+  ],
+  "itemData": {
+   "type": "article",
+   "title": "Immunological and Antigenic Signatures Associated with Chronic Illnesses after COVID-19 Vaccination",
+   "container-title": "medRxiv",
+   "author": [
+    {
+     "family": "Bhattacharjee",
+     "given": "Bornali"
+    },
+    {
+     "family": "Lu",
+     "given": "Peiwen"
+    },
+    {
+     "family": "Monteiro",
+     "given": "Valter Silva"
+    },
+    {
+     "family": "Tabachnikova",
+     "given": "Alexandra"
+    },
+    {
+     "family": "Wang",
+     "given": "Kexin"
+    },
+    {
+     "family": "Hooper",
+     "given": "William B."
+    },
+    {
+     "family": "Bastos",
+     "given": "Victoria"
+    },
+    {
+     "family": "Greene",
+     "given": "Kerrie"
+    },
+    {
+     "family": "Sawano",
+     "given": "Mitsuaki"
+    },
+    {
+     "family": "Guirgis",
+     "given": "Christian"
+    },
+    {
+     "family": "Tzeng",
+     "given": "Tiffany J."
+    },
+    {
+     "family": "Warner",
+     "given": "Frederick"
+    },
+    {
+     "family": "Baevova",
+     "given": "Pavlina"
+    },
+    {
+     "family": "Kamath",
+     "given": "Kathy"
+    },
+    {
+     "family": "Reifert",
+     "given": "Jack"
+    },
+    {
+     "family": "Hertz",
+     "given": "Danice"
+    },
+    {
+     "family": "Dressen",
+     "given": "Brianne"
+    },
+    {
+     "family": "Tabacof",
+     "given": "Laura"
+    },
+    {
+     "family": "Wood",
+     "given": "Jamie"
+    },
+    {
+     "family": "Cooke",
+     "given": "Lily"
+    },
+    {
+     "family": "Doerstling",
+     "given": "Mackenzie"
+    },
+    {
+     "family": "Nolasco",
+     "given": "Shadan"
+    },
+    {
+     "family": "Ahmed",
+     "given": "Amer"
+    },
+    {
+     "family": "Proal",
+     "given": "Amy"
+    },
+    {
+     "family": "Putrino",
+     "given": "David"
+    },
+    {
+     "family": "Guan",
+     "given": "Leying"
+    },
+    {
+     "family": "Krumholz",
+     "given": "Harlan M."
+    },
+    {
+     "family": "Iwasaki",
+     "given": "Akiko"
+    }
+   ],
+   "issued": {
+    "date-parts": [
+     [
+      2025,
+      2,
+      18
+     ]
+    ]
+   },
+   "DOI": "10.1101/2025.02.18.25322379",
+   "URL": "http://dx.doi.org/10.1101/2025.02.18.25322379",
+   "publisher": "openRxiv",
+   "genre": "preprint",
+   "id": 9030
+  }
+ },
+ "27": {
+  "id": 9027,
+  "uris": [
+   "http://zotero.org/users/local/Oz67iTD5/items/LAREB001"
+  ],
+  "itemData": {
+   "id": 9027,
+   "type": "report",
+   "genre": "Signal report",
+   "title": "Long COVID-like symptoms following immunization with COVID-19 vaccines",
+   "author": [
+    {
+     "literal": "Netherlands Pharmacovigilance Centre Lareb"
+    }
+   ],
+   "publisher": "Lareb",
+   "publisher-place": "'s-Hertogenbosch",
+   "issued": {
+    "date-parts": [
+     [
+      2024,
+      1,
+      17
+     ]
+    ]
+   },
+   "URL": "https://www.lareb.nl/media/g54d3xrc/signals_2024_long-covid-like-symptoms-after-covid-19-vaccination_website.pdf",
+   "accessed": {
+    "date-parts": [
+     [
+      2026,
+      11,
+      12
+     ]
+    ]
+   }
+  }
+ }
 }

@@ -18,10 +18,14 @@ from xml.sax.saxutils import escape
 src, dst, items_path, extra_path, custom_path = sys.argv[1:6]
 lib = json.load(open(items_path, encoding="utf-8"))
 extra = json.load(open(extra_path, encoding="utf-8"))
-# numbering: 1..17 in the order the user's file cites them (lib["order"]), then extras
-numbered = {i + 1: lib["items"][k] for i, k in enumerate(lib["order"])}
+# item keys: 1..17 in the order the user's file cites them (lib["order"]), then extras by key;
+# ref_order.json (beside extra_items.json) maps manuscript numbers, by first citation, to those keys
+pool = {i + 1: lib["items"][k] for i, k in enumerate(lib["order"])}
 for n, it in extra.items():
-    numbered[int(n)] = it
+    pool[int(n)] = it
+order_path = os.path.join(os.path.dirname(os.path.abspath(extra_path)), "ref_order.json")
+order = json.load(open(order_path, encoding="utf-8"))["order"] if os.path.exists(order_path) else sorted(pool)
+numbered = {i + 1: pool[k] for i, k in enumerate(order)}
 SCHEMA = "https://github.com/citation-style-language/schema/raw/master/csl-citation.json"
 
 

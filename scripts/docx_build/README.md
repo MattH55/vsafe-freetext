@@ -13,6 +13,7 @@ pandoc cover-letter.md -o cover-letter.docx && pandoc record-checklist.md -o REC
 ```
 
 `zotero_items.json` holds the 17 CSL items and library URIs from the author's own Zotero file;
-`extra_items.json` holds items 18–22 (OpenVSafe, ICAN, VAERS, MedDRA, Levi & Lu) embedded for the
-author to relink. `zotero_custom.xml` carries the Zotero document preferences; the style is set to
+`extra_items.json` holds items keyed 18–30 (OpenVSafe, ICAN, VAERS, MedDRA, Levi & Lu, and the eight
+references added on 12 Nov) embedded for the author to relink. `ref_order.json` maps each manuscript
+number, in order of first citation, to its item key. `zotero_custom.xml` carries the Zotero document preferences; the style is set to
 Springer NLM/Vancouver (brackets). No participant data is involved anywhere in this folder.

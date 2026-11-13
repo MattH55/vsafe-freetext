@@ -44,7 +44,7 @@ xml = d["data"]["xml"]
 FIG_FILES = {1: "figure1_validation.png", 2: "figure2_pair_ratios.png", 3: "figure3_onset.png",
              4: "figure4_text_matched.png", 5: "figure5_summary.png"}
 FIG_ASPECT = {1: 738 / 1344, 2: 784 / 1344, 3: 720 / 1344, 4: 1512 / 1344, 5: 898 / 1344}
-CITE = re.compile(r"\((\d{1,2}(?:[,–—-]\d{1,2})*)\)")
+CITE = re.compile(r"(?<!\))\((\d{1,2}(?:[,–—-]\d{1,2})*)\)")   # not "(b)(6)"
 
 
 def expand(group: str):
@@ -76,6 +76,15 @@ def inline(frag: str):
                     parts.append({"text": html.unescape(b.group(3))})
         else:
             parts.append({"text": "2026-11-12" if m.group(4) == "date" else "Matthew Halma"})
+    # merge adjacent plain runs first: an edit can split "(5)" across runs
+    merged = []
+    for p in parts:
+        plain = not (p.get("bold") or p.get("italic"))
+        if plain and merged and not (merged[-1].get("bold") or merged[-1].get("italic")):
+            merged[-1] = {"text": merged[-1]["text"] + p["text"]}
+        else:
+            merged.append(dict(p))
+    parts = merged
     # split citations out of plain text parts
     out = []
     for p in parts:
@@ -114,11 +123,12 @@ for m in re.finditer(r"<(paragraph|list|table|embed|pending)\b([^>]*)(?:/>|>(.*?
     elif kind == "list":
         ordered = "kind='ordered'" in attrs
         start = re.search(r"start='(\d+)'", attrs)
-        items = [inline(li) for li in re.findall(r"<listItem[^>]*>(.*?)</listItem>", body, re.DOTALL)]
-        if ordered and any(p.get("text", "").startswith(("Bellavite", "Platschek")) for it in items for p in it[:1]) or ordered and start:
-            blocks.append({"type": "bibl_part", "items": items})
-        else:
-            blocks.append({"type": "list", "ordered": ordered, "items": items})
+        lis = re.findall(r"<listItem[^>]*>(.*?)</listItem>", body, re.DOTALL)
+        if ordered and (start or (blocks and blocks[-1].get("type") == "heading" and blocks[-1]["text"] == "References")):
+            # reference entries stay plain text: no citation parsing, so "(22)" inside a DOI survives
+            blocks.append({"type": "bibl_part", "items": [[{"text": html.unescape(re.sub(r"<[^>]+>", "", li)).strip()}] for li in lis]})
+            continue
+        blocks.append({"type": "list", "ordered": ordered, "items": [inline(li) for li in lis]})
     elif kind == "table":
         rows = []
         for r in re.findall(r"<row[^>]*>(.*?)</row>", body, re.DOTALL):
@@ -132,7 +142,7 @@ for m in re.finditer(r"<(paragraph|list|table|embed|pending)\b([^>]*)(?:/>|>(.*?
         blocks.append({"type": "figure", "file": os.path.join(figdir, FIG_FILES[n]), "aspect": FIG_ASPECT[n],
                        "caption": [{"text": f"Figure {n}. ", "bold": True}, {"text": cap.split("·", 1)[1].strip() if "·" in cap else cap}]})
 
-# merge the bibliography parts (list starting at 1, then lists starting at 18, 19) into one bibl
+# merge the bibliography parts (the list under References, plus any continuation lists) into one bibl
 merged, bib = [], []
 for b in blocks:
     if b["type"] == "bibl_part":

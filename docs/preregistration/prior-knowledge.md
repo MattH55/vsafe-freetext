@@ -57,6 +57,7 @@ happened after filing and follows the registered plan.
 | 2026-11-08 | *Cries for Help* (OpenVAERS) | Qualitative selection of entries |
 | 2026-11-08 | Independent LLM screens (e.g. Vaccine Data Science) | Single-condition screens over MedDRA-selected subsets |
 | 2026-11-12 | Levi R, Lu N, *Reporting on prolonged adverse health impact among V-SAFE enrollees*, Research Square, posted 25 Aug 2026, doi:10.21203/rs.3.rs-10768889/v1 (full text and appendices) | See below |
+| 2026-11-12 | Eight papers added as references after a pre-submission reference check, all after every registered and exploratory result was computed: Scholkmann & May 2023 (Pathol Res Pract), Kenny 2025 (Ther Adv Drug Saf), Rosenblum et al. 2022 (Lancet Infect Dis), Botsis et al. 2011 (JAMIA), Lareb signal report of 17 Jan 2024, Fujisawa et al. 2026 (Sci Rep), Semmler et al. 2023 (Vaccines), Bhattacharjee et al. 2025 (medRxiv). Read: Crossref metadata for each; PubMed abstract of Fujisawa; the Lareb PDF; web-search abstract summaries of the rest | Citation and framing only. No analysis, taxonomy, threshold or result was changed. Lareb's selection (long-lasting symptoms in two or more long COVID-like groups) resembles the registered case definition, which predates this reading |
 
 ### Levi & Lu (2026): what we now know about long-term-survey data
 

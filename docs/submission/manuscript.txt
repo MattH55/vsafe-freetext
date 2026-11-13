@@ -28,11 +28,11 @@ Key Points
 
 Introduction
 
-Post-acute COVID-19 vaccination syndrome (PACVS) is a multi-system condition following COVID-19 vaccination, with symptoms resembling long COVID: fatigue, cognitive difficulty ("brain fog") and post-exertional malaise among them. Causality has been hard to assign for a multi-system disorder [1, 2], which leaves patients without the clinical entity on which compensation, treatment and research depend [3]. Prevalence estimates range from 0.003% to 0.9% of recipients [2]; the higher figure comes from an occupational survey, the lower from verified reports, which understate the rate. Case series describe a coherent presentation [4–15], but their patients came forward attributing symptoms to vaccination.
+Post-acute COVID-19 vaccination syndrome (PACVS) is a multi-system condition following COVID-19 vaccination, with symptoms resembling long COVID [1]: fatigue, cognitive difficulty ("brain fog") and post-exertional malaise among them. Causality has been hard to assign for a multi-system disorder [2, 3], which leaves patients without the clinical entity on which compensation, treatment and research depend [4]. Prevalence estimates range from 0.003% to 0.9% of recipients [3]; the higher figure comes from an occupational survey, the lower from verified reports, which understate the rate. Case series describe a coherent presentation [5–16], but their patients came forward attributing symptoms to vaccination.
 
-Routine surveillance is poorly placed to see such a syndrome. Spontaneous reports are coded one symptom at a time to MedDRA Preferred Terms, so a multi-system pattern is split across many terms, and their denominators are unknown, so reporting can track awareness of the system or the salience of the campaign rather than the rate of events [16]. Active surveillance counts events inside a fixed risk window after the dose, so later problems fall outside it. There is no disease entity to code to: a system can flag fatigue or brain fog, but not a constellation.
+Routine surveillance is poorly placed to see such a syndrome [17]. Spontaneous reports are coded one symptom at a time to MedDRA Preferred Terms, so a multi-system pattern is split across many terms, and their denominators are unknown, so reporting can track awareness of the system or the salience of the campaign rather than the rate of events [18]. Active surveillance counts events inside a fixed risk window after the dose, so later problems fall outside it. There is no disease entity to code to: a system can flag fatigue or brain fog, but not a constellation.
 
-v-safe, CDC's smartphone check-in system, followed about 10 million COVID-19 vaccine recipients in the United States for up to a year, soliciting their condition at fixed time points, and has been used to examine preliminary VAERS signals [17]. A followed cohort supplies the denominator that spontaneous reporting lacks, and v-safe asked open questions at 3, 6 and 12 months after a dose; released under FOIA, these answers are the largest body of long-term, participant-written text on post-vaccination health. Levi and Lu [22] analysed v-safe's structured answers: among 9,904,924 enrollees aged 16 or older, 185,285 (1.87%) reported worse health lasting at least three months that they attributed to vaccination, and 1.92% reported prolonged worse health without attributing it. Their phenotype rests on attribution. The present study uses the free text to define a symptom-based phenotype that does not, tests whether symptom domains cluster against a null model, and examines onset and recorded VAERS filing; the two analyses were independent.
+v-safe, CDC's smartphone check-in system, followed about 10 million COVID-19 vaccine recipients in the United States for up to a year, soliciting their condition at fixed time points; CDC reported mostly mild, short-lived reactions in its first six months [19], and it has been used to examine preliminary VAERS signals [20]. A followed cohort supplies the denominator that spontaneous reporting lacks, and v-safe asked open questions at 3, 6 and 12 months after a dose; released under FOIA, these answers are the largest body of long-term, participant-written text on post-vaccination health. Levi and Lu [21] analysed v-safe's structured answers: among 9,904,924 enrollees aged 16 or older, 185,285 (1.87%) reported worse health lasting at least three months that they attributed to vaccination, and 1.92% reported prolonged worse health without attributing it. Their phenotype rests on attribution. The present study uses the free text to define a symptom-based phenotype that does not, tests whether symptom domains cluster against a null model, and examines onset and recorded VAERS filing; the two analyses were independent.
 
 We asked four pre-registered questions:
 
@@ -53,24 +53,24 @@ Table 1. Data sources, content and use.
   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   Source                                                                               Content                                                                                                   Use
   ------------------------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------- ------------------------------------------
-  v-safe free text (FOIA 24-01322, original and updated releases, under-3 file) [19]   7,819,251 entries after de-duplication                                                                    Classification
+  v-safe free text (FOIA 24-01322, original and updated releases, under-3 file) [22]   7,819,251 entries after de-duplication                                                                    Classification
 
-  v-safe registrants, vaccinations, health check-ins [19]                              145.0 million check-ins; dose dates, manufacturer, sex (no age field was present in the linked release)   Dose anchor, survey type, health answers
+  v-safe registrants, vaccinations, health check-ins [22]                              145.0 million check-ins; dose dates, manufacturer, sex (no age field was present in the linked release)   Dose anchor, survey type, health answers
 
-  CDC MedDRA coding of the free text (November 2024 release) [19, 21]                  Preferred Terms per entry; 99.9% of entries coded                                                         Reference standard
+  CDC MedDRA coding of the free text (November 2024 release) [22, 23]                  Preferred Terms per entry; 99.9% of entries coded                                                         Reference standard
 
-  v-safe call centre (FOIA 23-00925, 23-00926) [19]                                    Cases, care, VAERS-filed dispositions                                                                     Q3, Q4
+  v-safe call centre (FOIA 23-00925, 23-00926) [22]                                    Cases, care, VAERS-filed dispositions                                                                     Q3, Q4
 
-  OpenVSafe person pages [18]                                                          Best-matching VAERS report per VAERS-filed person, score out of 11                                        Q3
+  OpenVSafe person pages [24]                                                          Best-matching VAERS report per VAERS-filed person, score out of 11                                        Q3
 
-  VAERS public data (dated 2026-06-03) [20]                                            Reports, MedDRA terms, symptom text                                                                       Q3, Q1 replication
+  VAERS public data (dated 2026-06-03) [25]                                            Reports, MedDRA terms, symptom text                                                                       Q3, Q1 replication
   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Each entry was linked to its registrant, the check-in it answered, the most recent preceding dose, CDC's MedDRA codes and call-centre outcomes within 90 days (Table 1); entries redacted under FOIA exemption (b)[6] were excluded. OpenVSafe match data were read from its public per-registrant pages [18] on 2026-11-10 and 2026-11-11 for the 44,954 people whom the call-centre data marked as VAERS-filed, at one request per second and within the access the site's robots.txt allows; no bulk file exists, and no permission beyond the site's published access rules was sought. Only the VAERS ID, match score, confidence and runner-up score were kept.
+Each entry was linked to its registrant, the check-in it answered, the most recent preceding dose, CDC's MedDRA codes and call-centre outcomes within 90 days (Table 1); entries redacted under FOIA exemption (b)(6) were excluded. OpenVSafe match data were read from its public per-registrant pages [24] on 2026-11-10 and 2026-11-11 for the 44,954 people whom the call-centre data marked as VAERS-filed, at one request per second and within the access the site's robots.txt allows; no bulk file exists, and no permission beyond the site's published access rules was sought. Only the VAERS ID, match score, confidence and runner-up score were kept.
 
 Pre-registration
 
-The protocol was registered on OSF (osf.io/gnfpd) on 2026-11-11, before any 3-, 6- or 12-month text was classified or read. Code enforced this: long-term text could not be classified until the registration link was set. The taxonomy (v1.0) was frozen on 2026-11-10. The closest prior work, Levi and Lu's analysis of v-safe's structured answers [22], was identified on 12 November 2026, after registration and after the registered analyses had been run; it did not change the registered plan, and no amendment was filed for it. Two amendments were filed before the results they govern were computed:
+The protocol was registered on OSF (osf.io/gnfpd) on 2026-11-11, before any 3-, 6- or 12-month text was classified or read. Code enforced this: long-term text could not be classified until the registration link was set. The taxonomy (v1.0) was frozen on 2026-11-10. The closest prior work, Levi and Lu's analysis of v-safe's structured answers [21], was identified on 12 November 2026, after registration and after the registered analyses had been run; it did not change the registered plan, and no amendment was filed for it. Two amendments were filed before the results they govern were computed:
 
 - Amendment 1 replaced the planned two-coder gold set, for which no coders were available, with CDC's MedDRA coding as the reference standard.
 
@@ -78,7 +78,7 @@ The protocol was registered on OSF (osf.io/gnfpd) on 2026-11-11, before any 3-, 
 
 Classification
 
-Layer 1 is a keyword lexicon for 21 themes, including the nine PACVS domains: fatigue and post-exertional malaise, cognitive, dysautonomia, sensory-neuropathic, sleep, pain, gastrointestinal, menstrual and cardiorespiratory. It also tags three exclusion themes (named acute diagnosis, unrelated cause, upper-respiratory infection) and flags entries about the time before vaccination. It was run on all entries.
+Layer 1, a keyword lexicon like those applied to VAERS narratives [26], covers 21 themes, including the nine PACVS domains: fatigue and post-exertional malaise, cognitive, dysautonomia, sensory-neuropathic, sleep, pain, gastrointestinal, menstrual and cardiorespiratory. It also tags three exclusion themes (named acute diagnosis, unrelated cause, upper-respiratory infection) and flags entries about the time before vaccination. It was run on all entries.
 
 Layer 3 is a language model (deepseek/deepseek-v4.1-flash, reasoning off, prompt v0.1) given the same closed theme list. It labelled every unique long-term text to which layer 1 gave no theme: 649,516 entries, 386,862 unique texts. Requests went through a zero-data-retention route; texts containing a detectable e-mail address or phone number were not sent. The final classifier is the union of the two layers.
 
@@ -110,7 +110,7 @@ Q1. For person-doses with long-term text we built a person-dose by domain matrix
 
 Q2. Onset is the first survey type (week 1, six weeks, 3, 6 or 12 months) whose text names any of the case's long-term domains. Each case's null probability of early onset is the share of their completed check-ins for that dose that fell in week 1 or the six-week period; the number of early-onset cases was compared with this Poisson-binomial null by an exact one-sided test. Persistence compares cases with group (c) on the share naming a PACVS domain at a later long-term survey, among those who completed one, as a risk difference with a Newcombe interval and a one-sided z-test.
 
-Q3. Analysis was per person: a case if any dose was a case, otherwise group (b) if any dose was. A person reached VAERS if a call-centre contact within 90 days of an entry recorded a VAERS filing, or if OpenVSafe [18], a project of OpenVAERS that matches v-safe records to VAERS reports on timing, dose and shared symptoms, matched them to a report (score at least 8 of 11; reports matched to more than one person dropped; main set 25,913 people, high-confidence set 23,925). We call this recorded VAERS filing; a report filed without call-centre contact and not matched by OpenVSafe is not counted. Filing was compared as a rate ratio with a log-scale Wald interval. Dispersion compared the Shannon entropy of matched reports' MedDRA terms between groups by a 1,000-fold permutation of group labels.
+Q3. Analysis was per person: a case if any dose was a case, otherwise group (b) if any dose was. A person reached VAERS if a call-centre contact within 90 days of an entry recorded a VAERS filing, or if OpenVSafe [24], a project of OpenVAERS that matches v-safe records to VAERS reports on timing, dose and shared symptoms, matched them to a report (score at least 8 of 11; reports matched to more than one person dropped; main set 25,913 people, high-confidence set 23,925). We call this recorded VAERS filing; a report filed without call-centre contact and not matched by OpenVSafe is not counted. Filing was compared as a rate ratio with a log-scale Wald interval. Dispersion compared the Shannon entropy of matched reports' MedDRA terms between groups by a 1,000-fold permutation of group labels.
 
 Q4 and attrition. Q4 gives rates per 1,000 for health impact, care and call-centre cases by group. Case prevalence was bounded by assuming every person-dose without a long-term survey was well (lower bound) or a case (upper bound).
 
@@ -480,12 +480,12 @@ Reproduction of Levi and Lu's cohorts. Rebuilt from the structured answers alone
 
 Symptom frequencies among cases, compared with published case series
 
-Among the 87,229 case person-doses, pain was the most often named domain (70.2%), then fatigue (51.5%), gastrointestinal symptoms (33.1%) and dysautonomia (25.1%); cognitive (8.5%), menstrual (5.3%) and sleep (4.0%) symptoms were named least. Cases named a median of 2 domains (mean 2.29). Table 14 sets these beside published PACVS series [4–6, 10, 12, 13], using each paper's own symptom label.
+Among the 87,229 case person-doses, pain was the most often named domain (70.2%), then fatigue (51.5%), gastrointestinal symptoms (33.1%) and dysautonomia (25.1%); cognitive (8.5%), menstrual (5.3%) and sleep (4.0%) symptoms were named least. Cases named a median of 2 domains (mean 2.29). Table 14 sets these beside published PACVS series [5–7, 11, 13, 14], using each paper's own symptom label.
 
 Table 14. Share of patients with each symptom domain: this study and published PACVS case series, %.
 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Domain                  This study, v-safe cases, free text (n = 87,229 person-doses)   Mundorf 2024, online checklist (n = 191) [5]   Krumholz 2023, online checklist (n = 241) [6]   Dinser 2026, CCC questionnaire (n = 26) [4]             Gerhard 2023, neurology clinic (n = 50) [12]   Tokumasu 2023, clinic records (n = 121) [10]
+  Domain                  This study, v-safe cases, free text (n = 87,229 person-doses)   Mundorf 2024, online checklist (n = 191) [6]   Krumholz 2023, online checklist (n = 241) [7]   Dinser 2026, CCC questionnaire (n = 26) [5]             Gerhard 2023, neurology clinic (n = 50) [13]   Tokumasu 2023, clinic records (n = 121) [11]
   ----------------------- --------------------------------------------------------------- ---------------------------------------------- ----------------------------------------------- ------------------------------------------------------- ---------------------------------------------- ----------------------------------------------
   Fatigue / PEM           51.5                                                            exhaustion 84.8; PEM 70.7                      excessive fatigue 69; exercise intolerance 71   new exhaustion 76.9; deterioration with exertion 96.2   fatigue 46                                     general fatigue 24.8
 
@@ -506,7 +506,7 @@ Table 14. Share of patients with each symptom domain: this study and published P
   Cardiorespiratory       16.3                                                            exertional dyspnoea 59.7; angina 46.4          shortness of breath 37; chest pain 26 to 28     dyspnoea 38.5                                           not reported                                   chest discomfort 3.3
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Percentages are of each series' whole sample; menstrual items in this study and in [5, 6] use denominators that include men. Finsterer and Scorza [13] describe three patients and are not tabulated. Symptoms were elicited by checklists of 38 to 96 items [4–6], clinician-recorded complaints [10, 12] or, here, unprompted free text at 3 to 12 months.
+Percentages are of each series' whole sample; menstrual items in this study and in [6, 7] use denominators that include men. Finsterer and Scorza [14] describe three patients and are not tabulated. Symptoms were elicited by checklists of 38 to 96 items [5–7], clinician-recorded complaints [11, 13] or, here, unprompted free text at 3 to 12 months.
 
 The rank order overlaps but the levels do not: checklist series report most domains in 60 to 90% of patients, clinician-recorded series in 4 to 56%, and v-safe free text sits between for fatigue, pain and gastrointestinal symptoms and well below both for cognitive and sleep symptoms. The 8.5% naming cognitive symptoms, against 36 to 88% elsewhere, reflects the classifier's recall for that domain (0.74), what people name unprompted, and a question about health after a dose rather than about a syndrome.
 
@@ -524,19 +524,19 @@ Onset. The registered hypothesis assumed that a vaccine-related syndrome would b
 
 - Late-onset or late-recognised effects. If real, they would be missed by any design that counts only events in a fixed window after the dose, often 1 to 42 days.
 
-- Background illness. Late onset is also what intercurrent illness, including COVID-19 infection, would produce. It weakens the case for attribution to the dose.
+- Background illness. Late onset is also what intercurrent illness, including COVID-19 infection, would produce; a national pharmacovigilance centre's review of long COVID-like reports could not exclude it [27]. It weakens the case for attribution to the dose.
 
 - Late reporting. Symptoms present early may be written down only once they have lasted, or once an open-ended long-term survey invites a description that the check-box surveys of the first weeks did not.
 
-Three features of the data bias the measure towards late description: early surveys collected symptoms mainly through check-boxes while long-term surveys were open-ended; early text was classified by keywords only, with lower recall; and daily week-1 check-ins inflate the expected early share to 71%. Classifying early and late text alike raised the early share only to 32.7%, and the check-boxes record reactogenicity that cannot be told apart from the start of a persistent syndrome (Table 10). The registered test therefore records when symptoms were first written down, not when they began; it is uninformative about onset, and the structured data cannot settle it.
+Two further features bias the measure towards late description: early text was classified by keywords only, with lower recall, and daily week-1 check-ins inflate the expected early share to 71%. Classifying early and late text alike raised the early share only to 32.7%, and the check-boxes record reactogenicity that cannot be told apart from the start of a persistent syndrome (Table 10). The registered test therefore records when symptoms were first written down, not when they began; it is uninformative about onset, and the structured data cannot settle it.
 
-Persistence. Persistence in 60% of cases, against 1.5% of group (c), is large, but part of the gap is built in: group (c) by construction reported no worse health or impact at long-term surveys, and cases were selected for naming at least two domains at a long-term survey, which makes naming one later more likely. Two checks specified after the results were seen narrow the gap without closing it (Table 11): same-survey cases persist in 47.1%, and group (d), people with the same worse health or impact who named one domain or none, in 10.5%, a difference of 36.6 points. Group (d) is the comparison the question needs, because it measures how often a single long-term complaint recurs in the same responders. The multi-domain pattern is therefore not a slow resolution of a severe first week, and it recurs more often than other long-term complaints among people who kept answering. Persistence relative to the general population or to those who stopped responding is not estimated, and the risk ratio in Figure 5 should not be read as an effect size.
+Persistence. Persistence in 60% of cases, against 1.5% of group (c), is large, but part of the gap is built in: group (c) by construction reported no worse health or impact at long-term surveys, and cases were selected for naming at least two domains at a long-term survey, which makes naming one later more likely. Two checks specified after the results were seen narrow the gap without closing it (Table 11): same-survey cases persist in 47.1%, and group (d), people with the same worse health or impact who named one domain or none, in 10.5%, a difference of 36.6 points. Group (d), single long-term complaints in the same responders, is the right comparison. The multi-domain pattern is therefore not a slow resolution of a severe first week, and it recurs more often than other long-term complaints among people who kept answering. Persistence relative to the general population or to those who stopped responding is not estimated, and the risk ratio in Figure 5 should not be read as an effect size.
 
-Detection. Cases were about 6% less likely than people with named acute diagnoses to reach VAERS, and, contrary to our hypothesis, their reports were coded to a narrower spread of terms, a difference that held under the Miller-Madow correction, rarefaction and a two-sided test. VAERS coding does not appear to scatter this pattern; the few cases who reach VAERS may be those with a more recognisable presentation. The detection problem, if there is one, lies in the 95% of cases who never reach VAERS, which this comparison cannot see. Of three readings of the exclusion criterion, the registered one gives the most conservative rate ratio.
+Detection. Cases were about 6% less likely than people with named acute diagnoses to reach VAERS, and, contrary to our hypothesis, their reports were coded to a narrower spread of terms, a difference that held under two bias corrections and a two-sided test. VAERS coding does not appear to scatter this pattern; the few cases who reach VAERS may be those with a more recognisable presentation. The detection problem, if there is one, lies in the 95% of cases who never reach VAERS, which this comparison cannot see. Of three readings of the exclusion criterion, the registered one gives the most conservative rate ratio.
 
-Model sensitivity. The two language models agreed on early text but not on the long-term residue. DeepSeek labelled fatigue there less than half as often as Claude Opus, so fatigue's recall of 0.86, and its passing the gate, depend on which model labelled the residue; three other domains were also model-sensitive, and Claude applied the unrelated-cause exclusion 45% more often, so the case count itself would differ between models.
+Model sensitivity. DeepSeek labelled fatigue in the long-term residue less than half as often as Claude Opus, so fatigue's gate pass depends on the model; Claude also applied the unrelated-cause exclusion 45% more often, which would change the case count.
 
-Relation to earlier work. Case series of PACVS describe fatigue, cognitive impairment, post-exertional malaise, dysautonomia and neuropathic symptoms as the core presentation [4–6, 10, 12], with a clinical and immunological profile shared with post-acute COVID-19 [4]. The cluster found here matches that core; sensory-neuropathic symptoms, prominent in some series [8, 9, 12], did not join it, which may reflect the classifier's recall for that domain (0.25). Published prevalence estimates run from 0.003% to 0.9% [2]; the 1.01% here sits at the top of that range before any adjustment for attrition or classifier error, and is a share of long-term responses, not of recipients. Levi and Lu found that 1.87% of participants reported worse health lasting at least three months that they attributed to vaccination [22]; our definition is stricter, requiring at least two symptom domains in free text and no named alternative cause. Their cohorts were reproduced within 0.5% at doses 1 and 2, and the two definitions overlap only partly (kappa 0.22): a third of text-defined cases attributed worse health to vaccination on a check-box, and a sixth of their cohort met the text definition, so the text-defined phenotype is not a relabelling of self-attribution. Women predominated among cases (77.5%), as in case series [5, 6], but v-safe registrants were also mostly women, and the no-symptoms group was 58% women.
+Relation to earlier work. Case series of PACVS describe fatigue, cognitive impairment, post-exertional malaise, dysautonomia and neuropathic symptoms as the core presentation [5–7, 11, 13], with a clinical and immunological profile shared with post-acute COVID-19 [5] and blood markers that differ from those of vaccinated controls [28, 29]. A Japanese registry coded to MedDRA placed 61.7% of events in three System Organ Classes, and 12.4% began 360 days or more after vaccination [30]. The cluster found here matches that core; sensory-neuropathic symptoms, prominent in some series [9, 10, 13], did not join it, which may reflect the classifier's recall for that domain (0.25). The 1.01% here sits at the top of published prevalence estimates [3] before any adjustment for attrition or classifier error, and is a share of long-term responses, not of recipients. Levi and Lu found that 1.87% of participants reported worse health lasting at least three months that they attributed to vaccination [21]; our definition is stricter, requiring at least two symptom domains in free text and no named alternative cause. Their cohorts were reproduced within 0.5% at doses 1 and 2, and the two definitions overlap only partly (kappa 0.22): a third of text-defined cases attributed worse health to vaccination on a check-box, and a sixth of their cohort met the text definition, so the text-defined phenotype is not a relabelling of self-attribution. Women predominated among cases (77.5%), as in case series [6, 7], but v-safe registrants were also mostly women, and the no-symptoms group was 58% women.
 
 Limitations
 
@@ -560,7 +560,7 @@ Limitations
 
 - Comparison groups are partly defined by the outcome, and the strictest persistence contrast was specified after the results were seen.
 
-- VAERS linkage and the detection test. Recorded filing relies on call-centre dispositions and OpenVSafe's probabilistic matches [18], which were not validated independently; Q3 was run per person while groups are defined per dose; and a contrast between two filing rates near 5% is a weak test of under-capture that says nothing about cases who never reach VAERS.
+- VAERS linkage and the detection test. Recorded filing relies on call-centre dispositions and OpenVSafe's probabilistic matches [24], which were not validated independently; Q3 was run per person while groups are defined per dose; and a contrast between two filing rates near 5% is a weak test of under-capture that says nothing about cases who never reach VAERS.
 
 - Implementation choices after registration are listed in Methods; all were made without seeing results.
 
@@ -574,7 +574,7 @@ Declarations
 
 Funding. No funding was received for this study.
 
-Conflicts of Interest. MH is Director of the Open Source Medicine Foundation and has previously received funding from the Independent Medical Alliance. He has published on PACVS and vaccine-injury recognition [3, 16]. He has no role with, and has received no payment from, OpenVAERS, ICAN or any litigation body, and the language-model services used were paid for at list price.
+Conflicts of Interest. MH is Director of the Open Source Medicine Foundation and has previously received funding from the Independent Medical Alliance. He has published on PACVS and vaccine-injury recognition [4, 18]. He has no role with, and has received no payment from, OpenVAERS, ICAN or any litigation body, and the language-model services used were paid for at list price.
 
 Ethics Approval. This secondary analysis used de-identified records released publicly under the US Freedom of Information Act and public VAERS data, and published only aggregate data with at least 10 people per cell. It did not involve contact with participants and did not require ethics review.
 
@@ -582,7 +582,7 @@ Consent to Participate. Not applicable; the study used de-identified public reco
 
 Consent for Publication. Not applicable.
 
-Availability of Data and Material. The v-safe, call-centre and MedDRA files are public FOIA releases hosted by ICAN [19]; VAERS data are public [20]; OpenVSafe's match pages are public [18]. The pre-registration and its two amendments are at osf.io/gnfpd. Only aggregates with at least 10 people per cell are released; no participant-level data or free text are shared.
+Availability of Data and Material. The v-safe, call-centre and MedDRA files are public FOIA releases hosted by ICAN [22]; VAERS data are public [25]; OpenVSafe's match pages are public [24]. The pre-registration and its two amendments are at osf.io/gnfpd. Only aggregates with at least 10 people per cell are released; no participant-level data or free text are shared.
 
 Code Availability. Analysis code, the frozen taxonomy (v1.0) and the classifier prompts are at github.com/MattH55/vsafe-freetext, tag v1.0.2-submission, archived on Zenodo (doi:10.5281/zenodo.24178319).
 
@@ -594,49 +594,65 @@ Data protection. Free text was stored locally, and layer 1 ran locally. For laye
 
 References
 
-1. Bellavite P, Donzelli A, Isidoro C. The WHO Algorithm for Causality Assessment of Adverse Effects Following Immunization with Genetic-Based Anti-COVID-19 Vaccines: Pitfalls and Suggestions for Improvement. J Clin Med. 2024;13:7291. doi:10.3390/jcm13237291
+1. Scholkmann F, May CA. COVID-19, post-acute COVID-19 syndrome (PACS, "long COVID") and post-COVID-19 vaccination syndrome (PCVS, "post-COVIDvac-syndrome"): Similarities and differences. Pathol Res Pract. 2023;246:154497. doi:10.1016/j.prp.2023.154497
 
-2. Platschek B, Boege F. The Post-Acute COVID-19-Vaccination Syndrome in the Light of Pharmacovigilance. Vaccines. 2024;12:1378. doi:10.3390/vaccines12121378
+2. Bellavite P, Donzelli A, Isidoro C. The WHO Algorithm for Causality Assessment of Adverse Effects Following Immunization with Genetic-Based Anti-COVID-19 Vaccines: Pitfalls and Suggestions for Improvement. J Clin Med. 2024;13(23):7291. doi:10.3390/jcm13237291
 
-3. Halma M, Varon J. Restoring trust in vaccination: listening to patients and acknowledging Post-Acute COVID Vaccine Syndrome. Front Med. 2025;12. doi:10.3389/fmed.2025.1688170
+3. Platschek B, Boege F. The Post-Acute COVID-19-Vaccination Syndrome in the Light of Pharmacovigilance. Vaccines. 2024;12(12):1378. doi:10.3390/vaccines12121378
 
-4. Dinser J, Anft M, Wiemers L, Skrzypczyk S, Kohut E, Kurek J, et al. Shared Clinical and Immunological Features of Post-Acute COVID-19 and Post-Acute COVID-19 Vaccination Syndromes. medRxiv. 2026. doi:10.64898/2026.09.18.26363380
+4. Halma M, Varon J. Restoring trust in vaccination: listening to patients and acknowledging Post-Acute COVID Vaccine Syndrome. Front Med. 2025;12. doi:10.3389/fmed.2025.1688170
 
-5. Mundorf AK, Semmler A, Heidecke H, Schott M, Steffen F, Bittner S, et al. Clinical and Diagnostic Features of Post-Acute COVID-19 Vaccination Syndrome (PACVS). Vaccines. 2024;12:790. doi:10.3390/vaccines12070790
+5. Dinser J, Anft M, Wiemers L, Skrzypczyk S, Kohut E, Kurek J, et al. Shared Clinical and Immunological Features of Post-Acute COVID-19 and Post-Acute COVID-19 Vaccination Syndromes. medRxiv. 2026. doi:10.64898/2026.09.18.26363380
 
-6. Krumholz HM, Wu Y, Sawano M, Shah R, Zhou T, Arun AS, et al. Post-Vaccination Syndrome: A Descriptive Analysis of Reported Symptoms and Patient Experiences After Covid-19 Immunization. medRxiv. 2023. doi:10.1101/2023.11.09.23298266
+6. Mundorf AK, Semmler A, Heidecke H, Schott M, Steffen F, Bittner S, et al. Clinical and Diagnostic Features of Post-Acute COVID-19 Vaccination Syndrome (PACVS). Vaccines. 2024;12(7):790. doi:10.3390/vaccines12070790
 
-7. Wang W, Yellamsetty A, Edmonds RM, Barcavage SR, Bao S. COVID-19 vaccination-related tinnitus is associated with pre-vaccination metabolic disorders. Front Pharmacol. 2024;15:1374320. doi:10.3389/fphar.2024.1374320
+7. Krumholz HM, Wu Y, Sawano M, Shah R, Zhou T, Arun AS, et al. Post-Vaccination Syndrome: A Descriptive Analysis of Reported Symptoms and Patient Experiences After Covid-19 Immunization. medRxiv. 2023. doi:10.1101/2023.11.09.23298266
 
-8. Rouleau I, Issa Kana KDN, Zafack JG, Viger YB, De Serres G. New-onset anesthesia/paresthesia following the administration of COVID-19 vaccines in Quebec, Canada. Vaccine. 2025;57:127217. doi:10.1016/j.vaccine.2025.127217
+8. Wang W, Yellamsetty A, Edmonds RM, Barcavage SR, Bao S. COVID-19 vaccination-related tinnitus is associated with pre-vaccination metabolic disorders. Front Pharmacol. 2024;15:1374320. doi:10.3389/fphar.2024.1374320
 
-9. Safavi F, Gustafson L, Walitt B, Lehky T, Dehbashi S, Wiebold A, et al. Neuropathic symptoms with SARS-CoV-2 vaccination. medRxiv. 2022. doi:10.1101/2022.05.16.22274439
+9. Rouleau I, Issa Kana KDN, Zafack JG, Viger YB, De Serres G. New-onset anesthesia/paresthesia following the administration of COVID-19 vaccines in Quebec, Canada. Vaccine. 2025;57:127217. doi:10.1016/j.vaccine.2025.127217
 
-10. Tokumasu K, Fujita-Yamashita M, Sunada N, Sakurada Y, Yamamoto K, Nakano Y, et al. Characteristics of Persistent Symptoms Manifested after SARS-CoV-2 Vaccination: An Observational Retrospective Study in a Specialized Clinic for Vaccination-Related Adverse Events. Vaccines. 2023;11:1661. doi:10.3390/vaccines11111661
+10. Safavi F, Gustafson L, Walitt B, Lehky T, Dehbashi S, Wiebold A, et al. Neuropathic symptoms with SARS-CoV-2 vaccination. medRxiv. 2022. doi:10.1101/2022.05.16.22274439
 
-11. Shrestha Y, Venkataraman R. The prevalence of inverse health consequences of COVID-19 vaccines: A post-vaccination study. Vacunas. 2022;23:S67–76. doi:10.1016/j.vacun.2022.03.002
+11. Tokumasu K, Fujita-Yamashita M, Sunada N, Sakurada Y, Yamamoto K, Nakano Y, et al. Characteristics of Persistent Symptoms Manifested after SARS-CoV-2 Vaccination: An Observational Retrospective Study in a Specialized Clinic for Vaccination-Related Adverse Events. Vaccines. 2023;11(11):1661. doi:10.3390/vaccines11111661
 
-12. Gerhard A, Raeder V, Pernice HF, Boesl F, Schroeder M, Richter J, et al. Neurological symptoms after COVID-19 vaccination: a report on the clinical presentation of the first 50 patients. J Neurol. 2023;270:4673–7. doi:10.1007/s00415-023-11895-9
+12. Shrestha Y, Venkataraman R. The prevalence of inverse health consequences of COVID-19 vaccines: A post-vaccination study. Vacunas. 2022;23:S67–76. doi:10.1016/j.vacun.2022.03.002
 
-13. Finterer J, Scorza FA. A retrospective analysis of clinically confirmed long post-COVID vaccination syndrome. J Clin Transl Res. 2022;8:506–8. PMID 36452006
+13. Gerhard A, Raeder V, Pernice HF, Boesl F, Schroeder M, Richter J, et al. Neurological symptoms after COVID-19 vaccination: a report on the clinical presentation of the first 50 patients. J Neurol. 2023;270(10):4673–7. doi:10.1007/s00415-023-11895-9
 
-14. Grieshaber V, Strumann C, Holzwarth S, Toepfner N, von Meißner WCG, Konstantopoulos N, et al. The Long-Term Tolerability of BNT162b2 in Children and Adolescents (the CoVacU18 Study). Dtsch Arztebl Int. 2025;122:257–63. doi:10.3238/arztebl.m2025.0032
+14. Finsterer J, Scorza FA. A retrospective analysis of clinically confirmed long post-COVID vaccination syndrome. J Clin Transl Res. 2022;8(6):506–8. PMID 36452006
 
-15. Riad A, Pokorná A, Attia S, Klugarová J, Koščík M, Klugar M. Prevalence of COVID-19 Vaccine Side Effects among Healthcare Workers in the Czech Republic. J Clin Med. 2021;10:1428. doi:10.3390/jcm10071428
+15. Grieshaber V, Strumann C, Holzwarth S, Toepfner N, von Meißner WCG, Konstantopoulos N, et al. The Long-Term Tolerability of BNT162b2 in Children and Adolescents (the CoVacU18 Study). Dtsch Arztebl Int. 2025;122(10):257–63. doi:10.3238/arztebl.m2025.0032
 
-16. Halma M, Varon J. DARE-SAFE: Denominator-Adjusted Rate Estimates of Substance Adverse Events Frequency Evaluation in Pharmaceuticals and Vaccines. Pharmacoepidemiology. 2025;4:7. doi:10.3390/pharma4020007
+16. Riad A, Pokorná A, Attia S, Klugarová J, Koščík M, Klugar M. Prevalence of COVID-19 Vaccine Side Effects among Healthcare Workers in the Czech Republic. J Clin Med. 2021;10(7):1428. doi:10.3390/jcm10071428
 
-17. Zauche LH, Miller ER, Kim SS, Jazwa A, Shay DK. Monitoring Vaccine Safety: United States Vaccine Safety Surveillance Systems. J Pediatr Health Care. 2026;40:174–86. doi:10.1016/j.pedhc.2025.07.016
+17. Kenny TA. Complex chronic adverse events following immunization: a systemic critique and reform proposal for vaccine pharmacovigilance. Ther Adv Drug Saf. 2025;16:20420986251395925. doi:10.1177/20420986251395925
 
-18. OpenVAERS. OpenVSafe: v-safe participant records matched to VAERS reports [Internet]. openvsafe.org. Person pages read 2026-11-10 to 2026-11-11; only the VAERS ID, match score (0 to 11), confidence and runner-up score of each match were retained.
+18. Halma M, Varon J. DARE-SAFE: Denominator-Adjusted Rate Estimates of Substance Adverse Events Frequency Evaluation in Pharmaceuticals and Vaccines. Pharmacoepidemiology. 2025;4(2):7. doi:10.3390/pharma4020007
 
-19. Informed Consent Action Network. v-safe data [Internet]. icandecide.org/v-safe-data/. Free-text responses released by CDC under FOIA 24-01322 (twelve interim and final releases and an under-3 file, 2024), registrant, vaccination and health check-in files, call-centre records (FOIA 23-00925 and 23-00926) and CDC's MedDRA coding of the free text (November 2024). Downloaded 2026-11-08 to 2026-11-10.
+19. Rosenblum HG, Gee J, Liu R, Marquez PL, Zhang B, Strid P, et al. Safety of mRNA vaccines administered during the initial 6 months of the US COVID-19 vaccination programme: an observational study of reports to the Vaccine Adverse Event Reporting System and v-safe. Lancet Infect Dis. 2022;22(6):802–12. doi:10.1016/S1473-3099(22)00054-8
 
-20. US Department of Health and Human Services. Vaccine Adverse Event Reporting System (VAERS) data [Internet]. vaers.hhs.gov/data.html. All-years CSV files dated 2026-06-03.
+20. Zauche LH, Miller ER, Kim SS, Jazwa A, Shay DK. Monitoring Vaccine Safety: United States Vaccine Safety Surveillance Systems. J Pediatr Health Care. 2026;40(1):174–86. doi:10.1016/j.pedhc.2025.07.016
 
-21. MedDRA Maintenance and Support Services Organization. Medical Dictionary for Regulatory Activities (MedDRA) [Internet]. meddra.org.
+21. Levi R, Lu N. Reporting on prolonged adverse health impact among V-SAFE enrollees. Research Square [Preprint]. Posted 25 Aug 2026. doi:10.21203/rs.3.rs-10768889/v1
 
-22. Levi R, Lu N. Reporting on prolonged adverse health impact among V-SAFE enrollees. Research Square [Preprint]. Posted 25 Aug 2026. doi:10.21203/rs.3.rs-10768889/v1
+22. Informed Consent Action Network. v-safe data [Internet]. icandecide.org/v-safe-data/. Free-text responses released by CDC under FOIA 24-01322 (twelve interim and final releases and an under-3 file, 2024), registrant, vaccination and health check-in files, call-centre records (FOIA 23-00925 and 23-00926) and CDC's MedDRA coding of the free text (November 2024). Downloaded 2026-11-08 to 2026-11-10.
+
+23. MedDRA Maintenance and Support Services Organization. Medical Dictionary for Regulatory Activities (MedDRA) [Internet]. meddra.org.
+
+24. OpenVAERS. OpenVSafe: v-safe participant records matched to VAERS reports [Internet]. openvsafe.org. Person pages read 2026-11-10 to 2026-11-11; only the VAERS ID, match score (0 to 11), confidence and runner-up score of each match were retained.
+
+25. US Department of Health and Human Services. Vaccine Adverse Event Reporting System (VAERS) data [Internet]. vaers.hhs.gov/data.html. All-years CSV files dated 2026-06-03.
+
+26. Botsis T, Nguyen MD, Woo EJ, Markatou M, Ball R. Text mining for the Vaccine Adverse Event Reporting System: medical text classification using informative feature selection. J Am Med Inform Assoc. 2011;18(5):631–8. doi:10.1136/amiajnl-2010-000022
+
+27. Netherlands Pharmacovigilance Centre Lareb. Long COVID-like symptoms following immunization with COVID-19 vaccines [Internet]. Signal report, 17 January 2024. lareb.nl/media/g54d3xrc/signals_2024_long-covid-like-symptoms-after-covid-19-vaccination_website.pdf
+
+28. Semmler A, Mundorf AK, Kuechler AS, Schulze-Bosse K, Heidecke H, Schulze-Forster K, et al. Chronic Fatigue and Dysautonomia following COVID-19 Vaccination Is Distinguished from Normal Vaccination Response by Altered Blood Markers. Vaccines. 2023;11(11):1642. doi:10.3390/vaccines11111642
+
+29. Bhattacharjee B, Lu P, Monteiro VS, Tabachnikova A, Wang K, Hooper WB, et al. Immunological and Antigenic Signatures Associated with Chronic Illnesses after COVID-19 Vaccination. medRxiv. 2025. doi:10.1101/2025.02.18.25322379
+
+30. Fujisawa A, Kodama S, Konishi N, Ueda J, Kitagawa A, Okada E, et al. Characterizing persistent Post-COVID-19 vaccination symptoms using MedDRA system organ class and preferred term classifications. Sci Rep. 2026;16(1):12366. doi:10.1038/s41598-026-43949-z
 
 Supplementary table S1: Q1 by stratum
 

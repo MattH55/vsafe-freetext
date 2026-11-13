@@ -37,7 +37,7 @@ I am submitting the original research article "Detecting post-acute COVID-19 vac
 
 Reviewers to exclude: Retsef Levi and Nelson Lu (MIT), whose closely related preprint is under review and is compared in the manuscript.
 
-The manuscript is not under consideration elsewhere and has one author. Conflicts of interest are stated in the Declarations. Main text about 6,000 words; 16 tables; 5 figures; 22 references; one supplementary file.
+The manuscript is not under consideration elsewhere and has one author. Conflicts of interest are stated in the Declarations. Main text 5,999 words; 14 tables; 5 figures; 30 references; one supplementary file.
 
 Yours sincerely,
 
