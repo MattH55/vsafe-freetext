@@ -97,8 +97,7 @@ def md_table(df: pl.DataFrame) -> str:
 def main() -> int:
     parts = ["# Electronic supplementary material",
              "",
-             ("A PACVS signature in v-safe free text: a pre-registered study whose primary analysis was not feasible, "
-             "with exploratory results. Matthew Halma. All cells have at least 10 people; smaller cells are suppressed (blank)."),
+             ("Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data: a pre-registered analysis of v-safe free text. Matthew Halma. All cells have at least 10 people; smaller cells are suppressed (blank)."),
              ""]
     pending = []
     for title, file, cols, note in TABLES:

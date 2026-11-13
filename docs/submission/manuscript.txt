@@ -1,4 +1,4 @@
-A PACVS signature in v-safe free text: a pre-registered study whose primary analysis was not feasible, with exploratory results
+Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data: a pre-registered analysis of v-safe free text
 Matthew Halma¹
 ¹ Open Source Medicine, Tallinn, Estonia. ORCID: 0000-0003-2487-0636. Corresponding author: Matthew Halma, Director, Open Source Medicine, Pärnu mnt. 139c, 11317 Tallinn, Estonia; mhalma@opensourcemed.info.
 Running title: PACVS signature in v-safe free text. Article type: Original Research Article. Draft of 2026-11-12.

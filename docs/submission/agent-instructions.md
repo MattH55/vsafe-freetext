@@ -17,7 +17,7 @@ Repository: https://github.com/MattH55/vsafe-freetext (private). The audit is in
    (https://zenodo.org/account/settings/github/) → switch on `MattH55/vsafe-freetext`.
 3. GitHub → the repository → Releases → "Draft a new release" → choose existing tag
    `v1.0.1-submission` → title "v1.0.1-submission: Drug Safety submission package" → description:
-   "Code, frozen taxonomy v1.0 and submission package for 'A PACVS signature in v-safe free text'.
+   "Code, frozen taxonomy v1.0 and submission package for 'Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data'.
    Aggregates only; no participant data." → Publish release. Zenodo archives it automatically
    within a few minutes.
 4. Zenodo → the new record → check: title as above; author Matthew Halma, ORCID
@@ -50,8 +50,7 @@ PDF export of it (supplementary file). Licence: CC BY 4.0.
 
 1. https://osf.io/preprints → "Add a preprint" → server: OSF Preprints (or MedRxiv is not used;
    see note) → upload `manuscript.pdf`.
-2. Title: "A PACVS signature in v-safe free text: a pre-registered study whose primary analysis
-   was not feasible, with exploratory results". Author: Matthew Halma (ORCID 0000-0003-2487-0636,
+2. Title: "Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data: a pre-registered analysis of v-safe free text". Author: Matthew Halma (ORCID 0000-0003-2487-0636,
    Open Source Medicine). Abstract: paste the Abstract from the manuscript. Subjects: Medicine and
    Health Sciences → Epidemiology / Public Health; Pharmacology. Tags: v-safe; VAERS; COVID-19
    vaccine; post-acute COVID-19 vaccination syndrome; pharmacovigilance; free text.

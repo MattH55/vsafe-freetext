@@ -11,7 +11,7 @@ Drug Safety
 
 Dear Editor,
 
-I am submitting the original research article "A PACVS signature in v-safe free text: a pre-registered study whose primary analysis was not feasible, with exploratory results" for consideration by Drug Safety.
+I am submitting the original research article "Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data: a pre-registered analysis of v-safe free text" for consideration by Drug Safety.
 
 **Why Drug Safety.** The paper addresses a surveillance question: whether a multi-system, post-acute syndrome after COVID-19 vaccination can be seen in a pharmacovigilance system that codes symptoms one at a time, and whether such cases reach VAERS. It analyses 7.8 million free-text entries from CDC's v-safe programme, including 1.6 million written 3 to 12 months after a dose, with a classifier validated against CDC's own MedDRA coding, and links v-safe records to VAERS. The methods, a frozen lexicon plus a language-model classifier under a pre-registered accuracy gate, and the detection analysis are of direct interest to readers working on signal detection in spontaneous and active surveillance.
 

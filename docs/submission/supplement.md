@@ -1,6 +1,6 @@
 # Electronic supplementary material
 
-A PACVS signature in v-safe free text: a pre-registered study whose primary analysis was not feasible, with exploratory results. Matthew Halma. All cells have at least 10 people; smaller cells are suppressed (blank).
+Detecting post-acute COVID-19 vaccination syndrome in pharmacovigilance data: a pre-registered analysis of v-safe free text. Matthew Halma. All cells have at least 10 people; smaller cells are suppressed (blank).
 
 ## S1. Q1 co-occurrence by stratum (registered)
 
